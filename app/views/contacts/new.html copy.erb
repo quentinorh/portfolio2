@@ -1,0 +1,79 @@
+<div class="container-8">
+  <div class="g-1-4">
+    <%= image_tag "avatar.png", class: "avatar" %>
+    <br><br>
+    <h2 class="red" >CONTACTS</h2>
+    <p>06 76 54 43 11</p>
+    <p>contact@quentino.io</p>
+    <div class="spacer"></div>
+    <h2 class="red" >Formations</h2>
+    <h3>BOOTCAMP Développeur WEB</h3>
+    <p>Le Wagon Rennes</p>
+    <p class="p-highlight">2022</p>
+    <br>
+    <h3>Licence géo & aménagement</h3>
+    <p>Université Rennes 2</p>
+    <p class="p-highlight">2011</p>
+    <br>
+    <h3>Licence énergie environnement</h3>
+    <p>Université de Clermont-Ferrand</p>
+    <p class="p-highlight">2010</p>
+    <div class="spacer"></div>
+    <h2 class="red" >Compétences</h2>
+    <p class="list">Développement web</p>
+    <p class="list">Conception d'objets</p>
+    <p class="list">Design graphique</p>
+    <p class="list">Gestion de projet</p>
+    <p class="list">Médiation</p>
+    <div class="spacer"></div>
+    <h2 class="red" >Références</h2>
+    <p class="list">L'Atelier Commun</p>
+    <p class="list">L'Espace des Science</p>
+    <p class="list">Rennes Métropole</p>
+    <div class="spacer"></div>
+    <h2 class="red" >Langages et logiciels</h2>
+    <%= image_tag "icons.png", class: "icons-logiciels"%>
+  </div>
+  <div class="g-4-9">
+    <div class="spacer"></div>
+    <h2 class="red" >Résumé</h2>
+    <p>Passionné par les low-tech. Poussé par les collaborations interdisciplinaires. Inspiré par le contraste entre la Nature et la société moderne.</p>
+    <div class="spacer"></div>
+    <h2 class="red" >Expériences</h2>
+    <h3>Coordinateur / Fabmanager</h3>
+    <p>Création et coordination de L'Atelier Commun. Tiers-lieu associatif dédié à l'écologie et au réemploi.</p>
+    <p class="p-highlight">2019 - Sept 2022</p>
+    <br>
+    <h3>Maker / développeur freelance</h3>
+    <p>Prototypage, développement web, créations artistique, médiation et ateliers.</p>
+    <p class="p-highlight">2013 - Aujourd’hui</p>
+    <br>
+    <h3>Animateur / médiateur scientifique</h3>
+    <p>Animation et accompagnement des groupes et du grand public à L’Espace des sciences de Rennes.</p>
+    <p class="p-highlight">2011 - 2013</p>
+    <div class="spacer-last"></div>
+    <h2 class="red" >Message</h2>
+    <%= form_for @contact do |f| %>
+      <div class= "contact-form">
+        <div class="g-1-4">
+          <%= f.label :name, "Prénom" %></br>
+          <%= f.text_field  :name, required: true, class: "contact-form-text-area" %></br>
+        </div>
+        <div class="g-4-9">
+          <%= f.label :email %></br>
+          <%= f.email_field :email, required: true, class: "contact-form-text-area" %></br>
+        </div>
+      </div>
+      <br>
+      <div>
+        <%= f.label :message, "Texte" %></br>
+        <%= f.text_area :message, rows: 8, cols: 40, required: true, class: "contact-form-text-area" %></br>
+        <div class= "display-none">
+          <%= f.label :nickname %>
+          <%= f.text_field :nickname, :hint => 'Leave this field blank!' %>
+        </div>
+      </div>
+      <%= f.submit ' ENVOYER ', class: 'button send-button' %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="nav-container">
+  <%= link_to tagged_path, class: "header-p-header" do %>
+    <h1 class="header text-align-center">Quentin Orhant</h1>
+    <p class="p-header text-align-center">Écologeek | Maker | Développeur</p>
+  <% end %>
+  <div class="buttons-container flex">
+    <% if current_user %>
+      <%= link_to "Log out", destroy_user_session_path, class: "button", data: {turbo_method: :delete} %>
+    <% end %>
+    <%= link_to "Infos", contact_path, class: "button" %>
+    <%= link_to "", message_path, class: "button button-mail" %>
+  </div>
+</div>

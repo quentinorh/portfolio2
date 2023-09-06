@@ -1,0 +1,39 @@
+.text textarea, .string input, .post_tag_list {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.edit-container {
+  width: auto;
+  margin-top: 30px;
+}
+
+.file input {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+select {
+  margin-bottom: 20px;
+}
+
+label {
+  margin-right: 20px;
+}
+
+.checkbox label {
+  font-size: 16px;
+}
+
+
+label.boolean {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}

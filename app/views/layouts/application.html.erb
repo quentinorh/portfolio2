@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Quentin Orhant - Écologeek | Maker | Développeur</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= favicon_link_tag "favicon.ico", rel: "icon" %>
+  </head>
+
+  <body data-hijacking="off" data-animation="none">
+    <%= render "shared/tagsbar" %>
+    <%= render "shared/navbar" %>
+    <%= render "shared/tagsline" %>
+    <%= render "shared/flashes" %>
+    <div class="container">
+      <%= yield %>
+      <div class="footer"></div>
+    </div>
+  </body>
+</html>
+
+<%# <script>
+  $(document).on('ready page:load', function () {
+    $('#post_tag_ids').chosen({
+      allow_single_deselect: true,
+      width: '100%'
+    })
+  });
+</script> %>

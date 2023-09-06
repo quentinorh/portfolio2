@@ -1,0 +1,136 @@
+.container {
+  padding-left: 80px;
+  padding-right: 34px;
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: auto;
+    margin-left: 140px;
+    margin-right: 140px;
+  }
+}
+
+@media (max-height: 400px) {
+  .container {
+    padding-left: 54px;
+  }
+}
+
+// @media (min-width: 992px) {
+//   .container {
+//     width: auto;
+//     margin-left: 160px;
+//     margin-right: 160px;
+//   }
+// }
+
+@media (min-width: 1200px) {
+  .container {
+    width: auto;
+    margin-left: 140px;
+    margin-right: 140px;
+  }
+}
+
+// @media (min-width: 1400px) {
+//   .container {
+//     width: auto;
+//     margin-left: 160px;
+//     margin-right: 160px;
+//   }
+// }
+
+
+
+// @media (min-width: 1300px) {
+//   .container {
+//     width: 1150px;
+//   }
+// }
+
+
+
+.sticky-container {
+  position: sticky;
+  background-color: white;
+  top: 0px;
+  z-index: 10;
+}
+
+.container-8 {
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+}
+
+// @media (min-width: 768px) {
+//   .container-8 {
+//     width: 100%;
+//   }
+// }
+
+@media (min-width: 1200px) {
+  .container-8 {
+    width: auto;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(auto, auto);
+    text-align: left;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container-contact {
+    max-width: 1000px;
+  }
+}
+
+// @media (min-width: 1400px) {
+//   .container-8 {
+//     width: 1000px;
+//     display: grid;
+//     grid-template-columns: repeat(8, 1fr);
+//     grid-gap: 10px;
+//     grid-auto-rows: minmax(auto, auto);
+//     text-align: left;
+//   }
+// }
+
+.g-1-4 {
+  grid-column: 1 / 4;
+  text-align: left;
+}
+
+.g-1-5 {
+  grid-column: 1 / 5;
+  text-align: left;
+}
+
+
+.g-4-9 {
+  grid-column: 4 / 9;
+  text-align: left;
+}
+
+.g-5-9 {
+  grid-column: 5 / 9;
+  text-align: left;
+}
+
+.g-6-9 {
+  grid-column: 6 / 9;
+  text-align: left;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}

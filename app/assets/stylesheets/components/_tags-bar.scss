@@ -1,0 +1,190 @@
+.tags-data {
+  display: none;
+}
+
+.tags-container {
+  position: absolute;
+  height: 100vh;
+  width: fit-content;
+  margin-left: 0vh;
+  margin-right: 0vh;
+}
+
+.tags-container2{
+  overflow: hidden;
+}
+
+.sticky {
+  position: sticky;
+  top: 0px;
+  left : 0px;
+  z-index: 2;
+}
+
+.gradient-titles {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: -35px;
+}
+
+.icon {
+  height: calc(20vh + 36px);
+  width: 44px;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-right: solid;
+  border-color: black;
+  margin-top: -22px;
+  margin-bottom: -22px;
+  z-index: 10;
+  // background-color: rgb(240, 240, 240);
+  display: block;
+  background-size: 40px;
+}
+
+.icon-top {
+  margin-top: 0px;
+  border-top-left-radius: 0%;
+  border-top-right-radius: 0%;
+}
+.icon-bottom {
+  margin-bottom: 0px;
+  border-bottom-left-radius: 0%;
+  border-bottom-right-radius: 0%;
+}
+
+@media (max-height: 400px) {
+  .icon {
+    height: calc(20vh + 18px);
+    width: 22px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 11px;
+    margin-top: -11px;
+    margin-bottom: -11px;
+    z-index: 10;
+    background-color: rgb(240, 240, 240);
+    display: block;
+    background-size: 20px;
+  }
+  .icon-top {
+    margin-top: 0px;
+    border-top-left-radius: 0%;
+    border-top-right-radius: 0%;
+  }
+  .icon-bottom {
+    margin-bottom: 0px;
+    border-bottom-left-radius: 0%;
+    border-bottom-right-radius: 0%;
+  }
+}
+
+@media (min-width: 768px) {
+  .icon {
+    height: calc(20vh + 36px);
+  }
+}
+
+
+.icon:hover {
+  z-index: 20;
+}
+
+.fab-icon {
+  background-image: image-url("fab2.png");
+}
+.photo-icon {
+  background-image: image-url("photo2.png");
+}
+.graph-icon {
+  background-image: image-url("graph2.png");
+}
+.dev-icon {
+  background-image: image-url("dev2.png");
+}
+.env-icon {
+  background-image: image-url("env2.png");
+}
+
+.fab-icon:hover {
+  background-image: image-url("fab1.png");
+}
+.photo-icon:hover {
+  background-image: image-url("photo1.png");
+}
+.graph-icon:hover {
+  background-image: image-url("graph1.png");
+}
+.dev-icon:hover {
+  background-image: image-url("dev1.png");
+}
+.env-icon:hover {
+  background-image: image-url("env1.png");
+}
+
+.fab-icon-2 {
+  background-image: image-url("fab1.png");
+  z-index: 20;
+}
+
+.photo-icon-2 {
+  background-image: image-url("photo1.png");
+  z-index: 20;
+}
+
+.graph-icon-2 {
+  background-image: image-url("graph1.png");
+  z-index: 20;
+}
+
+.dev-icon-2 {
+  background-image: image-url("dev1.png");
+  z-index: 20;
+}
+
+.env-icon-2 {
+  background-image: image-url("env1.png");
+  z-index: 20;
+}
+
+.gradient-tags {
+  height: 100vh;
+  position: absolute;
+  display: flex;
+  margin-left: 35px;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.tag-title {
+  font-family: $headers-font;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #666666;
+  padding-left: 10px;
+  display: none;
+  font-size: 16px;
+  opacity: 0%;
+  margin-top: 0px;
+  // transition: opacity 1s linear;
+}
+
+.tag-title-top {
+  margin-top: 24px;
+}
+
+.tag-title-bottom {
+  margin-top: -16px;
+}
+
+@media (min-width: 992px) {
+  .tag-title {
+    display: inline;
+  }
+}
+
+@media (min-width: 992px) {
+  .icon:hover + .tag-title {
+    opacity: 100%;
+  }
+}

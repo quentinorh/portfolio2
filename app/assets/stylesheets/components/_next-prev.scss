@@ -1,0 +1,40 @@
+.next-prev {
+  display: flex;
+  justify-content: space-between;
+}
+
+.next {
+  padding-left: 7px;
+  display: flex;
+  align-items: center;
+  transition: 0.5s ease;
+}
+
+.next:hover {
+  margin-right: -10px;
+}
+
+.prev:hover {
+  margin-left: -10px;
+}
+
+.prev {
+  padding-right: 7px;
+  display: flex;
+  align-items: center;
+  transition: 0.5s ease;
+}
+
+.next-title {
+  font-size: 13px;
+  padding-bottom: 20px;
+  text-align: right;
+  color: black;
+}
+
+.prev-title {
+  font-size: 13px;
+  padding-bottom: 20px;
+  text-align: left;
+  color: black;
+}

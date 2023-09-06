@@ -1,0 +1,44 @@
+<br>
+<div class="card-container">
+  <% if current_user %>
+    <%= link_to new_post_path do %>
+      <%= image_tag "add.png", class: "card-add-post" %>
+    <% end %>
+  <% end %>
+  <% @posts.each do |p| %>
+    <div class="card-box">
+      <%= link_to post_path(p) do %>
+        <%= cl_image_tag p.photos.first.key, class: "card-img", loading: "lazy", width: 650, height: 650, quality: 50, fetch_format: :auto, crop: :fill %>
+      <% end %>
+      <% if current_user %>
+        <%= link_to "Edit", edit_post_path(p), class: "card-edit button" %>
+      <% end %>
+      <%# <div>
+      <%#   <div class="card-tags-list">
+      <%#     <% p.tag_list.each do |tag| %>
+      <%#       <%= link_to tagged_path(tag: tag) do %>
+      <%#         <div class="card-tag">
+      <%#           <% if tag == "Fabrication" %>
+      <%#             <%= image_tag "fab1.png", class: "card-tags-img" %>
+      <%#           <% end %>
+      <%#           <% if tag == "Photographie" %>
+      <%#             <%= image_tag "photo1.png", class: "card-tags-img"  %>
+      <%#           <% end %>
+      <%#           <% if tag == "Développement" %>
+      <%#             <%= image_tag "dev1.png", class: "card-tags-img"  %>
+      <%#           <% end %>
+      <%#           <% if tag == "Graphisme" %>
+      <%#             <%= image_tag "graph1.png", class: "card-tags-img"  %>
+      <%#           <% end %>
+      <%#           <% if tag == "Environnement" %>
+      <%#             <%= image_tag "env1.png", class: "card-tags-img"  %>
+      <%#           <% end %>
+      <%#         </div>
+      <%#       <% end %>
+      <%#     <% end %>
+      <%#   </div>
+      <%# </div> %>
+
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,23 @@
+<div class="container-8">
+  <div class="g-1-5 show_pics">
+    <% @post.photos.each do |photo| %>
+      <%= cl_image_tag photo.key, class: "img-show",  width: 860, quality: :auto, fetch_format: :webp, crop: "fill" %>
+<%#
+
+      crop: :fill %>
+    <% end %>
+  </div>
+  <div class="g-6-9 show-fix">
+    <h1><%= @post.title %></h1>
+    <% if @post.description.present? %>
+      <p><%= simple_format @post.description %></p>
+    <% end %>
+    <% if @post.source.present? %>
+      <h3>Source</h3>
+      <%= link_to @post.source, target: "_blank" do %>
+        <p class="source"><%= @post.source %></p>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+<%= render "shared/next-prev" %>

@@ -1,0 +1,30 @@
+<div>
+  <div class="split-edit">
+    <div
+    class="edit-container"
+    data-controller="pictures"
+    data-pictures-postid-value="<%= @post.id %>">
+      <h1 class = "text-center">Edit Post</h1>
+      <%= simple_form_for @post do |f| %>
+        <%= f.input :title, required: true %>
+        <%= f.input :photos, as: :file, input_html: { multiple: true } %>
+        <div class="delete-img-container">
+          <% @post.photos.each do |photo| %>
+            <div class="delete-img-card" data-action="click->pictures#deletePicture">
+              <%= cl_image_tag photo.key, class: "delete-img", data: {picture_photoId_value: "#{photo.id}"} %>
+              <%= image_tag "del.png", class: "delete-icon" %>
+            </div>
+          <% end %>
+        </div>
+        <%= f.input :description %>
+        <%= f.input :source %>
+        <%= f.input :order_number, collection: @posts, label_method: :order_number, value_method: :order_number, include_blank: false %>
+        <%= f.input :tag_list, as: :check_boxes, collection: [ "Fabrication", "Photographie", "Graphisme", "Développement", "Environnement" ] %>
+        <%= f.submit class: "button submit-button" %>
+      <% end %>
+    </div>
+    <div class="script-edit">
+
+    </div>
+  </div>
+</div>

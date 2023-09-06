@@ -1,0 +1,38 @@
+.avatar {
+  width: 150px;
+}
+
+
+input#contact_name, input#contact_email {
+  width: calc(100% - 10px);
+}
+
+.contact-form {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-gap: 10px;
+  grid-auto-rows: minmax(auto, auto);
+}
+
+
+textarea#contact_message.contact-form-text-area {
+  width: calc(100% - 24px);
+  padding: 10px;
+}
+
+.send-button {
+  margin-top: 10px !important;
+  border-radius: 22px;
+  margin-left: calc(50% - 56px);
+}
+
+.icons-logiciels {
+  width: 100%;
+  margin-top: 20px;
+}
+
+@media (min-width: 550px) {
+  .icons-logiciels {
+    width: 440px;
+  }
+}

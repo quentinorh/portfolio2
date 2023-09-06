@@ -1,0 +1,16 @@
+<div class="spacer"></div>
+<div class="next-prev">
+  <% if @posts.find_by(order_number: @post.order_number + 1).present? %>
+    <%= link_to post_path(@posts.find_by(order_number: @post.order_number + 1)), class: "prev" do %>
+      <%= image_tag "prev.png", class: "prev-img", width: "19px", height: "41px"  %>
+      <h3 class="prev-title"><%= @posts.find_by(order_number: @post.order_number + 1).title %></h3>
+    <% end %>
+  <% end %>
+  <div></div>
+  <% if @posts.find_by(order_number: @post.order_number - 1).present? %>
+    <%= link_to post_path(@posts.find_by(order_number: @post.order_number - 1)), class: "next"  do %>
+      <h3 class="next-title"><%= @posts.find_by(order_number: @post.order_number - 1).title %></h3>
+      <%= image_tag "next.png", class: "next-img", width: "19px", height: "41px" %>
+    <% end %>
+  <% end %>
+</div>
