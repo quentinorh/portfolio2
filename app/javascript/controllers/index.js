@@ -12,3 +12,6 @@ application.register("pictures", PicturesController)
 
 import TagsController from "./tags_controller"
 application.register("tags", TagsController)
+
+import DatepickerController from "./datepicker_controller"
+application.register("datepicker", DatepickerController)

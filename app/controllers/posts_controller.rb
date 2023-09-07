@@ -3,9 +3,9 @@ class PostsController < ApplicationController
 
   def index
     if params[:tag].present?
-      @posts = Post.tagged_with(params[:tag]).order(order_number: :desc)
+      @posts = Post.tagged_with(params[:tag]).order(date: :desc)
     else
-      @posts = Post.all.order(order_number: :desc)
+      @posts = Post.all.order(date: :desc)
     end
   end
 
@@ -79,6 +79,6 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :description, :source, :script, :order_number, photos: [], tag_list: [])
+    params.require(:post).permit(:title, :date, :description, :source, :script, :order_number, photos: [], tag_list: [])
   end
 end

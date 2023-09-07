@@ -8,7 +8,7 @@ export default class extends Controller {
   }
 
   connect() {
-    console.log("Hellooooouuu World!")
+    console.log("Hellaaa World!")
 
     if (this.tagsTarget.innerHTML.includes("Fabrication")){
       this.fabTagTarget.classList.add("fab-icon-2")

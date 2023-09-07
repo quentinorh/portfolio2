@@ -6,6 +6,9 @@ ruby "3.1.2"
 # gem 'simple_form-tailwind'
 gem 'mail_form'
 gem "cloudinary"
+gem 'flatpickr', '~> 2.3', '>= 2.3.5.0'
+
+gem 'rails-i18n'
 
 # Install the Acts-As-Taggable-On Gem
 gem 'acts-as-taggable-on', '~> 9.0'

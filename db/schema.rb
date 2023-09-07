@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_06_141111) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_07_111401) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_06_141111) do
     t.integer "order_number"
     t.text "source"
     t.text "script"
+    t.date "date"
   end
 
   create_table "taggings", force: :cascade do |t|

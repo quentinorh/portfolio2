@@ -141,3 +141,12 @@ label {
 .prev-img {
   margin-right: 10px;
 }
+
+.flatpickr-calendar {
+  font-family: $headers-font;
+}
+
+.flatpickr-day.selected {
+  background-color: $red !important;
+  border-color: $red !important;
+}

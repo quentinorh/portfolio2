@@ -7,6 +7,10 @@
       <h1 class = "text-center">Edit Post</h1>
       <%= simple_form_for @post do |f| %>
         <%= f.input :title, required: true %>
+        <label>Date</label>
+        <br>
+        <%= f.text_field :date, data: { controller: "datepicker" } %>
+        <br><br>
         <%= f.input :photos, as: :file, input_html: { multiple: true } %>
         <div class="delete-img-container">
           <% @post.photos.each do |photo| %>
@@ -20,7 +24,7 @@
         <%= f.input :source %>
         <%= f.input :order_number, collection: @posts, label_method: :order_number, value_method: :order_number, include_blank: false %>
         <%= f.input :tag_list, as: :check_boxes, collection: [ "Fabrication", "Photographie", "Graphisme", "Développement", "Environnement" ] %>
-        <%= f.submit class: "button submit-button" %>
+        <%= f.submit "Mettre à jour", class: "button submit-button" %>
       <% end %>
     </div>
     <div class="script-edit">
