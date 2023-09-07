@@ -17,8 +17,10 @@
     <% end %>
     <% if @post.source.present? %>
       <h3>Source</h3>
-      <%= link_to @post.source, target: "_blank" do %>
-        <p class="source"><%= @post.source %></p>
+      <% @post.source.split(',').each do |link| %>
+        <%= link_to link, target: "_blank" do %>
+          <p class="source"><%= link %></p>
+        <% end %>
       <% end %>
     <% end %>
   </div>
