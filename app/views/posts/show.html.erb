@@ -1,10 +1,10 @@
+<% if current_user %>
+  <%= link_to "Edit", edit_post_path(@post), class: "post-edit button" %>
+<% end %>
 <div class="container-8">
   <div class="g-1-5 show_pics">
     <% @post.photos.each do |photo| %>
       <%= cl_image_tag photo.key, class: "img-show",  width: 860, quality: :auto, fetch_format: :webp, crop: "fill" %>
-<%#
-
-      crop: :fill %>
     <% end %>
   </div>
   <div class="g-6-9 show-fix">

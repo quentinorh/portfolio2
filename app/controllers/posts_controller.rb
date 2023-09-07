@@ -5,7 +5,7 @@ class PostsController < ApplicationController
     if params[:tag].present?
       @posts = Post.tagged_with(params[:tag]).order(date: :desc)
     else
-      @posts = Post.all.order(date: :desc)
+      @posts = Post.all.order(date: :desc, id: :desc)
     end
   end
 

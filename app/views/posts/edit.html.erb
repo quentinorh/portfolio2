@@ -22,9 +22,9 @@
         </div>
         <%= f.input :description %>
         <%= f.input :source %>
-        <%= f.input :order_number, collection: @posts, label_method: :order_number, value_method: :order_number, include_blank: false %>
+        <%# <%= f.input :order_number, collection: @posts, label_method: :order_number, value_method: :order_number, include_blank: false %>
         <%= f.input :tag_list, as: :check_boxes, collection: [ "Fabrication", "Photographie", "Graphisme", "Développement", "Environnement" ] %>
-        <%= f.submit "Mettre à jour", class: "button submit-button" %>
+        <%= f.submit "Edit", class: "button submit-button" %>
       <% end %>
     </div>
     <div class="script-edit">
