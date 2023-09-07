@@ -16,7 +16,11 @@
       <p><%= simple_format @post.description %></p>
     <% end %>
     <% if @post.source.present? %>
-      <h3>Source</h3>
+      <% if @post.source.split(',').count == 0 %>
+        <h3>Source</h3>
+      <% elsif @post.source.split(',').count >= 1 %>
+        <h3>Sources</h3>
+      <% end %>
       <% @post.source.split(',').each do |link| %>
         <%= link_to link, target: "_blank" do %>
           <p class="source"><%= link %></p>
