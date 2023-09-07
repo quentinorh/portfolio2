@@ -9,7 +9,9 @@
   </div>
   <div class="g-6-9 show-fix">
     <h1 class=""><%= @post.title %></h1>
-    <h3><%= l(@post.date, format: "%B %Y") %></h3>
+    <% if @post.date.present? %>
+      <h3><%= l(@post.date, format: "%B %Y") %></h3>
+    <% end %>
     <% if @post.description.present? %>
       <p><%= simple_format @post.description %></p>
     <% end %>
