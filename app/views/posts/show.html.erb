@@ -17,9 +17,9 @@
       <p><%= simple_format @post.description %></p>
     <% end %>
     <% if @post.source.present? %>
-      <% if @post.source.split(',').count == 0 %>
+      <% if @post.source.split(',').count == 1 %>
         <h3>Source</h3>
-      <% elsif @post.source.split(',').count >= 1 %>
+      <% elsif @post.source.split(',').count >= 2 %>
         <h3>Sources</h3>
       <% end %>
       <% @post.source.split(',').each do |link| %>
