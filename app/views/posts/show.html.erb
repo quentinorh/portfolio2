@@ -12,6 +12,7 @@
     <% if @post.date.present? %>
       <h3><%= l(@post.date, format: "%B %Y") %></h3>
     <% end %>
+    <br>
     <% if @post.description.present? %>
       <p><%= simple_format @post.description %></p>
     <% end %>
