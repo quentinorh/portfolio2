@@ -20,7 +20,7 @@
       <% if @post.source.split(',').count == 1 %>
         <h3>Source</h3>
       <% elsif @post.source.split(',').count >= 2 %>
-        <h3>Sources</h3>
+        <h3 class="source-title" >Sources</h3>
       <% end %>
       <% @post.source.split(',').each do |link| %>
         <%= link_to link, target: "_blank" do %>
