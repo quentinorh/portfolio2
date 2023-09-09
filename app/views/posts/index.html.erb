@@ -1,6 +1,5 @@
 <br>
 <div class="card-container">
-
   <% if current_user %>
     <%= link_to new_post_path do %>
       <%= image_tag "add.png", class: "card-add-post" %>
@@ -23,7 +22,7 @@
     <% end %>
   <% else %>
     <% @posts.each do |p| %>
-      <% if p.draft == true %>
+      <% if p.draft == false %>
         <div class="card-box">
           <%= link_to post_path(p) do %>
             <%= cl_image_tag p.photos.first.key, class: "card-img", loading: "lazy", width: 650, height: 650, quality: 50, fetch_format: :auto, crop: :fill %>
