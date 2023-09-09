@@ -1,6 +1,8 @@
 <div class = "edit-container" >
   <h1 class = "text-center">New Post</h1>
   <%= simple_form_for @post do |f| %>
+    <%= f.input :draft, as: :select, collection: [['Yes',true], ['No',false]], required: false, include_blank: false %>
+    <br>
     <%= f.input :title %>
     <br>
     <%= f.text_field :date, data: { controller: "datepicker" } %>

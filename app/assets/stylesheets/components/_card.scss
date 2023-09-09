@@ -77,6 +77,20 @@
   top: 10px;
 }
 
+.draft-edit {
+  line-height: 28px !important;
+  height: 24px;
+  padding-top: 3px !important;
+  background-image: image-url("draft-01.png");
+  width: 12px;
+  display: block;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+
+
 .card-edit:hover {
   background-color: rgb(245, 245, 245);
 }

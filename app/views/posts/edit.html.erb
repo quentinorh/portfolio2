@@ -6,6 +6,8 @@
     data-pictures-postid-value="<%= @post.id %>">
       <h1 class = "text-center">Edit Post</h1>
       <%= simple_form_for @post do |f| %>
+        <%= f.input :draft, as: :select, collection: [['Yes',true], ['No',false]], required: false, include_blank: false %>
+        <br>
         <%= f.input :title, required: true %>
         <label>Date</label>
         <br>

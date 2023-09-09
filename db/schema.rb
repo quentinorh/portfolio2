@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_07_111401) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_09_213812) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_111401) do
     t.text "source"
     t.text "script"
     t.date "date"
+    t.boolean "draft", default: false
   end
 
   create_table "taggings", force: :cascade do |t|
