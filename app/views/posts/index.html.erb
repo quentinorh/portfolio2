@@ -12,9 +12,7 @@
             <%= cl_image_tag p.photos.first.key, class: "card-img", loading: "lazy", width: 650, height: 650, opacity: 50, quality: 50, fetch_format: :auto, crop: :fill %>
           <% end %>
           <%= link_to "Edit", edit_post_path(p), class: "card-edit button" %>
-          <%= link_to  edit_post_path(p) do %>
-            <div class="draft-edit button"></div>
-          <% end %>
+          <%= link_to  "Draft", edit_post_path(p),  class: "draft-edit button" %>
         <% else %>
           <%= link_to post_path(p) do %>
             <%= cl_image_tag p.photos.first.key, class: "card-img", loading: "lazy", width: 650, height: 650, quality: 50, fetch_format: :auto, crop: :fill %>
