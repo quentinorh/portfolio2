@@ -3,15 +3,17 @@ class Post < ApplicationRecord
   has_many_attached :photos
   # validates :photos, :title, :order_number, presence: true
 
+  scope :published, -> { where(draft: false) }
+
   def previous_post
-    Post.where("date = ? AND id > ?", self.date, self.id)
-        .or(Post.where("date > ?", self.date))
+    Post.published.where("date = ? AND id > ?", self.date, self.id)
+        .or(Post.published.where("date > ?", self.date))
         .order(:date, :id).first
   end
 
   def next_post
-    Post.where("date = ? AND id < ?", self.date, self.id)
-        .or(Post.where("date < ?", self.date))
+    Post.published.where("date = ? AND id < ?", self.date, self.id)
+        .or(Post.published.where("date < ?", self.date))
         .order(date: :desc, id: :desc).first
   end
 

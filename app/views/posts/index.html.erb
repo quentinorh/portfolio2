@@ -8,7 +8,7 @@
       <div class="card-box">
         <% if p.draft == true %>
           <%= link_to post_path(p) do %>
-            <%= cl_image_tag p.photos.first.key, class: "card-img", loading: "lazy", width: 650, height: 650, opacity: 50, quality: 50, fetch_format: :auto, crop: :fill %>
+            <%= cl_image_tag p.photos.first.key, class: "card-img draft", loading: "lazy", width: 650, height: 650, opacity: 50, quality: 50, fetch_format: :auto, crop: :fill %>
           <% end %>
           <%= link_to "Edit", edit_post_path(p), class: "card-edit button" %>
           <%= link_to  "Draft", edit_post_path(p),  class: "draft-edit button" %>
