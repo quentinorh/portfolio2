@@ -12,6 +12,8 @@
     <%= f.input :description %>
     <%= f.input :source %>
     <%= f.input :tag_list, as: :check_boxes, collection: [ "Fabrication", "Photographie", "Graphisme", "Développement", "Environnement" ] %>
+
+
     <%= f.submit "Post", class: "button submit-button" %>
   <% end %>
 </div>

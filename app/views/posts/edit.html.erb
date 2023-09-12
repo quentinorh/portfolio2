@@ -25,12 +25,23 @@
         <%= f.input :description %>
         <%= f.input :source %>
         <%# <%= f.input :order_number, collection: @posts, label_method: :order_number, value_method: :order_number, include_blank: false %>
-        <%= f.input :tag_list, as: :check_boxes, collection: [ "Fabrication", "Photographie", "Graphisme", "Développement", "Environnement" ] %>
+        <%= f.label :tag_list, "Tags" %><br>
+        <%= f.input :tag_list, as: :check_boxes, collection: [ "Fabrication", "Photographie", "Graphisme", "Développement", "Environnement" ], label: false %>
+
+          <%= f.label :category_ids, "Hashtags" %><br>
+          <%= collection_check_boxes(:post, :category_ids, Category.all, :id, :name) %>
+        <br><br>
         <%= f.submit "Edit", class: "button submit-button" %>
       <% end %>
-    </div>
-    <div class="script-edit">
-
+      <br><br>
+      <h3>Texte instagram :</h3>
+      <p>
+        <%= @post.title %> (<%= l(@post.date, format: "%B %Y").capitalize %>) :
+      </p>
+      <%= simple_format @post.description %>
+      <p>
+        <%= @post.categories.map(&:hashtags).join(' ') %>
+      </p>
     </div>
   </div>
 </div>
