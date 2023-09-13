@@ -7,7 +7,8 @@ Rails.application.routes.draw do
       patch :delete_photo
     end
   end
-  root to: "posts#index", as: :tagged
+  root to: "posts#index"
+  get 'tags/:tag', to: 'posts#index', as: :tagged
   resources :contacts, only: [:new, :create]
   get 'contact', to: 'contacts#new', as: 'contact'
   get 'message', to: 'contacts#new2'

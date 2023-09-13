@@ -36,7 +36,8 @@ SitemapGenerator::Sitemap.create do
     add post_path(p), lastmod: p.updated_at
   end
 
+  # Add tag pages:
   Post.tag_counts_on(:tags).each do |tag|
-    add tagged_path(tag: tag.name), :priority => 0.7, :changefreq => 'monthly'
+    add tagged_path(tag: tag.name)
   end
 end
