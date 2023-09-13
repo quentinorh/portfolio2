@@ -4,6 +4,7 @@ require 'aws-sdk-s3'
 SitemapGenerator::Sitemap.default_host = "https://quentino.io"
 SitemapGenerator::Sitemap.public_path = 'tmp/'
 SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
+SitemapGenerator::Sitemap.compress = false
 
 SitemapGenerator::Sitemap.adapter = SitemapGenerator::S3Adapter.new(
   aws_access_key_id: ENV["S3_ACCESS_KEY"],

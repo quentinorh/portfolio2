@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :categories
   devise_for :users
 
-  get '/sitemap.xml.gz', to: redirect("https://portfolioquentinoio.s3.eu-central-1.amazonaws.com/sitemaps/sitemap.xml.gz")
+  get '/sitemap.xml', to: redirect("https://portfolioquentinoio.s3.eu-central-1.amazonaws.com/sitemaps/sitemap.xml")
 
   get 'tags/:tag', to: 'posts#index', as: :tagged
   resources :contacts, only: [:new, :create]

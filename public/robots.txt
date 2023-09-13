@@ -1,3 +1,3 @@
 User-agent: *
 Disallow: /users/sign_in/
-Sitemap: https://quentino.io/sitemap.xml.gz
+Sitemap: https://quentino.io/sitemap.xml
