@@ -1,5 +1,20 @@
+require 'aws-sdk-s3'
+
 # Set the host name for URL creation
 SitemapGenerator::Sitemap.default_host = "https://quentino.io"
+SitemapGenerator::Sitemap.public_path = 'tmp/'
+SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
+SitemapGenerator::Sitemap.compress = false
+
+SitemapGenerator::Sitemap.adapter = SitemapGenerator::S3Adapter.new(
+  aws_access_key_id: ENV["S3_ACCESS_KEY"],
+  aws_secret_access_key: ENV["S3_SECRET_KEY"],
+  fog_provider: 'AWS',
+  fog_directory: ENV["S3_BUCKET_NAME"],
+  fog_region: ENV["S3_REGION"]
+  )
+
+SitemapGenerator::Sitemap.sitemaps_host = "https://portfolioquentinoio.s3.amazonaws.com"
 
 SitemapGenerator::Sitemap.create do
   # Put links creation logic here.

@@ -40,3 +40,7 @@
 *.swp
 .DS_Store
 .env*
+
+/config/credentials/productiob.key
+
+/config/credentials/production.key
