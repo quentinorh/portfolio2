@@ -2,15 +2,18 @@ class PostsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   def index
+    @meta_description = "Quentin Orhant : Expert freelance en éco-conception d’objets et de services. Explorez mes travaux qui fusionnent art, science et technologie pour un avenir plus durable."
     if params[:tag].present?
       @posts = Post.tagged_with(params[:tag]).order(date: :desc)
+      @page_title = "##{params[:tag]}"
     else
       @posts = Post.all.order(date: :desc, id: :desc)
     end
   end
 
   def show
-    @post = Post.friendly.find(params[:id])  # <-- Changement ici
+    @post = Post.friendly.find(params[:id])
+    @meta_description = "#{@post.title}: #{@post.description}"
     @related_posts = @post.find_related_tags
     @posts = Post.all.order(order_number: :desc)
   end
