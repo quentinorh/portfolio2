@@ -13,7 +13,7 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.friendly.find(params[:id])
-    @meta_description = "#{@post.title}: #{@post.description}"
+    @meta_description = "#{@post.title}: #{@post.description.gsub(/\r?\n/, ' ')}"
     @related_posts = @post.find_related_tags
     @posts = Post.all.order(order_number: :desc)
   end
