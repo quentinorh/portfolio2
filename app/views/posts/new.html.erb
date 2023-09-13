@@ -11,9 +11,12 @@
     <br>
     <%= f.input :description %>
     <%= f.input :source %>
-    <%= f.input :tag_list, as: :check_boxes, collection: [ "Fabrication", "Photographie", "Graphisme", "Développement", "Environnement" ] %>
+    <%= f.label :tag_list, "Tags" %><br>
+    <%= f.input :tag_list, as: :check_boxes, collection: [ "Fabrication", "Photographie", "Graphisme", "Développement", "Environnement" ], label: false %>
 
-
-    <%= f.submit "Post", class: "button submit-button" %>
+    <%= f.label :category_ids, "Hashtags" %><br>
+    <%= collection_check_boxes(:post, :category_ids, Category.all, :id, :name) %>
+    <br><br>
+    <%= f.submit "Edit", class: "button submit-button" %>
   <% end %>
 </div>

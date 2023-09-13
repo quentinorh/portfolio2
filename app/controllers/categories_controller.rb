@@ -2,6 +2,7 @@ class CategoriesController < ApplicationController
 
   def index
     @categories = Category.all
+    @posts = Post.all.order(date: :desc, id: :desc)
   end
 
   def new

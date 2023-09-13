@@ -1,5 +1,4 @@
-<h1>Catégories</h1>
-<%= link_to 'Nouvelle catégorie', new_category_path %>
+<h2>Catégories</h2>
 <ul>
   <% @categories.each do |category| %>
     <li>
@@ -8,3 +7,16 @@
     </li>
   <% end %>
 </ul>
+<br>
+<%= link_to 'Nouvelle catégorie', new_category_path, class: "button" %>
+<br><br>
+<h2>Texte instagram</h2>
+<% @posts.each do |p| %>
+  <p>
+  Titre : <br>
+  <%= p.title %> (<%= l(p.date, format: "%B %Y").capitalize %>) :
+  <br><br>
+  Description : <br>
+  <%= p.description %>
+  </p>
+<% end %>
