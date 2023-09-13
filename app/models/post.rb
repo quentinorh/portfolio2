@@ -8,10 +8,17 @@ class Post < ApplicationRecord
 
   scope :published, -> { where(draft: false) }
 
+  extend FriendlyId
+  friendly_id :title, use: :slugged
+
   def previous_post
     Post.published.where("date = ? AND id > ?", self.date, self.id)
         .or(Post.published.where("date > ?", self.date))
         .order(:date, :id).first
+  end
+
+  def should_generate_new_friendly_id?
+    title_changed?
   end
 
   def next_post

@@ -10,7 +10,7 @@ class PostsController < ApplicationController
   end
 
   def show
-    @post = Post.find(params[:id])
+    @post = Post.friendly.find(params[:id])  # <-- Changement ici
     @related_posts = @post.find_related_tags
     @posts = Post.all.order(order_number: :desc)
   end
@@ -34,12 +34,12 @@ class PostsController < ApplicationController
   end
 
   def edit
-    @post = Post.find(params[:id])
+    @post = Post.friendly.find(params[:id])  # <-- Changement ici
     @posts = Post.all.order(order_number: :desc)
   end
 
   def update
-    @post = Post.find(params[:id])
+    @post = Post.friendly.find(params[:id])  # <-- Changement ici
     @old_order = @post.order_number
     @post.attributes = post_params.except(:photos)
     post_params[:photos].each do |photo|
@@ -61,7 +61,7 @@ class PostsController < ApplicationController
           p.save
         end
       end
-      @post = Post.find(params[:id])
+      @post = Post.friendly.find(params[:id])  # <-- Changement ici
       @post.order_number = @new_order
       @post.save
       redirect_to post_path(@post)
@@ -71,7 +71,7 @@ class PostsController < ApplicationController
   end
 
   def delete_photo
-    @post = Post.find(params[:id])
+    @post = Post.friendly.find(params[:id])  # <-- Changement ici
     @post.photos.find_by_id(params[:photo_id]).delete
     @post.save
   end

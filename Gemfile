@@ -10,6 +10,8 @@ gem 'flatpickr', '~> 2.3', '>= 2.3.5.0'
 
 gem 'rails-i18n'
 
+gem 'friendly_id', '~> 5.4'
+
 # Install the Acts-As-Taggable-On Gem
 gem 'acts-as-taggable-on', '~> 9.0'
 
