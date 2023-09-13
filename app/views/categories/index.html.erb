@@ -13,10 +13,6 @@
 <h2>Texte instagram</h2>
 <% @posts.each do |p| %>
   <p>
-  Titre : <br>
-  <%= p.title %> (<%= l(p.date, format: "%B %Y").capitalize %>) :
-  <br><br>
-  Description : <br>
   <%= p.description %>
   </p>
 <% end %>
