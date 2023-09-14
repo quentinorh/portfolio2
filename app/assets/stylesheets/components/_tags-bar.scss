@@ -37,7 +37,6 @@
   margin-top: -22px;
   margin-bottom: -22px;
   z-index: 10;
-  // background-color: rgb(240, 240, 240);
   display: block;
   background-size: 40px;
 }
@@ -57,25 +56,15 @@
   .icon {
     height: calc(20vh + 18px);
     width: 22px;
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 11px;
     margin-top: -11px;
     margin-bottom: -11px;
-    z-index: 10;
-    background-color: rgb(240, 240, 240);
-    display: block;
     background-size: 20px;
   }
   .icon-top {
     margin-top: 0px;
-    border-top-left-radius: 0%;
-    border-top-right-radius: 0%;
   }
   .icon-bottom {
     margin-bottom: 0px;
-    border-bottom-left-radius: 0%;
-    border-bottom-right-radius: 0%;
   }
 }
 
@@ -83,11 +72,6 @@
   .icon {
     height: calc(20vh + 36px);
   }
-}
-
-
-.icon:hover {
-  z-index: 20;
 }
 
 .fab-icon {
