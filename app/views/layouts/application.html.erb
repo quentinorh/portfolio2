@@ -3,11 +3,13 @@
   <head>
 
     <% if @post %>
-      <% image_url = "#{@post.photos.first.key if @post.photos.any?}" %>
+      <% image_url = cl_image_url(@post.photos.first.key, :secure => true) if @post.photos.any? %>
     <% elsif params[:tag].present? && @posts.any? %>
-      <% image_url = "https://res.cloudinary.com/dkv3sh4oq/image/upload/v1694691411/portfolio_jxqx9m.png" %>
+      <% image_url = root_url(chop: true) + asset_path('portfolio.png') %>
+      <meta property="og:image" content="<%= image_url %>">
     <% else %>
-      <% image_url = "https://res.cloudinary.com/dkv3sh4oq/image/upload/v1694691411/portfolio_jxqx9m.png" %>
+      <% image_url = root_url(chop: true) + asset_path('portfolio.png') %>
+      <meta property="og:image" content="<%= image_url %>">
     <% end %>
 
     <% title_content = "Quentin Orhant - Écologeek | Maker | Développeur#{@post ? " - #{@post.title}" : (@page_title ? " - #{@page_title}" : "")}" %>
