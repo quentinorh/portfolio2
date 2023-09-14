@@ -123,10 +123,6 @@ label {
   height: 110px;
 }
 
-.footer {
-  height: 100px;
-}
-
 .source {
   word-break: break-word;
 }
@@ -186,7 +182,8 @@ label {
 }
 
 .footer {
-  margin-block-start: 50px;
+  margin-block-start: 100px;
+  height: 50px;
 }
 
 .footer-text {

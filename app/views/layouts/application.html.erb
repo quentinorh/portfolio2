@@ -1,9 +1,28 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <title>Quentin Orhant - Écologeek | Maker | Développeur<%= @post ? " - #{@post.title}" : (@page_title ? " - #{@page_title}" : "") %></title>
-    <meta name="description" content="<%= @meta_description || "Quentin Orhant : Expert freelance en éco-conception d’objets et de services. Développeur, maker, je mets en avant une approche éthique et écologique dans tous mes projets. Découvrez mes réalisations allant du recyclage des plastiques à la fabrication d’une balise pour les tortues marines. Chaque création est le fruit d'une réflexion sur les enjeux environnementaux actuels. Explorez mes travaux qui fusionnent art, science et technologie pour un avenir plus durable." %>">
+
+    <% if @post %>
+      <% image_url = @post.photos.first.key if @post.photos.any? %>
+    <% elsif params[:tag].present? && @posts.any? %>
+      <% image_url = @posts.first.photos.first.key if @posts.first.photos.any? %>
+    <% else %>
+      <% image_url = asset_path('portrait-quentin-orhant.jpg') %>
+    <% end %>
+
+    <% title_content = "Quentin Orhant - Écologeek | Maker | Développeur#{@post ? " - #{@post.title}" : (@page_title ? " - #{@page_title}" : "")}" %>
+    <% description_content = @meta_description || "Quentin Orhant : Expert freelance en éco-conception d’objets et de services..." %>
+    <% page_url = request.original_url %>
+
+    <title><%= title_content %></title>
+    <meta name="description" content="<%= description_content %>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta property="og:title" content="<%= title_content %>" />
+    <meta property="og:description" content="<%= description_content %>" />
+    <meta property="og:image" content="<%= image_url %>" />
+    <meta property="og:url" content="<%= page_url %>" />
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
