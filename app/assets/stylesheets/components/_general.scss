@@ -184,3 +184,23 @@ label {
 #post_description {
   height: 100px;
 }
+
+.footer {
+  margin-block-start: 50px;
+}
+
+.footer-text {
+  color: black;
+  line-height: 19px;
+  font-style: italic;
+  font-size: 12px;
+  margin-right: 6px;
+  margin-block-start: 0;
+  margin-block-end: 0 !important;
+  text-align: center;
+}
+
+.leaf {
+  margin-bottom: -2px;
+  height: 10px;
+}

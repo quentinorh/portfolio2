@@ -10,9 +10,7 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <%= favicon_link_tag "favicon.ico", rel: "icon" %>
     <script defer src="https://app.tinyanalytics.io/pixel/2NvQLdPcP9PonJgK"></script>
-
   </head>
-
   <body data-hijacking="off" data-animation="none">
     <%= render "shared/tagsbar" %>
     <%= render "shared/navbar" %>
@@ -20,16 +18,10 @@
     <%= render "shared/flashes" %>
     <div class="container">
       <%= yield %>
-      <div class="footer"></div>
+    <div class="footer">
+      <%= link_to "https://collectif.greenit.fr/ecoconception-web/", class: "footer", title: "lien vers greenIT - référenciel d'éco-conception web" do %>
+        <p class= "footer-text"> Site réalisé en respectant les principes de l'éco-conception web</p>
+      <% end %>
     </div>
   </body>
 </html>
-
-<%# <script>
-  $(document).on('ready page:load', function () {
-    $('#post_tag_ids').chosen({
-      allow_single_deselect: true,
-      width: '100%'
-    })
-  });
-</script> %>
