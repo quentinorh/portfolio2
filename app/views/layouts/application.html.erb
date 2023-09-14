@@ -5,9 +5,9 @@
     <% if @post %>
       <% image_url = @post.photos.first.key if @post.photos.any? %>
     <% elsif params[:tag].present? && @posts.any? %>
-      <% image_url = @posts.first.photos.first.key if @posts.first.photos.any? %>
+      <% image_url = asset_path('portfolio.png') %>
     <% else %>
-      <% image_url = asset_path('portrait-quentin-orhant.jpg') %>
+      <% image_url = asset_path('portfolio.png') %>
     <% end %>
 
     <% title_content = "Quentin Orhant - Écologeek | Maker | Développeur#{@post ? " - #{@post.title}" : (@page_title ? " - #{@page_title}" : "")}" %>
@@ -38,10 +38,5 @@
     <%= render "shared/flashes" %>
     <div class="container">
       <%= yield %>
-    <div class="footer">
-      <%= link_to "https://collectif.greenit.fr/ecoconception-web/", class: "footer", title: "lien vers greenIT - référenciel d'éco-conception web", target: "_blank" do %>
-        <p class= "footer-text"> Site réalisé en respectant les principes de l'éco-conception web</p>
-      <% end %>
-    </div>
   </body>
 </html>
