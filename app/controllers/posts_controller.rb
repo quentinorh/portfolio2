@@ -37,12 +37,12 @@ class PostsController < ApplicationController
   end
 
   def edit
-    @post = Post.friendly.find(params[:id])  # <-- Changement ici
+    @post = Post.friendly.find(params[:id])
     @posts = Post.all.order(order_number: :desc)
   end
 
   def update
-    @post = Post.friendly.find(params[:id])  # <-- Changement ici
+    @post = Post.friendly.find(params[:id])
     @old_order = @post.order_number
     @post.attributes = post_params.except(:photos)
     post_params[:photos].each do |photo|
@@ -82,6 +82,6 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :draft, :date, :description, :source, :script, :order_number, photos: [], tag_list: [], category_ids: [])
+    params.require(:post).permit(:title, :draft, :date, :alt_text, :description, :source, :script, :order_number, photos: [], tag_list: [], category_ids: [])
   end
 end

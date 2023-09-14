@@ -1,47 +1,47 @@
 <div class="tags-line">
   <% if params[:tag].present? %>
     <% if params[:tag] == "Fabrication" %>
-      <%= link_to tagged_path(tag: "Fabrication") do %><h3 class="tag-line fab-tag">Fabrication</h3><% end %>
+      <%= link_to tagged_path(tag: "Fabrication"), title: "Tag : Fabrication" do %><h3 class="tag-line fab-tag">Fabrication</h3><% end %>
     <% end %>
     <% if params[:tag] == "Photographie" %>
-      <%= link_to tagged_path(tag: "Photographie") do %><h3 class="tag-line photo-tag">Photographie</h3><% end %>
+      <%= link_to tagged_path(tag: "Photographie"), title: "Tag : Photographie" do %><h3 class="tag-line photo-tag">Photographie</h3><% end %>
     <% end %>
     <% if params[:tag] == "Graphisme" %>
-      <%= link_to tagged_path(tag: "Graphisme") do %><h3 class="tag-line graph-tag">Graphisme</h3><% end %>
+      <%= link_to tagged_path(tag: "Graphisme"), title: "Tag : Graphisme" do %><h3 class="tag-line graph-tag">Graphisme</h3><% end %>
     <% end %>
     <% if params[:tag] == "Développement" %>
-      <%= link_to tagged_path(tag: "Développement") do %><h3 class="tag-line dev-tag">Développement</h3><% end %>
+      <%= link_to tagged_path(tag: "Développement"), title: "Tag : Développement" do %><h3 class="tag-line dev-tag">Développement</h3><% end %>
     <% end %>
     <% if params[:tag] == "Environnement" %>
-      <%= link_to tagged_path(tag: "Environnement") do %><h3 class="tag-line env-tag">Environnement</h3><% end %>
+      <%= link_to tagged_path(tag: "Environnement"), title: "Tag : Environnement" do %><h3 class="tag-line env-tag">Environnement</h3><% end %>
     <% end %>
     <div class="spacer-30"></div>
 
   <% elsif @post.present? %>
     <% @post.tag_list.each do |tag| %>
       <% if tag == "Fabrication" %>
-        <%= link_to tagged_path(tag: "Fabrication") do %><h3 class="multi-tag-line fab-tag">Fabrication</h3><% end %>
+        <%= link_to tagged_path(tag: "Fabrication"), title: "Tag : Fabrication" do %><h3 class="multi-tag-line fab-tag">Fabrication</h3><% end %>
       <% end %>
       <% if tag == "Photographie" %>
-        <%= link_to tagged_path(tag: "Photographie") do %><h3 class="multi-tag-line photo-tag">Photographie</h3><% end %>
+        <%= link_to tagged_path(tag: "Photographie"), title: "Tag : Photographie" do %><h3 class="multi-tag-line photo-tag">Photographie</h3><% end %>
       <% end %>
       <% if tag == "Graphisme" %>
-        <%= link_to tagged_path(tag: "Graphisme") do %><h3 class="multi-tag-line graph-tag">Graphisme</h3><% end %>
+        <%= link_to tagged_path(tag: "Graphisme"), title: "Tag : Graphisme" do %><h3 class="multi-tag-line graph-tag">Graphisme</h3><% end %>
       <% end %>
       <% if tag == "Développement" %>
-        <%= link_to tagged_path(tag: "Développement") do %><h3 class="multi-tag-line dev-tag">Développement</h3><% end %>
+        <%= link_to tagged_path(tag: "Développement"), title: "Tag : Développement" do %><h3 class="multi-tag-line dev-tag">Développement</h3><% end %>
       <% end %>
       <% if tag == "Environnement" %>
-        <%= link_to tagged_path(tag: "Environnement") do %><h3 class="multi-tag-line env-tag">Environnement</h3><% end %>
+        <%= link_to tagged_path(tag: "Environnement"), title: "Tag : Environnement" do %><h3 class="multi-tag-line env-tag">Environnement</h3><% end %>
       <% end %>
     <% end %>
     <div class="spacer-30"></div>
   <% else %>
-    <%= link_to tagged_path(tag: "Fabrication") do %><h3 class="multi-tag-line fab-tag">Fabrication</h3><% end %>
-    <%= link_to tagged_path(tag: "Photographie") do %><h3 class="multi-tag-line photo-tag">Photographie</h3><% end %>
-    <%= link_to tagged_path(tag: "Graphisme") do %><h3 class="multi-tag-line graph-tag">Graphisme</h3><% end %>
-    <%= link_to tagged_path(tag: "Développement") do %><h3 class="multi-tag-line dev-tag">Développement</h3><% end %>
-    <%= link_to tagged_path(tag: "Environnement") do %><h3 class="multi-tag-line env-tag">Environnement</h3><% end %>
+    <%= link_to tagged_path(tag: "Fabrication"), title: "Tag : Fabrication" do %><h3 class="multi-tag-line fab-tag">Fabrication</h3><% end %>
+    <%= link_to tagged_path(tag: "Photographie"), title: "Tag : Photographie" do %><h3 class="multi-tag-line photo-tag">Photographie</h3><% end %>
+    <%= link_to tagged_path(tag: "Graphisme"), title: "Tag : Graphisme" do %><h3 class="multi-tag-line graph-tag">Graphisme</h3><% end %>
+    <%= link_to tagged_path(tag: "Développement"), title: "Tag : Développement" do %><h3 class="multi-tag-line dev-tag">Développement</h3><% end %>
+    <%= link_to tagged_path(tag: "Environnement"), title: "Tag : Environnement" do %><h3 class="multi-tag-line env-tag">Environnement</h3><% end %>
   <div class="spacer-30"></div>
   <% end %>
 
