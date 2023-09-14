@@ -5,9 +5,9 @@
     <% if @post %>
       <% image_url = @post.photos.first.key if @post.photos.any? %>
     <% elsif params[:tag].present? && @posts.any? %>
-      <% image_url = asset_path('portfolio.png') %>
+      <% image_url = https://res.cloudinary.com/dkv3sh4oq/image/upload/v1694691236/portrait-quentin-orhant_yrkiyn.jpg %>
     <% else %>
-      <% image_url = asset_path('portfolio.png') %>
+      <% image_url = https://res.cloudinary.com/dkv3sh4oq/image/upload/v1694691236/portrait-quentin-orhant_yrkiyn.jpg %>
     <% end %>
 
     <% title_content = "Quentin Orhant - Écologeek | Maker | Développeur#{@post ? " - #{@post.title}" : (@page_title ? " - #{@page_title}" : "")}" %>
