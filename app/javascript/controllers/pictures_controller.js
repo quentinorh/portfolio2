@@ -6,7 +6,6 @@ static values = {
   postid: String,
 }
   connect() {
-    console.log("Hello World!")
   }
 
   deletePicture(e) {
