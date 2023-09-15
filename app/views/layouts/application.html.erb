@@ -5,10 +5,10 @@
     <% if @post %>
       <% image_url = cloudinary_url(@post.photos.first.key, secure: true) if @post.photos.any? %>
     <% elsif params[:tag].present? && @posts.any? %>
-      <% image_url = asset_url('portfolio.png') %>
+      <% image_url = asset_url('portfolio.webp') %>
       <meta property="og:image" content="<%= image_url %>">
     <% else %>
-      <% image_url = asset_url('portfolio.png') %>
+      <% image_url = asset_url('portfolio.webp') %>
     <% end %>
 
     <% title_content = "Quentin Orhant - Écologeek | Maker | Développeur#{@post ? " - #{@post.title}" : (@page_title ? " - #{@page_title}" : "")}" %>
