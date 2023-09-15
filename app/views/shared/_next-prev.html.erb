@@ -2,7 +2,7 @@
 <div class="next-prev">
   <% if @post.previous_post %>
     <%= link_to post_path(@post.previous_post), class: "prev" do %>
-      <%= image_tag "prev.png", class: "prev-img", width: "19px", height: "41px"  %>
+      <%= image_tag "prev.webp", class: "prev-img", width: "19px", height: "41px"  %>
       <h3 class="prev-title"><%= @post.previous_post&.title %></h3>
     <% end %>
   <% end %>
@@ -10,7 +10,7 @@
   <% if @post.next_post %>
     <%= link_to post_path(@post.next_post), class: "next" do %>
       <h3 class="next-title"><%= @post.next_post&.title %></h3>
-      <%= image_tag "next.png", class: "next-img", width: "19px", height: "41px"  %>
+      <%= image_tag "next.webp", class: "next-img", width: "19px", height: "41px"  %>
     <% end %>
   <% end %>
 </div>
