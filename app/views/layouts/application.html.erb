@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-
     <% if @post %>
       <% image_url = cloudinary_url(@post.photos.first.key, secure: true) if @post.photos.any? %>
     <% elsif params[:tag].present? && @posts.any? %>
@@ -10,21 +9,17 @@
     <% else %>
       <% image_url = asset_url('portfolio.webp') %>
     <% end %>
-
     <% title_content = "Quentin Orhant - Écologeek | Maker | Développeur#{@post ? " - #{@post.title}" : (@page_title ? " - #{@page_title}" : "")}" %>
     <% description_content = @meta_description || "Expert freelance en éco-conception d’objets et de services. Développeur et maker, je mets en avant une approche éthique et écologique dans tous mes projets. Explorez mes travaux qui fusionnent art, science et technologie pour un futur plus durable." %>
     <% page_url = request.original_url %>
-
     <title><%= title_content %></title>
     <meta name="description" content="<%= description_content %>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <meta property="og:type" content="article" />
     <meta property="og:title" content="<%= title_content %>" />
     <meta property="og:description" content="<%= description_content %>" />
     <meta property="og:image" content="<%= image_url %>" />
     <meta property="og:url" content="<%= page_url %>" />
-
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
