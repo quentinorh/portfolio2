@@ -203,5 +203,11 @@ label {
 }
 
 .description {
-  padding-right: 30px;
+  padding-right: 70px;
+}
+
+@media (max-width: 992px) {
+  .description {
+    padding-right: 30px;
+  }
 }
