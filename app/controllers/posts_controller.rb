@@ -2,7 +2,7 @@ class PostsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   def index
-    @meta_description = "Expert freelance en éco-conception d’objets et de services. Développeur et maker, je mets en avant une approche éthique et écologique dans tous mes projets. Explorez mes travaux qui fusionnent art, science et technologie pour un avenir plus durable."
+    @meta_description = "Expert freelance en éco-conception d’objets et de services. Développeur et maker, je mets en avant une approche éthique et écologique dans tous mes projets. Explorez mes travaux qui fusionnent art, science et technologie pour un futur plus durable."
     if params[:tag].present?
       @posts = Post.tagged_with(params[:tag]).order(date: :desc)
       @page_title = "##{params[:tag]}"
