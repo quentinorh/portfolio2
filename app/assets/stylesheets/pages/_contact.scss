@@ -43,6 +43,12 @@ textarea#contact_message.contact-form-text-area {
 
 @media (min-width: 550px) {
   .icons-logiciels {
-    width: 440px;
+    width: 450px;
+  }
+}
+
+@media (min-width: 992px) {
+  .icons-logiciels {
+    width: 550px;
   }
 }
