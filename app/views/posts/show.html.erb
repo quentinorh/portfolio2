@@ -20,7 +20,7 @@
     <% end %>
     <br>
     <% if @post.description.present? %>
-      <p><%= simple_format @post.description %></p>
+      <%= simple_format(@post.description, class: 'post-description')  %>
     <% end %>
     <% if @post.source.present? %>
       <% if @post.source.split(',').count == 1 %>
