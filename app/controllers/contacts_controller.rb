@@ -1,13 +1,13 @@
 class ContactsController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:new, :new2, :create, :sent]
+  skip_before_action :authenticate_user!, only: [:info, :message, :create, :sent]
 
-  def new
+  def info
     @contact = Contact.new
     @page_title = "Informations et contact"
     @meta_description = "Pour en savoir plus sur mes services et réalisations en éco-conception. Je suis là pour répondre à toutes vos questions et envisager des collaborations."
   end
 
-  def new2
+  def message
     @contact = Contact.new
     @page_title = "Me contacter"
     @meta_description = "Pour en savoir plus sur mes services et réalisations en éco-conception. Je suis là pour répondre à toutes vos questions et envisager des collaborations."

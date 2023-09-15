@@ -7,8 +7,8 @@ Rails.application.routes.draw do
 
   get 'tags/:tag', to: 'posts#index', as: :tagged
   resources :contacts, only: [:new, :create]
-  get 'contact', to: 'contacts#new', as: 'contact'
-  get 'message', to: 'contacts#new2'
+  get 'contact', to: 'contacts#info', as: 'contact'
+  get 'message', to: 'contacts#message'
   get 'contacts/sent'
 
   resources :posts, path: '/' do
