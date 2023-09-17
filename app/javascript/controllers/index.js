@@ -12,3 +12,6 @@ application.register("tags", TagsController)
 
 import DatepickerController from "./datepicker_controller"
 application.register("datepicker", DatepickerController)
+
+import CookiesController from "./cookies_controller"
+application.register("cookies", CookiesController)
