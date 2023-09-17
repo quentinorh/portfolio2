@@ -3,8 +3,8 @@
     <div
     class="edit-container"
     data-controller="pictures"
-    data-pictures-postid-value="<%= @post.id %>">
-      <h1 class = "text-center">Edit Post</h1>
+    data-pictures-postslug-value="<%= @post.slug %>">
+      <h1 class = "text-center">Edit Post <%= @post.slug %></h1>
       <%= simple_form_for @post do |f| %>
         <%= f.input :draft, as: :select, collection: [['Yes',true], ['No',false]], required: false, include_blank: false %>
         <br>
@@ -18,7 +18,7 @@
           <% @post.photos.each do |photo| %>
             <div class="delete-img-card" data-action="click->pictures#deletePicture">
               <%= cl_image_tag photo.key, class: "delete-img", data: {picture_photoId_value: "#{photo.id}"} %>
-              <%= image_tag "del.png", class: "delete-icon" %>
+              <%= image_tag "del.webp", class: "delete-icon" %>
             </div>
           <% end %>
         </div>

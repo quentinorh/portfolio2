@@ -2,7 +2,6 @@ import { Controller } from "stimulus";
 
 export default class extends Controller {
   connect() {
-    console.log("coookies");
     // Vérifiez si le cookie existe déjà
     if (!this.hasCookie("cookieBannerDismissed")) {
       this.element.style.display = "flex";
