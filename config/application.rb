@@ -15,10 +15,6 @@ module MyPortfolio
     end
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
-<<<<<<< HEAD
-
-=======
->>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
