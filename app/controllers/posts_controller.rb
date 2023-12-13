@@ -64,7 +64,7 @@ class PostsController < ApplicationController
           p.save
         end
       end
-      @post = Post.friendly.find(params[:id])  # <-- Changement ici
+      @post = Post.friendly.find(params[:id])
       @post.order_number = @new_order
       @post.save
       redirect_to post_path(@post)
@@ -74,7 +74,7 @@ class PostsController < ApplicationController
   end
 
   def delete_photo
-    @post = Post.friendly.find(params[:id])  # <-- Changement ici
+    @post = Post.friendly.find(params[:id])
     @post.photos.find_by_id(params[:photo_id]).delete
     @post.save
   end

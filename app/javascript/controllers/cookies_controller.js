@@ -2,17 +2,13 @@ import { Controller } from "stimulus";
 
 export default class extends Controller {
   connect() {
-    // Vérifiez si le cookie existe déjà
     if (!this.hasCookie("cookieBannerDismissed")) {
       this.element.style.display = "flex";
     }
   }
 
   close() {
-    // Cachez le bandeau
     this.element.style.display = "none";
-
-    // Ajoutez un cookie pour le cacher pendant 24 heures
     this.setCookie("cookieBannerDismissed", "true", 1);
   }
 

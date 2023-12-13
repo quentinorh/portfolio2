@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   get '/sitemap.xml', to: redirect("https://portfolioquentinoio.s3.eu-central-1.amazonaws.com/sitemaps/sitemap.xml")
 
+  get '/storybird', to: 'storybird#index'
   get 'tags/:tag', to: 'posts#index', as: :tagged
   resources :contacts, only: [:new, :create]
   get 'contact', to: 'contacts#info', as: 'contact'

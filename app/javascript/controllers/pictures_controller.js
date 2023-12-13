@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="pictures"
 export default class extends Controller {
 static values = {
   postslug: String,
