@@ -1,11 +1,31 @@
 <div class = "edit-container" >
   <h1 class = "text-center">New Post</h1>
   <%= simple_form_for @post do |f| %>
+<<<<<<< HEAD
     <%= f.input :title %>
     <%= f.input :photos, as: :file, input_html: { multiple: true } %>
     <%= f.input :description %>
     <%= f.input :source %>
     <%= f.input :tag_list, as: :check_boxes, collection: [ "Fabrication", "Photographie", "Graphisme", "Développement", "Environnement" ] %>
     <%= f.submit %>
+=======
+    <%= f.input :draft, as: :select, collection: [['Yes',true], ['No',false]], required: false, include_blank: false %>
+    <br>
+    <%= f.input :title %>
+    <br>
+    <%= f.text_field :date, data: { controller: "datepicker" } %>
+    <br><br>
+    <%= f.input :photos, as: :file, input_html: { multiple: true } %>
+    <br>
+    <%= f.input :description %>
+    <%= f.input :source %>
+    <%= f.label :tag_list, "Tags" %><br>
+    <%= f.input :tag_list, as: :check_boxes, collection: [ "Fabrication", "Photographie", "Graphisme", "Développement", "Environnement" ], label: false %>
+
+    <%= f.label :category_ids, "Hashtags" %><br>
+    <%= collection_check_boxes(:post, :category_ids, Category.all, :id, :name) %>
+    <br><br>
+    <%= f.submit "Edit", class: "button submit-button" %>
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
   <% end %>
 </div>

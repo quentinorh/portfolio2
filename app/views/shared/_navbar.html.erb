@@ -1,4 +1,5 @@
 <div class="nav-container">
+<<<<<<< HEAD
   <%= link_to tagged_path, class: "header-p-header" do %>
     <h1 class="header text-align-center">Quentin Orhant</h1>
     <p class="p-header text-align-center">Maker et développeur freelance</p>
@@ -9,5 +10,18 @@
     <% end %>
     <%= link_to "Infos", contact_path, class: "button" %>
     <%= link_to "", message_path, class: "button button-mail" %>
+=======
+  <%= link_to root_path, class: "header-p-header", title: "Quentin Orhant - Écologeek | Maker | Développeur" do  %>
+    <h1 class="header text-align-center red">Quentin Orhant</h1>
+    <p class="p-header text-align-center">Écologeek | Maker | Développeur</p>
+  <% end %>
+  <div class="buttons-container flex">
+    <% if current_user %>
+      <%= link_to "Tags", categories_path, class: "button", title: "Link to tags generator"  %>
+      <%= link_to "Log out", destroy_user_session_path, class: "button", data: {turbo_method: :delete}, title: "Log out"  %>
+    <% end %>
+    <%= link_to "Infos", contact_path, class: "button", title: "Link to infos"  %>
+    <%= link_to "", message_path, class: "button button-mail", title: "Link to message"  %>
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
   </div>
 </div>

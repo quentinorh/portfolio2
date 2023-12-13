@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="container-8">
   <div class="g-1-5 show_pics">
     <% @post.photos.each do |photo| %>
@@ -18,6 +19,46 @@
         <p class="source"><%= @post.source %></p>
       <% end %>
     <% end %>
+=======
+<% if current_user %>
+  <%= link_to "Edit", edit_post_path(@post), class: "post-edit button" %>
+<% end %>
+<div class="container-8">
+  <div class="g-1-5 show_pics">
+    <% @post.photos.each_with_index do |photo, index| %>
+      <%= cl_image_tag photo.key,
+          class: "img-show",
+          width: 860,
+          quality: :auto,
+          fetch_format: :webp,
+          crop: "fill",
+          alt: "#{@post.alt_text} #{index + 1}" %>
+    <% end %>
+    <div class="spacer"></div>
+  </div>
+  <div class="g-6-9 show-fix">
+    <h2 class=""><%= @post.title %></h2>
+    <% if @post.date.present? %>
+      <h3><%= l(@post.date, format: "%B %Y") %></h3>
+    <% end %>
+    <br>
+    <% if @post.description.present? %>
+      <%= simple_format(@post.description, class: 'post-description')  %>
+    <% end %>
+    <% if @post.source.present? %>
+      <% if @post.source.split(',').count == 1 %>
+        <h3>Source</h3>
+      <% elsif @post.source.split(',').count >= 2 %>
+        <h3 class="source-title" >Sources</h3>
+      <% end %>
+      <% @post.source.split(',').each do |link| %>
+        <%= link_to link, target: "_blank" do %>
+          <p class="source"><%= link %></p>
+        <% end %>
+      <% end %>
+    <% end %>
+    <div class="spacer"></div>
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
   </div>
 </div>
 <%= render "shared/next-prev" %>

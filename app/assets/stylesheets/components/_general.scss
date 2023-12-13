@@ -29,22 +29,38 @@ h2, h3 {
 
 h2 {
   font-size: 24px;
+<<<<<<< HEAD
   margin-top: 0;
+=======
+  margin-top: 0px;
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
   margin-block-end: 0.5em;
 }
 
 h3 {
   margin-block-end: 0;
+<<<<<<< HEAD
   margin-top: 21px
+=======
+  margin-top: 12px
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
 }
 
 h3, label {
   font-size: 16px;
 }
 
+<<<<<<< HEAD
 a {
   font-size: 12px;
   color: $red;
+=======
+
+
+a {
+  font-size: 12px;
+  color: red;
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
 }
 
 p {
@@ -60,7 +76,11 @@ p {
   font-family: $body-font;
   font-weight: 600;
   font-size: 15px;
+<<<<<<< HEAD
   margin-block-start: 0em;
+=======
+  margin-block-start: 0.2em;
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
   margin-block-end: 0em;
   text-decoration: none;
   color: black;
@@ -109,7 +129,11 @@ label {
 }
 
 .spacer {
+<<<<<<< HEAD
   height: 70px;
+=======
+  height: 44px;
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
 }
 
 .spacer-30 {
@@ -120,12 +144,22 @@ label {
   height: 110px;
 }
 
+<<<<<<< HEAD
 .footer {
   height: 100px;
 }
 
 .source {
   word-break: break-all;
+=======
+.source {
+  word-break: break-word;
+}
+
+.source-title {
+  margin-top: 46px;
+  margin-bottom: 19px;
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
 }
 
 .message {
@@ -141,3 +175,66 @@ label {
 .prev-img {
   margin-right: 10px;
 }
+<<<<<<< HEAD
+=======
+
+.flatpickr-calendar {
+  font-family: $headers-font;
+}
+
+.flatpickr-day.selected {
+  background-color: $red !important;
+  border-color: $red !important;
+}
+
+.post-edit{
+  line-height: 28px !important;
+  height: 21px;
+  padding-top: 3px !important;
+  margin-bottom: 20px;
+  width: 33px;
+  display: block;
+  margin-left: auto !important;
+  margin-right: auto;
+}
+
+.post-draft{
+  line-height: 28px !important;
+  height: 21px;
+  padding-top: 3px !important;
+  margin-bottom: 20px;
+  width: 41px;
+  display: block;
+  margin-left: auto !important;
+  margin-right: auto;
+}
+
+#post_description {
+  height: 100px;
+}
+
+.footer {
+  margin-block-start: 50px;
+  height: 60px;
+}
+
+.footer-text {
+  color: black;
+  line-height: 19px;
+  font-style: italic;
+  font-size: 14px;
+  margin-right: 6px;
+  margin-block-start: 0;
+  margin-block-end: 0 !important;
+  text-align: center;
+}
+
+.leaf {
+  margin-bottom: -2px;
+  height: 10px;
+}
+
+.post-description {
+  margin-block-end: 1em !important;
+}
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85

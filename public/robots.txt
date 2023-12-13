@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 # See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+=======
+User-agent: *
+Disallow: /users/sign_in/
+Sitemap: https://quentino.io/sitemap.xml
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85

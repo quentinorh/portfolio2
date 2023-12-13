@@ -7,14 +7,26 @@
 .tag-line {
   color: white;
   display: inline-block;
+<<<<<<< HEAD
   padding-left: 14px;
   padding-right: 14px;
   padding-top: 8px;
+=======
+  font-size: 16px;
+  padding-left: 14px;
+  padding-right: 14px;
+  padding-top: 4px;
+  padding-bottom: 5px;
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
   margin-top: 0px;
   margin-bottom: 13px;
   height: 20px;
   border-radius: 25px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+<<<<<<< HEAD
+=======
+  transition: background-color 0.5s ease;
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
 }
 
 .multi-tag-line {
@@ -24,7 +36,11 @@
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 8px;
+<<<<<<< HEAD
   line-height: 1.2;
+=======
+  line-height: 1;
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
   margin-top: 0px;
   margin-bottom: 13px;
   height: 20px;
@@ -32,6 +48,7 @@
   margin-left: 3px;
   margin-right: 3px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+<<<<<<< HEAD
 }
 
 .fab-tag {
@@ -52,4 +69,35 @@
 
 .env-tag {
   background-color: $green;
+=======
+  transition: background-color 0.2s ease;
+}
+
+.fab-tag {
+ background-color: $gray;
+}
+
+.photo-tag {
+  background-color: $gray;
+}
+
+.graph-tag {
+  background-color: $gray;
+}
+
+.dev-tag {
+  background-color: $gray;
+}
+
+.env-tag {
+  background-color: $gray;
+}
+
+.multi-tag-line:hover {
+  background: $red;
+}
+
+.tag-line:hover {
+  background: $red;
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
 }

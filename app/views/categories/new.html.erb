@@ -1,0 +1,11 @@
+<div class="edit-container">
+  <%= simple_form_for @category do |f| %>
+    <%= f.label :name, "Nom de la catégorie" %><br>
+    <%= f.text_field  :name, label: false %>
+    <br><br>
+    <%= f.label :hashtags, "Hashtags (séparés par des espaces)" %><br>
+    <%= f.text_area :hashtags, rows: 5 %>
+    <br>
+    <%= f.submit "Créer une catégorie" %>
+  <% end %>
+</div>

@@ -5,6 +5,10 @@
     "@hotwired/stimulus": "^3.2.1",
     "@hotwired/turbo-rails": "^7.2.4",
     "@popperjs/core": "^2.11.6",
+<<<<<<< HEAD
+=======
+    "flatpickr": "^4.6.13",
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
     "gsap": "^3.11.5",
     "scrollmagic": "^2.0.8",
     "stimulus": "^3.2.1",

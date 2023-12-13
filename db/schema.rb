@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[7.0].define(version: 2023_01_06_141111) do
+=======
+ActiveRecord::Schema[7.0].define(version: 2023_09_14_081840) do
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +46,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_06_141111) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+<<<<<<< HEAD
+=======
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "hashtags"
+  end
+
+  create_table "categories_posts", id: false, force: :cascade do |t|
+    t.bigint "post_id", null: false
+    t.bigint "category_id", null: false
+  end
+
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -50,6 +69,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_06_141111) do
     t.integer "order_number"
     t.text "source"
     t.text "script"
+<<<<<<< HEAD
+=======
+    t.date "date"
+    t.boolean "draft", default: false
+    t.string "slug"
+    t.string "alt_text"
+    t.index ["slug"], name: "index_posts_on_slug", unique: true
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
   end
 
   create_table "taggings", force: :cascade do |t|

@@ -4,11 +4,23 @@
 
 import { application } from "./application"
 
+<<<<<<< HEAD
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
+=======
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
 import PicturesController from "./pictures_controller"
 application.register("pictures", PicturesController)
 
 import TagsController from "./tags_controller"
 application.register("tags", TagsController)
+<<<<<<< HEAD
+=======
+
+import DatepickerController from "./datepicker_controller"
+application.register("datepicker", DatepickerController)
+
+import CookiesController from "./cookies_controller"
+application.register("cookies", CookiesController)
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85

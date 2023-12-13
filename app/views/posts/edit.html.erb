@@ -3,15 +3,29 @@
     <div
     class="edit-container"
     data-controller="pictures"
+<<<<<<< HEAD
     data-pictures-postid-value="<%= @post.id %>">
       <h1 class = "text-center">Edit Post</h1>
       <%= simple_form_for @post do |f| %>
         <%= f.input :title, required: true %>
+=======
+    data-pictures-postslug-value="<%= @post.slug %>">
+      <h1 class = "text-center">Edit Post <%= @post.slug %></h1>
+      <%= simple_form_for @post do |f| %>
+        <%= f.input :draft, as: :select, collection: [['Yes',true], ['No',false]], required: false, include_blank: false %>
+        <br>
+        <%= f.input :title, required: true %>
+        <label>Date</label>
+        <br>
+        <%= f.text_field :date, data: { controller: "datepicker" } %>
+        <br><br>
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
         <%= f.input :photos, as: :file, input_html: { multiple: true } %>
         <div class="delete-img-container">
           <% @post.photos.each do |photo| %>
             <div class="delete-img-card" data-action="click->pictures#deletePicture">
               <%= cl_image_tag photo.key, class: "delete-img", data: {picture_photoId_value: "#{photo.id}"} %>
+<<<<<<< HEAD
               <%= image_tag "del.png", class: "delete-icon" %>
             </div>
           <% end %>
@@ -25,6 +39,32 @@
     </div>
     <div class="script-edit">
 
+=======
+              <%= image_tag "del.webp", class: "delete-icon" %>
+            </div>
+          <% end %>
+        </div>
+        <%= f.input :alt_text %>
+        <%= f.input :description %>
+        <%= f.input :source %>
+        <%= f.label :tag_list, "Tags" %><br>
+        <%= f.input :tag_list, as: :check_boxes, collection: [ "Fabrication", "Photographie", "Graphisme", "Développement", "Environnement" ], label: false %>
+
+        <%= f.label :category_ids, "Hashtags" %><br>
+        <%= collection_check_boxes(:post, :category_ids, Category.all, :id, :name) %>
+        <br><br>
+        <%= f.submit "Edit", class: "button submit-button" %>
+      <% end %>
+      <br><br>
+      <h3>Texte instagram :</h3>
+      <p>
+        <%= @post.title %> (<%= l(@post.date, format: "%B %Y").capitalize %>) :
+      </p>
+      <%= simple_format @post.description %>
+      <p>
+        <%= @post.categories.map(&:hashtags).join(' ') %>
+      </p>
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
     </div>
   </div>
 </div>

@@ -1,6 +1,7 @@
 <br>
 <div class="card-container">
   <% if current_user %>
+<<<<<<< HEAD
     <%= link_to new_post_path do %>
       <%= image_tag "add.png", class: "card-add-post" %>
     <% end %>
@@ -39,3 +40,62 @@
     </div>
   <% end %>
 </div>
+=======
+    <%= link_to new_post_path, title: "Add post" do %>
+      <%= image_tag "add.webp", alt: "Add post img", class: "card-add-post" %>
+    <% end %>
+    <% @posts.each do |p| %>
+      <div class="card-box">
+        <% if p.draft == true %>
+          <%= link_to post_path(p), title: "#{p.title}"  do %>
+            <%= cl_image_tag p.photos.first.key,
+            class: "card-img draft",
+            loading: "lazy",
+            width: 500,
+            height: 500,
+            opacity: 50,
+            quality: 50,
+            fetch_format: :auto,
+            crop: :fill,
+            alt: "#{p.alt_text} 1" %>
+          <% end %>
+          <%= link_to "Edit", edit_post_path(p), class: "card-edit button", title: "Edit"  %>
+          <%= link_to  "Draft", edit_post_path(p),  class: "draft-edit button", title: "Edit daft"  %>
+        <% else %>
+          <%= link_to post_path(p), title: "#{p.title}" do %>
+            <%= cl_image_tag p.photos.first.key,
+            class: "card-img",
+            loading: "lazy",
+            width: 500,
+            height: 500,
+            quality: 50,
+            fetch_format: :auto,
+            crop: :fill,
+            alt: "#{p.alt_text} 1" %>
+          <% end %>
+          <%= link_to "Edit", edit_post_path(p), class: "card-edit button", title: "Edit"  %>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <% @posts.each do |p| %>
+      <% if p.draft == false %>
+        <div class="card-box">
+          <%= link_to post_path(p), title: "#{p.title}" do %>
+            <%= cl_image_tag p.photos.first.key,
+            class: "card-img",
+            loading: "lazy",
+            width: 500,
+            height: 500,
+            quality: 50,
+            fetch_format: :auto,
+            crop: :fill,
+            alt: "#{p.alt_text} 1" %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+<div class="footer"></div>
+>>>>>>> b1061df5e30387f8557abba7298717ea4a1fbe85
