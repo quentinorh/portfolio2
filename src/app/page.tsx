@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
-// Pour les images Cloudinary (comme en Rails)
+// Pour les images Cloudinary (comme en Rails Active Storage)
+// Rails stocke les fichiers dans un dossier = Rails.env (production / development)
 const CLOUDINARY_CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "";
+const CLOUDINARY_FOLDER = process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER || "production";
 
 function buildImageUrl(key: string) {
   if (!CLOUDINARY_CLOUD) return null;
-  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/upload/${key}`;
+  // public_id sur Cloudinary = folder + key (ex: production/xtapjjcjiudrlk3tmwyjgpuobabd)
+  const publicId = key.startsWith(CLOUDINARY_FOLDER + "/") ? key : `${CLOUDINARY_FOLDER}/${key}`;
+  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/upload/${publicId}`;
 }
 
 export default async function HomePage() {

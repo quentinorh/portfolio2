@@ -3,10 +3,12 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 
 const CLOUDINARY_CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "";
+const CLOUDINARY_FOLDER = process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER || "production";
 
 function buildImageUrl(key: string) {
   if (!CLOUDINARY_CLOUD) return null;
-  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/upload/${key}`;
+  const publicId = key.startsWith(CLOUDINARY_FOLDER + "/") ? key : `${CLOUDINARY_FOLDER}/${key}`;
+  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/upload/${publicId}`;
 }
 
 export default async function PostPage({
