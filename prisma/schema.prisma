@@ -1,0 +1,134 @@
+// Schéma aligné sur la base Rails (Heroku) pour migration sans perte de données.
+// Après restauration du dump Heroku, cette BDD est utilisée telle quelle.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   BigInt   @id @default(autoincrement())
+  email                String   @default("")
+  encrypted_password   String   @default("")
+  reset_password_token String?
+  reset_password_sent_at DateTime?
+  remember_created_at  DateTime?
+  created_at           DateTime @default(now())
+  updated_at           DateTime @default(now())
+
+  @@map("users")
+}
+
+model Post {
+  id           BigInt   @id @default(autoincrement())
+  title        String?
+  description  String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now())
+  order_number Int?
+  source       String?
+  script       String?
+  date         DateTime?
+  draft        Boolean  @default(false)
+  slug         String?  @unique
+  alt_text     String?
+
+  @@map("posts")
+}
+
+model Tag {
+  id            BigInt   @id @default(autoincrement())
+  name          String?  @unique
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now())
+  taggings_count Int     @default(0)
+
+  taggings Tagging[]
+
+  @@map("tags")
+}
+
+model Tagging {
+  id            BigInt   @id @default(autoincrement())
+  tag_id        BigInt?
+  taggable_type String?
+  taggable_id   BigInt?
+  tagger_type   String?
+  tagger_id     BigInt?
+  context       String?  @db.VarChar(128)
+  created_at    DateTime?
+  tenant        String?  @db.VarChar(128)
+
+  tag Tag? @relation(fields: [tag_id], references: [id])
+
+  @@index([tag_id])
+  @@index([taggable_type, taggable_id])
+  @@index([taggable_id, taggable_type, context])
+  @@map("taggings")
+}
+
+model ActiveStorageBlob {
+  id             BigInt   @id @default(autoincrement())
+  key            String   @unique
+  filename       String
+  content_type   String?
+  metadata       String?
+  service_name   String
+  byte_size      BigInt
+  checksum       String?
+  created_at     DateTime @default(now())
+
+  attachments ActiveStorageAttachment[]
+  variant_records ActiveStorageVariantRecord[]
+
+  @@map("active_storage_blobs")
+}
+
+model ActiveStorageAttachment {
+  id          BigInt   @id @default(autoincrement())
+  name        String
+  record_type String
+  record_id   BigInt
+  blob_id     BigInt
+  created_at  DateTime @default(now())
+
+  blob   ActiveStorageBlob @relation(fields: [blob_id], references: [id])
+
+  @@unique([record_type, record_id, name, blob_id])
+  @@index([blob_id])
+  @@map("active_storage_attachments")
+}
+
+model ActiveStorageVariantRecord {
+  id               BigInt   @id @default(autoincrement())
+  blob_id          BigInt
+  variation_digest String
+
+  blob ActiveStorageBlob @relation(fields: [blob_id], references: [id])
+
+  @@unique([blob_id, variation_digest])
+  @@map("active_storage_variant_records")
+}
+
+model Category {
+  id         BigInt   @id @default(autoincrement())
+  name       String?
+  hashtags   String?
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  @@map("categories")
+}
+
+// Table de liaison many-to-many Rails (categories_posts)
+model CategoriesPost {
+  post_id     BigInt
+  category_id BigInt
+
+  @@id([post_id, category_id])
+  @@map("categories_posts")
+}
