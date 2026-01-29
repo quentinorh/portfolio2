@@ -36,10 +36,10 @@ L’idée : garder la même app Heroku, mais qu’elle exécute Next.js au lieu 
    Si tu as déjà un remote `heroku` qui pointe ailleurs, supprime-le puis refais :
    `git remote remove heroku` puis `heroku git:remote -a quentino-io`.
 
-3. **Utiliser le buildpack Next.js** (au lieu de Ruby) :
+3. **Utiliser le buildpack Node.js officiel** (le buildpack « Next.js » mars/heroku-nextjs est cassé) :
 
    ```bash
-   heroku buildpacks:set https://github.com/mars/heroku-nextjs.git -a quentino-io
+   heroku buildpacks:set heroku/nodejs -a quentino-io
    ```
 
 4. **Variables d’environnement**  
@@ -83,7 +83,7 @@ Si tu préfères un seul repo avec à la fois l’ancien code Rails et le nouvea
 | Étape | Commande |
 |-------|----------|
 | Remote Heroku (app existante) | `heroku git:remote -a quentino-io` |
-| Buildpack Next.js | `heroku buildpacks:set https://github.com/mars/heroku-nextjs.git -a quentino-io` |
+| Buildpack Node.js | `heroku buildpacks:set heroku/nodejs -a quentino-io` |
 | Cloudinary (optionnel) | `heroku config:set NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=xxx -a quentino-io` |
 | Déployer | `git push heroku main` |
 
