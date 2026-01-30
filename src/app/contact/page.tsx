@@ -33,9 +33,6 @@ export default function ContactPage() {
                 <p className="text-sm text-stone-500">Email</p>
                 <p className="text-stone-900 font-medium">quentin.orhant@mailo.fr</p>
               </div>
-              <svg className="w-5 h-5 text-stone-400 group-hover:text-accent group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
             </a>
 
             <a
@@ -51,9 +48,6 @@ export default function ContactPage() {
                 <p className="text-sm text-stone-500">Téléphone</p>
                 <p className="text-stone-900 font-medium">06 76 54 43 11</p>
               </div>
-              <svg className="w-5 h-5 text-stone-400 group-hover:text-stone-600 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
             </a>
           </div>
 
