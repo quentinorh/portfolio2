@@ -195,7 +195,7 @@ export default function AdminPostsPage() {
           value={notes}
           onChange={(e) => handleNotesChange(e.target.value)}
           placeholder="Ex. : Titres des projets à ajouter, idées de posts..."
-          rows={4}
+          rows={14}
           className="w-full px-3 py-2 text-sm text-[#2D2D2D] bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#219CB8]/30 focus:border-[#219CB8] resize-y min-h-[80px]"
         />
       </div>
