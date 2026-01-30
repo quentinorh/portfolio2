@@ -168,15 +168,8 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl py-12">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <Image
-                src="/logoQ.png"
-                alt="Quentin Orhant"
-                width={32}
-                height={32}
-                className="object-contain"
-              />
               <span className="text-sm text-stone-600">
-                {new Date().getFullYear()} Quentin Orhant
+                Quentin Orhant
               </span>
             </div>
             <div className="flex items-center gap-6">

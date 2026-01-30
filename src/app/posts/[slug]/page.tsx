@@ -159,19 +159,6 @@ export default async function PostPage({
                     </ul>
                   </div>
                 )}
-
-                {/* CTA */}
-                <div className="pt-4">
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-white font-medium hover:bg-accent/90 transition-colors"
-                  >
-                    Me contacter
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </Link>
-                </div>
               </div>
             </div>
           </div>
@@ -184,15 +171,8 @@ export default async function PostPage({
         <div className="mx-auto max-w-7xl py-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <Image
-                src="/logoQ.png"
-                alt="Quentin Orhant"
-                width={32}
-                height={32}
-                className="object-contain"
-              />
               <span className="text-sm text-stone-600">
-                {new Date().getFullYear()} Quentin Orhant
+                Quentin Orhant
               </span>
             </div>
             <a
