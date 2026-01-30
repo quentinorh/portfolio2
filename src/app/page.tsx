@@ -1,8 +1,10 @@
 import { prisma } from "@/lib/prisma";
-import Image from "next/image";
 import Header from "@/components/Header";
 import ProjectsSection from "@/components/ProjectsSection";
 import HeroContent from "@/components/HeroContent";
+
+// Revalider la page toutes les 60 secondes pour refléter les changements de la DB
+export const revalidate = 60;
 
 type Post = {
   id: bigint;
