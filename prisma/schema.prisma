@@ -36,6 +36,7 @@ model Post {
   draft        Boolean  @default(false)
   slug         String?  @unique
   alt_text     String?
+  featured     Boolean  @default(false)
 
   @@map("posts")
 }

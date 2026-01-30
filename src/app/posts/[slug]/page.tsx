@@ -1,15 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-
-const CLOUDINARY_CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "";
-const CLOUDINARY_FOLDER = process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER || "production";
-
-function buildImageUrl(key: string) {
-  if (!CLOUDINARY_CLOUD) return null;
-  const publicId = key.startsWith(CLOUDINARY_FOLDER + "/") ? key : `${CLOUDINARY_FOLDER}/${key}`;
-  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/upload/${publicId}`;
-}
+import { sanitizeHtml } from "@/lib/sanitize";
+import { getCloudinaryUrlRaw } from "@/lib/cloudinary";
+import Header from "@/components/Header";
 
 export default async function PostPage({
   params,
@@ -49,53 +44,166 @@ export default async function PostPage({
   const photoKeys = attachments.map((a) => a.blob?.key).filter(Boolean) as string[];
   const tagNames = taggings.map((t) => t.tag?.name).filter(Boolean) as string[];
 
+  // Extraire les URLs du champ source (séparées par espaces ou retours à la ligne)
+  const sourceUrls =
+    post.source
+      ?.split(/\s+/)
+      .map((s) => s.trim())
+      .filter((s) => s.startsWith("http://") || s.startsWith("https://")) ?? [];
+
   return (
-    <div className="min-h-screen bg-[#F9F9F7] text-[#2D2D2D] antialiased">
-      <header className="border-b border-[#2D2D2D]/10 px-6 py-5 md:px-12">
-        <div className="mx-auto flex max-w-[1920px] items-center justify-between">
-          <Link href="/" className="text-lg font-medium uppercase tracking-wide md:text-xl">
-            Quentin Orhant
-          </Link>
-          <nav className="flex gap-6 text-xs md:text-sm">
-            <Link href="/" className="hover:text-[#219CB8]">Projets</Link>
-            <Link href="/#about" className="hover:text-[#219CB8]">À propos</Link>
-            <Link href="/contact" className="hover:text-[#219CB8]">Contact</Link>
-          </nav>
-        </div>
-      </header>
+    <div className="min-h-screen bg-stone-50">
+      <Header />
 
-      <main className="mx-auto max-w-4xl px-6 py-12 md:px-12">
-        <Link href="/" className="mb-8 inline-block text-sm text-[#219CB8] hover:underline">
-          ← Retour aux projets
-        </Link>
+      {/* Main Content - Two Column Layout */}
+      <main className="pt-24 pb-16">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          {/* Back link */}
+          <div className="mb-8">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-sm text-stone-500 hover:text-accent transition-colors group"
+            >
+              <svg
+                className="w-4 h-4 transition-transform group-hover:-translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Retour aux projets
+            </Link>
+          </div>
 
-        <h1 className="mb-4 text-2xl font-medium md:text-3xl">{post.title || "Sans titre"}</h1>
-        {tagNames.length > 0 && (
-          <p className="mb-8 text-sm italic text-[#2D2D2D]/70">{tagNames.join(" • ")}</p>
-        )}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+            {/* Left Column - Gallery */}
+            <div className="order-2 lg:order-1">
+              {photoKeys.length > 0 && (
+                <div className="space-y-4 lg:sticky lg:top-24">
+                  {photoKeys.map((key, i) => {
+                    const imageUrl = getCloudinaryUrlRaw(key);
+                    if (!imageUrl) return null;
 
-        {post.description && (
-          <div
-            className="prose prose-neutral mb-10 max-w-none"
-            dangerouslySetInnerHTML={{ __html: post.description }}
-          />
-        )}
+                    return (
+                      <div
+                        key={key}
+                        className="group relative overflow-hidden rounded-xl bg-stone-100"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={imageUrl}
+                          alt={post.alt_text || `${post.title} - ${i + 1}`}
+                          className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                          loading={i === 0 ? "eager" : "lazy"}
+                          decoding="async"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
 
-        <div className="space-y-6">
-          {photoKeys.map((key, i) => {
-            const url = buildImageUrl(key);
-            if (!url) return null;
-            return (
-              <img
-                key={key}
-                src={url}
-                alt={post.alt_text || `${post.title} - ${i + 1}`}
-                className="w-full rounded-sm object-cover"
-              />
-            );
-          })}
+            {/* Right Column - Content */}
+            <div className="order-1 lg:order-2">
+              <div className="lg:sticky lg:top-24">
+                {/* Title & Tags */}
+                <div className="mb-8">
+                  <h1 className="uppercase text-3xl sm:text-4xl lg:text-5xl font-semibold text-stone-900 mb-4 tracking-tight leading-tight">
+                    {post.title || "Sans titre"}
+                  </h1>
+                  {tagNames.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {tagNames.map((tag) => (
+                        <span
+                          key={tag}
+                          className="tag inline-flex px-3 py-1 text-xs font-medium rounded-full bg-accent-light text-accent"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Description */}
+                {post.description && (
+                  <div className="mb-8 pb-8 border-b border-stone-200">
+                    <div
+                      className="prose prose-stone prose-lg max-w-none text-stone-600 leading-relaxed whitespace-pre-line"
+                      dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.description) }}
+                    />
+                  </div>
+                )}
+
+                {/* Sources */}
+                {sourceUrls.length > 0 && (
+                  <div className="mb-8">
+                    <h2 className="font-medium uppercase tracking-wider text-stone-500 mb-3 text-sm">
+                      Sources
+                    </h2>
+                    <ul className="space-y-2 text-stone-600">
+                      {sourceUrls.map((url) => (
+                        <li key={url}>
+                          <a
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-accent hover:underline break-all text-sm"
+                          >
+                            {url}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* CTA */}
+                <div className="pt-4">
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-white font-medium hover:bg-accent/90 transition-colors"
+                  >
+                    Me contacter
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
+
+
+      {/* Footer */}
+      <footer className="border-t border-stone-200 bg-stone-50 px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl py-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/logoQ.png"
+                alt="Quentin Orhant"
+                width={32}
+                height={32}
+                className="object-contain"
+              />
+              <span className="text-sm text-stone-600">
+                {new Date().getFullYear()} Quentin Orhant
+              </span>
+            </div>
+            <a
+              href="mailto:quentin.orhant@mailo.fr"
+              className="text-sm text-stone-500 hover:text-accent transition-colors"
+            >
+              quentin.orhant@mailo.fr
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

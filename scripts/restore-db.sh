@@ -24,8 +24,11 @@ fi
 DB_NAME=$(echo "$DATABASE_URL" | sed -n 's|.*/\([^?]*\).*|\1|p')
 echo "Restauration dans la base: $DB_NAME"
 
+# pg_restore n'accepte pas ?schema=public dans l'URL, on enlève les paramètres de requête
+PG_URL="${DATABASE_URL%%\?*}"
+
 # pg_restore avec --clean pour supprimer les objets existants avant de recréer
-pg_restore --verbose --clean --if-exists --no-owner --no-acl -d "$DATABASE_URL" "$DUMP_FILE" || true
+pg_restore --verbose --clean --if-exists --no-owner --no-acl -d "$PG_URL" "$DUMP_FILE" || true
 # || true car pg_restore peut retourner un code non nul si des objets sont ignorés
 
 echo "Restauration terminée. Lance: npm run db:push (optionnel, pour synchroniser le schéma Prisma) ou npm run dev"
