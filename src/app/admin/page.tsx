@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -30,6 +30,49 @@ export default function AdminPostsPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
+  // Notes personnelles (persistées en base de données)
+  const [notes, setNotes] = useState("");
+  const [savingNotes, setSavingNotes] = useState(false);
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const fetchNotes = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/notes");
+      if (res.ok) {
+        const data = await res.json();
+        setNotes(data.notes ?? "");
+      }
+    } catch (e) {
+      console.error("Erreur chargement notes", e);
+    }
+  }, []);
+
+  const saveNotes = useCallback(async (value: string) => {
+    setSavingNotes(true);
+    try {
+      await fetch("/api/admin/notes", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notes: value }),
+      });
+    } catch (e) {
+      console.error("Erreur sauvegarde notes", e);
+    } finally {
+      setSavingNotes(false);
+    }
+  }, []);
+
+  const handleNotesChange = (value: string) => {
+    setNotes(value);
+    // Debounce: sauvegarde 1 seconde après la dernière frappe
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+    saveTimeoutRef.current = setTimeout(() => {
+      saveNotes(value);
+    }, 1000);
+  };
+
   // Rediriger vers login si pas de session
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -58,8 +101,9 @@ export default function AdminPostsPage() {
   useEffect(() => {
     if (status === "authenticated") {
       fetchPosts();
+      fetchNotes();
     }
-  }, [status, fetchPosts]);
+  }, [status, fetchPosts, fetchNotes]);
 
   const handleDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
@@ -132,6 +176,28 @@ export default function AdminPostsPage() {
         >
           + Nouveau post
         </Link>
+      </div>
+
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-2">
+          <label
+            htmlFor="admin-notes"
+            className="text-sm font-medium text-gray-600"
+          >
+            Notes personnelles
+          </label>
+          {savingNotes && (
+            <span className="text-xs text-gray-400">Sauvegarde...</span>
+          )}
+        </div>
+        <textarea
+          id="admin-notes"
+          value={notes}
+          onChange={(e) => handleNotesChange(e.target.value)}
+          placeholder="Ex. : Titres des projets à ajouter, idées de posts..."
+          rows={4}
+          className="w-full px-3 py-2 text-sm text-[#2D2D2D] bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#219CB8]/30 focus:border-[#219CB8] resize-y min-h-[80px]"
+        />
       </div>
 
       {error && (

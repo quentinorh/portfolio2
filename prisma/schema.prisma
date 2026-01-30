@@ -133,3 +133,14 @@ model CategoriesPost {
   @@id([post_id, category_id])
   @@map("categories_posts")
 }
+
+// Paramètres admin (clé/valeur)
+model Setting {
+  id         BigInt   @id @default(autoincrement())
+  key        String   @unique
+  value      String?  @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("settings")
+}
