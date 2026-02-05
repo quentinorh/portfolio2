@@ -35,6 +35,10 @@ export default function AdminPostsPage() {
   const [savingNotes, setSavingNotes] = useState(false);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Export markdown
+  const [exporting, setExporting] = useState(false);
+  const [exportedMarkdown, setExportedMarkdown] = useState<string | null>(null);
+
   const fetchNotes = useCallback(async () => {
     try {
       const res = await fetch("/api/admin/notes");
@@ -71,6 +75,32 @@ export default function AdminPostsPage() {
     saveTimeoutRef.current = setTimeout(() => {
       saveNotes(value);
     }, 1000);
+  };
+
+  const handleExportMarkdown = async () => {
+    setExporting(true);
+    try {
+      const res = await fetch("/api/admin/posts/export");
+      if (!res.ok) throw new Error("Erreur export");
+      const data = await res.json();
+      setExportedMarkdown(data.markdown);
+    } catch (e) {
+      setError("Erreur lors de l'export");
+      console.error(e);
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleCopyMarkdown = async () => {
+    if (exportedMarkdown) {
+      try {
+        await navigator.clipboard.writeText(exportedMarkdown);
+        alert("Markdown copié dans le presse-papier !");
+      } catch {
+        setError("Erreur lors de la copie");
+      }
+    }
   };
 
   // Rediriger vers login si pas de session
@@ -198,6 +228,45 @@ export default function AdminPostsPage() {
           rows={14}
           className="w-full px-3 py-2 text-sm text-[#2D2D2D] bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#219CB8]/30 focus:border-[#219CB8] resize-y min-h-[80px]"
         />
+      </div>
+
+      {/* Export Markdown */}
+      <div className="mb-8 p-4 bg-white rounded-lg border border-gray-200">
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <h2 className="text-sm font-medium text-gray-600">
+              Export Markdown
+            </h2>
+            <p className="text-xs text-gray-400 mt-0.5">
+              Récupérer tous les titres et textes des articles publiés
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            {exportedMarkdown && (
+              <button
+                onClick={handleCopyMarkdown}
+                className="px-3 py-1.5 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors"
+              >
+                Copier
+              </button>
+            )}
+            <button
+              onClick={handleExportMarkdown}
+              disabled={exporting}
+              className="px-3 py-1.5 text-sm bg-[#219CB8] text-white rounded hover:bg-[#1a7a91] transition-colors disabled:opacity-50"
+            >
+              {exporting ? "Export..." : "Générer"}
+            </button>
+          </div>
+        </div>
+        {exportedMarkdown && (
+          <textarea
+            readOnly
+            value={exportedMarkdown}
+            rows={10}
+            className="w-full px-3 py-2 text-sm text-[#2D2D2D] bg-gray-50 border border-gray-200 rounded-lg font-mono resize-y"
+          />
+        )}
       </div>
 
       {error && (
