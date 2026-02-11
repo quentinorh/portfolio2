@@ -193,7 +193,7 @@ export default function ProjectsSection({
               slug={post.slug}
               photoKey={post.photoKey}
               tags={post.tagNames}
-              featured={post.featured && currentView === "all"}
+              featured={post.featured && currentView !== "selection"}
             />
           ))}
         </div>
