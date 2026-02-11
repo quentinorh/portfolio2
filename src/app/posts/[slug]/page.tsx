@@ -56,8 +56,8 @@ export default async function PostPage({
       <Header />
 
       {/* Main Content - Two Column Layout */}
-      <main className="pt-24 pb-16">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <main className="pt-24 pb-16 px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
           {/* Back link */}
           <div className="mb-8">
             <Link

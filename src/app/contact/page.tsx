@@ -25,8 +25,8 @@ export default function ContactPage() {
               className="flex items-center gap-4 p-6 border-b border-stone-100 hover:bg-stone-50 transition-colors group"
             >
               <div className="flex-1">
-                <p className="text-sm text-stone-500">Email</p>
-                <p className="text-stone-900 font-medium">quentin.orhant@mailo.fr</p>
+                <p className="text-sm text-stone-500 text-center">Email</p>
+                <p className="text-stone-900 font-medium text-center">quentin.orhant@mailo.fr</p>
               </div>
             </a>
 
@@ -35,8 +35,8 @@ export default function ContactPage() {
               className="flex items-center gap-4 p-6 border-b border-stone-100 hover:bg-stone-50 transition-colors group"
             >
               <div className="flex-1">
-                <p className="text-sm text-stone-500">Téléphone</p>
-                <p className="text-stone-900 font-medium">06 76 54 43 11</p>
+                <p className="text-sm text-stone-500 text-center">Téléphone</p>
+                <p className="text-stone-900 font-medium text-center">06 76 54 43 11</p>
               </div>
             </a>
           </div>
