@@ -129,7 +129,7 @@ export default async function PostPage({
 
                 {/* Description */}
                 {post.description && (
-                  <div className="mb-8 pb-8 border-b border-stone-200">
+                  <div className="mb-8">
                     <div
                       className="prose prose-stone prose-lg max-w-none text-stone-600 leading-relaxed whitespace-pre-line"
                       dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.description) }}
@@ -139,8 +139,8 @@ export default async function PostPage({
 
                 {/* Sources */}
                 {sourceUrls.length > 0 && (
-                  <div className="mb-8">
-                    <h2 className="font-medium uppercase tracking-wider text-stone-500 mb-3 text-sm">
+                  <div className="mb-8 border-t border-stone-200">
+                    <h2 className="pt-8 font-medium uppercase tracking-wider text-stone-500 mb-3 text-sm">
                       Sources
                     </h2>
                     <ul className="space-y-2 text-stone-600">
