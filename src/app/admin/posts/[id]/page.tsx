@@ -6,6 +6,14 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import PostForm from "../../components/PostForm";
 
+interface Photo {
+  id: string;
+  attachmentId: string;
+  blobId: string;
+  key: string | null;
+  filename: string | null;
+}
+
 interface Post {
   id: string;
   title: string | null;
@@ -17,6 +25,7 @@ interface Post {
   featured: boolean;
   slug: string | null;
   alt_text: string | null;
+  photos?: Photo[];
 }
 
 export default function EditPostPage({
@@ -134,7 +143,12 @@ export default function EditPostPage({
         </div>
       )}
 
-      <PostForm post={post} onSubmit={handleSubmit} saving={saving} />
+      <PostForm
+        post={post}
+        onSubmit={handleSubmit}
+        saving={saving}
+        onPhotosRefresh={fetchPost}
+      />
     </div>
   );
 }

@@ -61,7 +61,7 @@ export default async function PostPage({
           {/* Back link */}
           <div className="mb-8">
             <Link
-              href="/"
+              href="/projets"
               className="inline-flex items-center gap-2 text-sm text-stone-500 hover:text-accent transition-colors group"
             >
               <svg

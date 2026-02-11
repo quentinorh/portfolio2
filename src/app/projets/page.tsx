@@ -1,12 +1,16 @@
 import { getPosts, getAllTags } from "@/lib/posts";
 import Header from "@/components/Header";
 import ProjectsSection from "@/components/ProjectsSection";
-import HeroContent from "@/components/HeroContent";
 
 // Revalider la page toutes les 60 secondes pour refléter les changements de la DB
 export const revalidate = 60;
 
-export default async function HomePage() {
+export const metadata = {
+  title: "Projets - Quentin Orhant",
+  description: "Découvrez les projets de Quentin Orhant, maker et développeur freelance.",
+};
+
+export default async function ProjetsPage() {
   let posts: Awaited<ReturnType<typeof getPosts>> = [];
   let allTags: string[] = [];
 
@@ -19,13 +23,11 @@ export default async function HomePage() {
   const featuredPosts = posts.filter((p) => p.featured);
   const hasFeaturedPosts = featuredPosts.length > 0;
 
-  // Calculer le nombre de posts par tag
   const tagCounts: Record<string, number> = {};
   for (const tag of allTags) {
     tagCounts[tag] = posts.filter((p) => p.tagNames.includes(tag)).length;
   }
 
-  // Convertir bigint en string pour le composant client
   const clientPosts = posts.map((p) => ({
     id: String(p.id),
     title: p.title,
@@ -39,15 +41,8 @@ export default async function HomePage() {
     <div className="min-h-screen bg-stone-50">
       <Header />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <HeroContent />
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section className="pb-24 px-6 lg:px-8">
+      {/* Projets uniquement */}
+      <section className="pt-24 pb-24 px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           {posts.length === 0 ? (
             <div className="text-center py-20 bg-white rounded-2xl border border-stone-200">
@@ -70,9 +65,9 @@ export default async function HomePage() {
               tagCounts={tagCounts}
               hasFeaturedPosts={hasFeaturedPosts}
               featuredCount={featuredPosts.length}
+              defaultView="all"
             />
-
-)}
+          )}
         </div>
       </section>
 
@@ -81,9 +76,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl py-12">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <span className="text-sm text-stone-600">
-                Quentin Orhant
-              </span>
+              <span className="text-sm text-stone-600">Quentin Orhant</span>
             </div>
             <div className="flex items-center gap-6">
               <a
@@ -92,7 +85,6 @@ export default async function HomePage() {
               >
                 quentin.orhant@mailo.fr
               </a>
-             
             </div>
           </div>
         </div>

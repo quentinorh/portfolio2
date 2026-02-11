@@ -46,9 +46,28 @@ export async function GET(
       return createErrorResponse("Post non trouvé", 404);
     }
 
+    const attachments = await prisma.activeStorageAttachment.findMany({
+      where: {
+        record_type: "Post",
+        record_id: id,
+        name: "photos",
+      },
+      include: { blob: true },
+      orderBy: { id: "asc" },
+    });
+
+    const photos = attachments.map((a) => ({
+      id: String(a.id),
+      attachmentId: String(a.id),
+      blobId: String(a.blob_id),
+      key: a.blob?.key ?? null,
+      filename: a.blob?.filename ?? null,
+    }));
+
     return Response.json({
       ...post,
       id: String(post.id),
+      photos,
     });
   } catch (err) {
     if (err instanceof ZodError) {

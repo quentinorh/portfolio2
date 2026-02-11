@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PhotosManager, { type Photo } from "./PhotosManager";
 
 interface Post {
   id?: string;
@@ -13,15 +14,22 @@ interface Post {
   featured: boolean;
   slug: string | null;
   alt_text: string | null;
+  photos?: Photo[];
 }
 
 interface PostFormProps {
   post?: Post;
   onSubmit: (data: Record<string, unknown>) => Promise<void>;
   saving: boolean;
+  onPhotosRefresh?: () => void;
 }
 
-export default function PostForm({ post, onSubmit, saving }: PostFormProps) {
+export default function PostForm({
+  post,
+  onSubmit,
+  saving,
+  onPhotosRefresh,
+}: PostFormProps) {
   const [formData, setFormData] = useState({
     title: post?.title || "",
     slug: post?.slug || "",
@@ -139,7 +147,7 @@ export default function PostForm({ post, onSubmit, saving }: PostFormProps) {
             htmlFor="source"
             className="block text-sm font-medium text-[#2D2D2D] mb-2"
           >
-            Source (iframe/embed HTML)
+            Sources
           </label>
           <textarea
             id="source"
@@ -188,6 +196,16 @@ export default function PostForm({ post, onSubmit, saving }: PostFormProps) {
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#219CB8] focus:border-transparent"
           />
         </div>
+
+        {/* Photos - uniquement en mode édition */}
+        {post?.id && onPhotosRefresh && (
+          <PhotosManager
+            postId={post.id}
+            photos={post.photos || []}
+            onRefresh={onPhotosRefresh}
+            altText={formData.alt_text || undefined}
+          />
+        )}
 
         {/* Alt text */}
         <div>
