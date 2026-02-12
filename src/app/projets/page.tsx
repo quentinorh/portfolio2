@@ -10,7 +10,13 @@ export const metadata = {
   description: "Découvrez les projets de Quentin Orhant, maker et développeur freelance.",
 };
 
-export default async function ProjetsPage() {
+export default async function ProjetsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tag?: string }>;
+}) {
+  const { tag } = await searchParams;
+  
   let posts: Awaited<ReturnType<typeof getPosts>> = [];
   let allTags: string[] = [];
 
@@ -66,6 +72,7 @@ export default async function ProjetsPage() {
               hasFeaturedPosts={hasFeaturedPosts}
               featuredCount={featuredPosts.length}
               defaultView="all"
+              initialTag={tag}
             />
           )}
         </div>

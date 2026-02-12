@@ -116,12 +116,13 @@ export default async function PostPage({
                   {tagNames.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                       {tagNames.map((tag) => (
-                        <span
+                        <Link
                           key={tag}
-                          className="tag inline-flex px-3 py-1 text-xs font-medium rounded-full bg-accent-light text-accent"
+                          href={`/projets?tag=${encodeURIComponent(tag)}`}
+                          className="lowercase tag inline-flex px-3 pt-[0.5rem] pb-[0.4rem] text-xs font-medium rounded-full bg-accent-light text-accent hover:bg-accent hover:text-white transition-colors cursor-pointer"
                         >
-                          {tag}
-                        </span>
+                          #{tag}
+                        </Link>
                       ))}
                     </div>
                   )}

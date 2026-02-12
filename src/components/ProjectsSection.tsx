@@ -20,6 +20,8 @@ type ProjectsSectionProps = {
   featuredCount: number;
   /** Vue par défaut : "selection" (accueil) ou "all" (page Projets) */
   defaultView?: "selection" | "all";
+  /** Tag initial à sélectionner (depuis l'URL) */
+  initialTag?: string;
 };
 
 type ViewType = "selection" | "all" | "tag";
@@ -31,14 +33,16 @@ export default function ProjectsSection({
   hasFeaturedPosts,
   featuredCount,
   defaultView,
+  initialTag,
 }: ProjectsSectionProps) {
   // État du filtre côté client
   const getInitialView = (): ViewType => {
+    if (initialTag) return "tag";
     if (defaultView === "all") return "all";
     return hasFeaturedPosts ? "selection" : "all";
   };
   const [currentView, setCurrentView] = useState<ViewType>(getInitialView);
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(initialTag || null);
 
   // Handlers pour les clics (sans rechargement de page)
   const handleSelectionClick = useCallback(() => {
@@ -99,7 +103,7 @@ export default function ProjectsSection({
             <>
               <button
                 onClick={handleSelectionClick}
-                className={`inline-flex items-center gap-2 px-4 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
+                className={`inline-flex items-center gap-2 px-3 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
                   currentView === "selection"
                     ? "bg-accent text-white shadow-sm"
                     : "bg-white text-stone-600 border border-stone-200 hover:border-accent/40 hover:text-accent hover:bg-accent-light"
@@ -113,7 +117,7 @@ export default function ProjectsSection({
 
               <button
                 onClick={handleAllClick}
-                className={`inline-flex items-center gap-2 px-4 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
+                className={`inline-flex items-center gap-2 px-3 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
                   currentView === "all"
                     ? "bg-accent text-white shadow-sm"
                     : "bg-white text-stone-600 border border-stone-200 hover:border-accent/40 hover:text-accent hover:bg-accent-light"
@@ -131,7 +135,7 @@ export default function ProjectsSection({
           {!hasFeaturedPosts && (
             <button
               onClick={handleAllClick}
-              className={`inline-flex items-center gap-2 px-4 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
+              className={`inline-flex items-center gap-2 px-3 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
                 currentView === "all" && !selectedTag
                   ? "bg-stone-900 text-white"
                   : "bg-white text-stone-600 border border-stone-200 hover:border-stone-300 hover:bg-stone-50"
@@ -155,7 +159,7 @@ export default function ProjectsSection({
                   <button
                     key={tag}
                     onClick={() => handleTagClick(tag)}
-                    className={`lowercase inline-flex items-center gap-1.5 px-4 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
+                    className={`lowercase inline-flex items-center gap-1.5 px-3 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
                       isSelected
                         ? "bg-accent text-white"
                         : "bg-white text-stone-500 border border-stone-200 hover:border-accent/40 hover:text-accent hover:bg-accent-light"
@@ -178,7 +182,7 @@ export default function ProjectsSection({
           </p>
           <button
             onClick={handleSelectionClick}
-            className="inline-flex items-center gap-2 px-4 pt-[0.5rem] pb-[0.3rem] rounded-full bg-stone-100 text-stone-700 text-sm font-medium hover:bg-stone-200 transition-colors"
+            className="inline-flex items-center gap-2 px-3 pt-[0.5rem] pb-[0.3rem] rounded-full bg-stone-100 text-stone-700 text-sm font-medium hover:bg-stone-200 transition-colors"
           >
             Voir la sélection
           </button>
