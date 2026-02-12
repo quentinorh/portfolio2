@@ -74,7 +74,7 @@ export default function ProjectsSection({
   // Titre de la section
   const sectionTitle = (() => {
     if (currentView === "tag" && selectedTag) {
-      return `Projets : ${selectedTag}`;
+      return `${selectedTag}`;
     }
     if (currentView === "selection") {
       return "Sélection";
@@ -90,7 +90,7 @@ export default function ProjectsSection({
           {sectionTitle}
         </h2>
         <div className="h-px flex-1 bg-stone-200 ml-6 mr-6" />
-        <span className="text-sm text-stone-400">
+        <span className="text-sm text-stone-400 text-right">
           {displayedPosts.length} projet{displayedPosts.length > 1 ? "s" : ""}
         </span>
       </div>
@@ -103,7 +103,7 @@ export default function ProjectsSection({
             <>
               <button
                 onClick={handleSelectionClick}
-                className={`inline-flex items-center gap-2 px-3 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
+                className={`inline-flex items-center gap-1 pl-2 pr-3 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
                   currentView === "selection"
                     ? "bg-accent text-white shadow-sm"
                     : "bg-white text-stone-600 border border-stone-200 hover:border-accent/40 hover:text-accent hover:bg-accent-light"
@@ -117,7 +117,7 @@ export default function ProjectsSection({
 
               <button
                 onClick={handleAllClick}
-                className={`inline-flex items-center gap-2 px-3 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
+                className={`inline-flex items-center gap-1 pl-2 pr-3 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
                   currentView === "all"
                     ? "bg-accent text-white shadow-sm"
                     : "bg-white text-stone-600 border border-stone-200 hover:border-accent/40 hover:text-accent hover:bg-accent-light"
@@ -135,7 +135,7 @@ export default function ProjectsSection({
           {!hasFeaturedPosts && (
             <button
               onClick={handleAllClick}
-              className={`inline-flex items-center gap-2 px-3 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
+              className={`inline-flex items-center pl-2 pr-3 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
                 currentView === "all" && !selectedTag
                   ? "bg-stone-900 text-white"
                   : "bg-white text-stone-600 border border-stone-200 hover:border-stone-300 hover:bg-stone-50"
@@ -159,13 +159,16 @@ export default function ProjectsSection({
                   <button
                     key={tag}
                     onClick={() => handleTagClick(tag)}
-                    className={`lowercase inline-flex items-center gap-1.5 px-3 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
+                    className={`lowercase inline-flex items-center pl-2 pr-3 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
                       isSelected
                         ? "bg-accent text-white"
                         : "bg-white text-stone-500 border border-stone-200 hover:border-accent/40 hover:text-accent hover:bg-accent-light"
                     }`}
                   >
-                    #{tag}
+                    <svg className="relative -top-[2px] w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                    </svg>
+                    {tag}
                   </button>
                 );
               })}

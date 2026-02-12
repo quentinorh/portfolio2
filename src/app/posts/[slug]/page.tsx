@@ -119,9 +119,12 @@ export default async function PostPage({
                         <Link
                           key={tag}
                           href={`/projets?tag=${encodeURIComponent(tag)}`}
-                          className="lowercase tag inline-flex px-3 pt-[0.5rem] pb-[0.4rem] text-xs font-medium rounded-full bg-accent-light text-accent hover:bg-accent hover:text-white transition-colors cursor-pointer"
+                          className="lowercase tag inline-flex items-center px-3 pt-[0.5rem] pb-[0.4rem] text-xs font-medium rounded-full bg-accent-light text-accent hover:bg-accent hover:text-white transition-colors cursor-pointer"
                         >
-                          #{tag}
+                          <svg className="relative -top-[1px] w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                          </svg>
+                          {tag}
                         </Link>
                       ))}
                     </div>
