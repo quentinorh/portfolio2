@@ -155,13 +155,13 @@ export default function ProjectsSection({
                   <button
                     key={tag}
                     onClick={() => handleTagClick(tag)}
-                    className={`inline-flex items-center gap-1.5 px-4 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
+                    className={`lowercase inline-flex items-center gap-1.5 px-4 pt-[0.5rem] pb-[0.3rem] rounded-full text-sm font-medium transition-all duration-200 ${
                       isSelected
                         ? "bg-accent text-white"
                         : "bg-white text-stone-500 border border-stone-200 hover:border-accent/40 hover:text-accent hover:bg-accent-light"
                     }`}
                   >
-                    {tag}
+                    #{tag}
                   </button>
                 );
               })}
