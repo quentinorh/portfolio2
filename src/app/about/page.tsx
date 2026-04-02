@@ -13,7 +13,7 @@ export default function AboutPage() {
           <div className="grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16 mb-16">
             <div className="flex flex-col items-center lg:items-start">
               <Image
-                src="/avatar2.png"
+                src="/avatar.png"
                 alt="Quentin Orhant"
                 width={250}
                 height={250}
