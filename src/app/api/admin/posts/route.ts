@@ -82,11 +82,11 @@ export async function POST(request: NextRequest) {
     // Validation des données
     const validatedData = postSchema.parse(body);
 
-    // Calculer le prochain order_number
-    const maxOrder = await prisma.post.aggregate({
-      _max: { order_number: true },
+    // Placer le nouveau post en première position
+    const minOrder = await prisma.post.aggregate({
+      _min: { order_number: true },
     });
-    const nextOrder = (maxOrder._max.order_number ?? 0) + 1;
+    const nextOrder = (minOrder._min.order_number ?? 1) - 1;
 
     const post = await prisma.post.create({
       data: {
