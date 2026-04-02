@@ -3,12 +3,11 @@ import { prisma } from "@/lib/prisma";
 /**
  * Synchronise les tags d'un post : supprime les anciens, ajoute les nouveaux,
  * crée les tags inexistants, et met à jour les compteurs.
+ * Préserve la casse originale des noms de tags.
  */
 export async function syncPostTags(postId: bigint, tagNames: string[]) {
-  const normalized = tagNames
-    .map((t) => t.trim().toLowerCase())
-    .filter((t) => t.length > 0);
-  const unique = [...new Set(normalized)];
+  const trimmed = tagNames.map((t) => t.trim()).filter((t) => t.length > 0);
+  const unique = [...new Map(trimmed.map((t) => [t.toLowerCase(), t])).values()];
 
   const existingTaggings = await prisma.tagging.findMany({
     where: { taggable_type: "Post", taggable_id: postId },
@@ -16,15 +15,16 @@ export async function syncPostTags(postId: bigint, tagNames: string[]) {
   });
 
   const currentTagNames = existingTaggings
-    .map((t) => t.tag?.name?.toLowerCase())
+    .map((t) => t.tag?.name)
     .filter((n): n is string => !!n);
 
-  const toAdd = unique.filter((name) => !currentTagNames.includes(name));
+  const toAdd = unique.filter(
+    (name) => !currentTagNames.some((c) => c.toLowerCase() === name.toLowerCase())
+  );
   const toRemove = existingTaggings.filter(
-    (t) => !unique.includes(t.tag?.name?.toLowerCase() ?? "")
+    (t) => !unique.some((name) => name.toLowerCase() === (t.tag?.name?.toLowerCase() ?? ""))
   );
 
-  // Supprimer les tags retirés
   if (toRemove.length > 0) {
     const removeIds = toRemove.map((t) => t.id);
     const removeTagIds = toRemove
@@ -35,7 +35,6 @@ export async function syncPostTags(postId: bigint, tagNames: string[]) {
       where: { id: { in: removeIds } },
     });
 
-    // Décrémenter les compteurs
     for (const tagId of removeTagIds) {
       await prisma.tag.update({
         where: { id: tagId },
@@ -44,9 +43,9 @@ export async function syncPostTags(postId: bigint, tagNames: string[]) {
     }
   }
 
-  // Ajouter les nouveaux tags
   for (const name of toAdd) {
-    let tag = await prisma.tag.findUnique({ where: { name } });
+    const allTags = await prisma.tag.findMany();
+    let tag = allTags.find((t) => t.name?.toLowerCase() === name.toLowerCase()) ?? null;
 
     if (!tag) {
       tag = await prisma.tag.create({
