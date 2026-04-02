@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PhotosManager, { type Photo } from "./PhotosManager";
+import TagsInput from "./TagsInput";
 
 interface Post {
   id?: string;
@@ -15,6 +16,7 @@ interface Post {
   slug: string | null;
   alt_text: string | null;
   photos?: Photo[];
+  tags?: string[];
 }
 
 interface PostFormProps {
@@ -40,6 +42,7 @@ export default function PostForm({
     alt_text: post?.alt_text || "",
     draft: post?.draft ?? true,
     featured: post?.featured ?? false,
+    tags: post?.tags || [] as string[],
   });
 
   const handleChange = (
@@ -196,6 +199,12 @@ export default function PostForm({
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#219CB8] focus:border-transparent"
           />
         </div>
+
+        {/* Tags */}
+        <TagsInput
+          value={formData.tags}
+          onChange={(tags) => setFormData((prev) => ({ ...prev, tags }))}
+        />
 
         {/* Photos - uniquement en mode édition */}
         {post?.id && onPhotosRefresh && (

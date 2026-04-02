@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { postUpdateSchema, idSchema } from "@/lib/validations";
+import { syncPostTags } from "@/lib/tags";
 import { logger, createErrorResponse } from "@/lib/logger";
 import { rateLimit, RATE_LIMITS, createRateLimitResponse } from "@/lib/rate-limit";
 import { ZodError } from "zod";
@@ -46,15 +47,24 @@ export async function GET(
       return createErrorResponse("Post non trouvé", 404);
     }
 
-    const attachments = await prisma.activeStorageAttachment.findMany({
-      where: {
-        record_type: "Post",
-        record_id: id,
-        name: "photos",
-      },
-      include: { blob: true },
-      orderBy: { id: "asc" },
-    });
+    const [attachments, taggings] = await Promise.all([
+      prisma.activeStorageAttachment.findMany({
+        where: {
+          record_type: "Post",
+          record_id: id,
+          name: "photos",
+        },
+        include: { blob: true },
+        orderBy: { id: "asc" },
+      }),
+      prisma.tagging.findMany({
+        where: {
+          taggable_type: "Post",
+          taggable_id: id,
+        },
+        include: { tag: true },
+      }),
+    ]);
 
     const photos = attachments.map((a) => ({
       id: String(a.id),
@@ -64,10 +74,15 @@ export async function GET(
       filename: a.blob?.filename ?? null,
     }));
 
+    const tags = taggings
+      .map((t) => t.tag?.name)
+      .filter((name): name is string => !!name);
+
     return Response.json({
       ...post,
       id: String(post.id),
       photos,
+      tags,
     });
   } catch (err) {
     if (err instanceof ZodError) {
@@ -124,6 +139,10 @@ export async function PUT(
         updated_at: new Date(),
       },
     });
+
+    if (validatedData.tags !== undefined) {
+      await syncPostTags(id, validatedData.tags ?? []);
+    }
 
     logger.info("Post mis à jour", { 
       action: "update_post", 

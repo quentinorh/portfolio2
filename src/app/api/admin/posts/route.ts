@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { postSchema } from "@/lib/validations";
+import { syncPostTags } from "@/lib/tags";
 import { logger, createErrorResponse } from "@/lib/logger";
 import { rateLimit, RATE_LIMITS, createRateLimitResponse } from "@/lib/rate-limit";
 import { ZodError } from "zod";
@@ -102,6 +103,10 @@ export async function POST(request: NextRequest) {
         order_number: nextOrder,
       },
     });
+
+    if (validatedData.tags && validatedData.tags.length > 0) {
+      await syncPostTags(post.id, validatedData.tags);
+    }
 
     logger.info("Post créé", { 
       action: "create_post", 
