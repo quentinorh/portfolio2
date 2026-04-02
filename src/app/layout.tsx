@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     siteName: "Quentin Orhant",
     images: [
       {
-        url: "/avatar2.png",
+        url: "/imageOG.png",
         width: 1200,
         height: 630,
         alt: "Quentin Orhant - Maker et développeur freelance",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Quentin Orhant - Maker et développeur freelance",
     description: "Portfolio de Quentin Orhant, maker et développeur freelance spécialisé dans les projets entre écologie et numérique. Prototypage, programmation, médiation et créations artistiques.",
-    images: ["/avatar2.png"],
+    images: ["/imageOG.png"],
   },
   robots: {
     index: true,
