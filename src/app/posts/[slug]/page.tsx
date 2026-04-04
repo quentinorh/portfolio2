@@ -68,7 +68,7 @@ export default async function PostPage({
       <Header />
 
       {/* Main Content - Two Column Layout */}
-      <main className="pt-24 pb-16 px-6 lg:px-8">
+      <main className="pt-16 pb-16 px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           {/* Bannière hero — mobile / tablette uniquement (< lg) */}
           {heroUrl && (
@@ -82,41 +82,9 @@ export default async function PostPage({
                   sizes="100vw"
                   priority
                 />
-                <Link
-                  href="/projets"
-                  className="absolute left-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-xs font-medium text-stone-700 shadow-sm backdrop-blur-sm transition-colors hover:bg-white hover:text-accent group"
-                >
-                  <svg
-                    className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  Projets
-                </Link>
               </div>
             </div>
           )}
-
-          {/* Back link — desktop ou si pas de hero mobile */}
-          <div className={heroUrl ? "mb-8 hidden lg:block" : "mb-8"}>
-            <Link
-              href="/projets"
-              className="inline-flex items-center gap-2 text-sm text-stone-500 hover:text-accent transition-colors group"
-            >
-              <svg
-                className="w-4 h-4 transition-transform group-hover:-translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Retour aux projets
-            </Link>
-          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
             {/* Left Column - Gallery */}
