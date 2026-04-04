@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PhotosManager, { type Photo } from "./PhotosManager";
+import CoverImageField, { type CoverImage } from "./CoverImageField";
 import TagsInput from "./TagsInput";
 
 interface Post {
@@ -16,6 +17,7 @@ interface Post {
   slug: string | null;
   alt_text: string | null;
   photos?: Photo[];
+  cover?: CoverImage | null;
   tags?: string[];
 }
 
@@ -206,14 +208,22 @@ export default function PostForm({
           onChange={(tags) => setFormData((prev) => ({ ...prev, tags }))}
         />
 
-        {/* Photos - uniquement en mode édition */}
+        {/* Couverture + photos — uniquement en mode édition */}
         {post?.id && onPhotosRefresh && (
-          <PhotosManager
-            postId={post.id}
-            photos={post.photos || []}
-            onRefresh={onPhotosRefresh}
-            altText={formData.alt_text || undefined}
-          />
+          <>
+            <CoverImageField
+              postId={post.id}
+              cover={post.cover ?? null}
+              onRefresh={onPhotosRefresh}
+              altText={formData.alt_text || undefined}
+            />
+            <PhotosManager
+              postId={post.id}
+              photos={post.photos || []}
+              onRefresh={onPhotosRefresh}
+              altText={formData.alt_text || undefined}
+            />
+          </>
         )}
 
         {/* Alt text */}

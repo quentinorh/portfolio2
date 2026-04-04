@@ -47,7 +47,7 @@ export async function GET(
       return createErrorResponse("Post non trouvé", 404);
     }
 
-    const [attachments, taggings] = await Promise.all([
+    const [attachments, coverAttachment, taggings] = await Promise.all([
       prisma.activeStorageAttachment.findMany({
         where: {
           record_type: "Post",
@@ -56,6 +56,15 @@ export async function GET(
         },
         include: { blob: true },
         orderBy: { id: "asc" },
+      }),
+      prisma.activeStorageAttachment.findFirst({
+        where: {
+          record_type: "Post",
+          record_id: id,
+          name: "cover",
+        },
+        include: { blob: true },
+        orderBy: { id: "desc" },
       }),
       prisma.tagging.findMany({
         where: {
@@ -74,6 +83,16 @@ export async function GET(
       filename: a.blob?.filename ?? null,
     }));
 
+    const cover = coverAttachment
+      ? {
+          id: String(coverAttachment.id),
+          attachmentId: String(coverAttachment.id),
+          blobId: String(coverAttachment.blob_id),
+          key: coverAttachment.blob?.key ?? null,
+          filename: coverAttachment.blob?.filename ?? null,
+        }
+      : null;
+
     const tags = taggings
       .map((t) => t.tag?.name)
       .filter((name): name is string => !!name);
@@ -82,6 +101,7 @@ export async function GET(
       ...post,
       id: String(post.id),
       photos,
+      cover,
       tags,
     });
   } catch (err) {

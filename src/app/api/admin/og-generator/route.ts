@@ -27,21 +27,29 @@ export async function GET() {
       where: {
         record_type: "Post",
         record_id: { in: postIds },
-        name: "photos",
+        name: { in: ["photos", "cover"] },
       },
       include: { blob: true },
       orderBy: { id: "asc" },
     });
 
     const firstPhotoByPostId = new Map<bigint, string>();
+    const coverByPostId = new Map<bigint, string>();
     for (const att of attachments) {
-      if (!firstPhotoByPostId.has(att.record_id) && att.blob?.key) {
-        firstPhotoByPostId.set(att.record_id, att.blob.key);
+      const key = att.blob?.key;
+      if (!key) continue;
+      if (att.name === "cover") {
+        if (!coverByPostId.has(att.record_id)) {
+          coverByPostId.set(att.record_id, key);
+        }
+      } else if (!firstPhotoByPostId.has(att.record_id)) {
+        firstPhotoByPostId.set(att.record_id, key);
       }
     }
 
     const result = posts.map((post) => {
-      const photoKey = firstPhotoByPostId.get(post.id) || null;
+      const photoKey =
+        coverByPostId.get(post.id) || firstPhotoByPostId.get(post.id) || null;
       return {
         id: String(post.id),
         title: post.title,

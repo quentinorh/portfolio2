@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { sanitizeHtml } from "@/lib/sanitize";
-import { getCloudinaryUrlRaw } from "@/lib/cloudinary";
+import { getCloudinaryUrl, getCloudinaryUrlRaw } from "@/lib/cloudinary";
 import Header from "@/components/Header";
 
 export default async function PostPage({
@@ -22,7 +22,7 @@ export default async function PostPage({
 
   if (!post) notFound();
 
-  const [attachments, taggings] = await Promise.all([
+  const [attachments, coverAttachment, taggings] = await Promise.all([
     prisma.activeStorageAttachment.findMany({
       where: {
         record_type: "Post",
@@ -31,6 +31,15 @@ export default async function PostPage({
       },
       include: { blob: true },
       orderBy: { id: "asc" },
+    }),
+    prisma.activeStorageAttachment.findFirst({
+      where: {
+        record_type: "Post",
+        record_id: post.id,
+        name: "cover",
+      },
+      include: { blob: true },
+      orderBy: { id: "desc" },
     }),
     prisma.tagging.findMany({
       where: {
@@ -42,6 +51,9 @@ export default async function PostPage({
   ]);
 
   const photoKeys = attachments.map((a) => a.blob?.key).filter(Boolean) as string[];
+  const coverKey = coverAttachment?.blob?.key ?? null;
+  const heroKey = coverKey ?? photoKeys[0] ?? null;
+  const heroUrl = heroKey ? getCloudinaryUrl(heroKey, "hero") : null;
   const tagNames = taggings.map((t) => t.tag?.name).filter(Boolean) as string[];
 
   // Extraire les URLs du champ source (séparées par espaces ou retours à la ligne)
@@ -75,6 +87,22 @@ export default async function PostPage({
               Retour aux projets
             </Link>
           </div>
+
+          {/* Bannière hero — mobile / tablette uniquement (< lg) */}
+          {heroUrl && (
+            <div className="lg:hidden -mx-6 mb-10 sm:mb-12">
+              <div className="relative aspect-[5/3] w-full overflow-hidden rounded-2xl bg-stone-200 shadow-sm ring-1 ring-stone-200/80">
+                <Image
+                  src={heroUrl}
+                  alt={post.alt_text || post.title || "Illustration du projet"}
+                  fill
+                  className="object-cover object-center"
+                  sizes="100vw"
+                  priority
+                />
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
             {/* Left Column - Gallery */}
