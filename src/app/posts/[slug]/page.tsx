@@ -153,7 +153,7 @@ export default async function PostPage({
 
                 {/* Sources */}
                 {sourceUrls.length > 0 && (
-                  <div className="mb-8 border-t border-stone-200">
+                  <div className="mb-0 lg:mb-8 border-t border-stone-200">
                     <h2 className="pt-8 font-medium uppercase tracking-wider text-stone-500 mb-3 text-sm">
                       Sources
                     </h2>
