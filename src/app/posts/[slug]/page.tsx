@@ -70,8 +70,38 @@ export default async function PostPage({
       {/* Main Content - Two Column Layout */}
       <main className="pt-24 pb-16 px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          {/* Back link */}
-          <div className="mb-8">
+          {/* Bannière hero — mobile / tablette uniquement (< lg) */}
+          {heroUrl && (
+            <div className="lg:hidden -mx-6 mb-10 sm:mb-12">
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-stone-200">
+                <Image
+                  src={heroUrl}
+                  alt={post.alt_text || post.title || "Illustration du projet"}
+                  fill
+                  className="object-cover object-center"
+                  sizes="100vw"
+                  priority
+                />
+                <Link
+                  href="/projets"
+                  className="absolute left-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 text-xs font-medium text-stone-700 shadow-sm backdrop-blur-sm transition-colors hover:bg-white hover:text-accent group"
+                >
+                  <svg
+                    className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Projets
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Back link — desktop ou si pas de hero mobile */}
+          <div className={heroUrl ? "mb-8 hidden lg:block" : "mb-8"}>
             <Link
               href="/projets"
               className="inline-flex items-center gap-2 text-sm text-stone-500 hover:text-accent transition-colors group"
@@ -87,22 +117,6 @@ export default async function PostPage({
               Retour aux projets
             </Link>
           </div>
-
-          {/* Bannière hero — mobile / tablette uniquement (< lg) */}
-          {heroUrl && (
-            <div className="lg:hidden -mx-6 mb-10 sm:mb-12">
-              <div className="relative aspect-[16/9] w-full overflow-hidden bg-stone-200 sm:h-40">
-                <Image
-                  src={heroUrl}
-                  alt={post.alt_text || post.title || "Illustration du projet"}
-                  fill
-                  className="object-cover object-center"
-                  sizes="100vw"
-                  priority
-                />
-              </div>
-            </div>
-          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
             {/* Left Column - Gallery */}
