@@ -91,7 +91,7 @@ export default async function PostPage({
           {/* Bannière hero — mobile / tablette uniquement (< lg) */}
           {heroUrl && (
             <div className="lg:hidden -mx-6 mb-10 sm:mb-12">
-              <div className="relative aspect-[5/3] w-full overflow-hidden rounded-2xl bg-stone-200 shadow-sm ring-1 ring-stone-200/80">
+              <div className="relative h-36 w-full overflow-hidden bg-stone-200 sm:h-40">
                 <Image
                   src={heroUrl}
                   alt={post.alt_text || post.title || "Illustration du projet"}
