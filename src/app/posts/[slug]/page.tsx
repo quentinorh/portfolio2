@@ -88,7 +88,7 @@ export default async function PostPage({
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
             {/* Left Column - Gallery */}
-            <div className="order-2 lg:order-1">
+            <div className="order-2 lg:order-1 pt-0 lg:pt-8">
               {photoKeys.length > 0 && (
                 <div className="space-y-4 lg:sticky lg:top-24">
                   {photoKeys.map((key, i) => {
