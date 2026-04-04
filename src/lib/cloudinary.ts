@@ -18,7 +18,7 @@ export type ImageSize = "thumbnail" | "card" | "hero" | "gallery" | "full";
 const IMAGE_SIZES: Record<ImageSize, { width: number; height?: number }> = {
   thumbnail: { width: 150, height: 150 },
   card: { width: 600, height: 450 },      // Ratio 4:3 pour les cartes
-  hero: { width: 1200, height: 600 },     // Image hero large
+  hero: { width: 2400, height: 1350 },    // Image hero large (Retina-ready)
   gallery: { width: 800 },                 // Galerie (hauteur auto)
   full: { width: 1600 },                   // Grande taille
 };
@@ -37,15 +37,15 @@ export function getCloudinaryUrl(
     : `${CLOUDINARY_FOLDER}/${key}`;
 
   const config = IMAGE_SIZES[size];
+  const quality = size === "hero" || size === "full" ? "q_auto:good" : "q_auto:eco";
   
-  // Construire les transformations
   const transforms = [
-    "f_auto",           // Format auto (WebP/AVIF)
-    "q_auto:eco",       // Qualité auto mode éco (plus léger)
+    "f_auto",
+    quality,
     `w_${config.width}`,
     config.height ? `h_${config.height}` : null,
-    config.height ? "c_fill" : "c_limit", // fill si hauteur, limit sinon
-    "g_auto",           // Gravité auto (centre d'intérêt)
+    config.height ? "c_fill" : "c_limit",
+    "g_auto",
   ].filter(Boolean).join(",");
 
   return `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/upload/${transforms}/${publicId}`;
