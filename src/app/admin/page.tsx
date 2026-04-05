@@ -29,6 +29,7 @@ export default function AdminPostsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [activeTab, setActiveTab] = useState<"published" | "drafts" | "all">("published");
 
   // Notes personnelles (persistées en base de données)
   const [notes, setNotes] = useState("");
@@ -190,14 +191,28 @@ export default function AdminPostsPage() {
     return null;
   }
 
+  const filteredPosts = posts.filter((post) => {
+    if (activeTab === "published") return !post.draft;
+    if (activeTab === "drafts") return post.draft;
+    return true;
+  });
+
+  const publishedCount = posts.filter((p) => !p.draft).length;
+  const draftsCount = posts.filter((p) => p.draft).length;
+
+  const tabs = [
+    { id: "published" as const, label: "Publiés", count: publishedCount },
+    { id: "drafts" as const, label: "Brouillons", count: draftsCount },
+    { id: "all" as const, label: "Tous", count: posts.length },
+  ];
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-medium text-[#2D2D2D]">Posts</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Glissez-déposez pour réordonner • {posts.length} post
-            {posts.length > 1 ? "s" : ""}
+            Glissez-déposez pour réordonner
           </p>
         </div>
         <Link
@@ -206,6 +221,27 @@ export default function AdminPostsPage() {
         >
           + Nouveau post
         </Link>
+      </div>
+
+      <div className="flex gap-1 mb-6 bg-gray-100 p-1 rounded-lg w-fit">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+              activeTab === tab.id
+                ? "bg-white text-[#2D2D2D] shadow-sm font-medium"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            {tab.label}
+            <span className={`ml-1.5 text-xs ${
+              activeTab === tab.id ? "text-gray-500" : "text-gray-400"
+            }`}>
+              {tab.count}
+            </span>
+          </button>
+        ))}
       </div>
 
       <div className="mb-8">
@@ -287,15 +323,23 @@ export default function AdminPostsPage() {
         </div>
       )}
 
-      {posts.length === 0 ? (
+      {filteredPosts.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-          <p className="text-gray-500 mb-4">Aucun post pour le moment</p>
-          <Link
-            href="/admin/posts/new"
-            className="text-[#219CB8] hover:underline"
-          >
-            Créer votre premier post
-          </Link>
+          <p className="text-gray-500 mb-4">
+            {posts.length === 0
+              ? "Aucun post pour le moment"
+              : activeTab === "published"
+                ? "Aucun post publié"
+                : "Aucun brouillon"}
+          </p>
+          {posts.length === 0 && (
+            <Link
+              href="/admin/posts/new"
+              className="text-[#219CB8] hover:underline"
+            >
+              Créer votre premier post
+            </Link>
+          )}
         </div>
       ) : (
         <DragDropContext onDragEnd={handleDragEnd}>
@@ -306,7 +350,7 @@ export default function AdminPostsPage() {
                 ref={provided.innerRef}
                 className="space-y-2"
               >
-                {posts.map((post, index) => (
+                {filteredPosts.map((post, index) => (
                   <Draggable
                     key={post.id}
                     draggableId={post.id}

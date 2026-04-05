@@ -13,13 +13,28 @@ export async function GET() {
   try {
     const tags = await prisma.tag.findMany({
       orderBy: { name: "asc" },
+      include: {
+        taggings: {
+          where: { taggable_type: "Post" },
+          select: { taggable_id: true },
+        },
+      },
     });
+
+    const publishedPostIds = new Set(
+      (await prisma.post.findMany({
+        where: { draft: false },
+        select: { id: true },
+      })).map((p) => p.id)
+    );
 
     return Response.json(
       tags.map((t) => ({
         id: String(t.id),
         name: t.name,
-        count: t.taggings_count,
+        count: t.taggings.filter(
+          (tg) => tg.taggable_id !== null && publishedPostIds.has(tg.taggable_id)
+        ).length,
       }))
     );
   } catch {
