@@ -203,28 +203,20 @@ export default function AboutPage() {
                 // Langages
                 "Python",
                 "Ruby",
-                "Javascript",
                 "TypeScript",
-                "HTML/CSS",
                 "SQL",
                 // Frameworks & backend
                 "React",
                 "Next.js",
                 "Node.js",
                 "Tailwind",
-                "API REST",
+                "Three.js",
                 // CMS
                 "WordPress",
-                // Outils dev
-                "Git",
-                "Github",
                 // Design
                 "Figma",
-                "Photoshop",
-                "Illustrator",
                 // Maker & CAO
                 "Arduino",
-                "Sketchup",
                 "Fusion 360",
               ].map((tech) => (
                 <span

@@ -1,25 +1,31 @@
 "use client";
 
 import { useRef, useMemo, useCallback, Suspense } from "react";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 const AUTO_SPEED = 0.1;
 const DRAG_SENSITIVITY = 0.01;
+const MODEL_URL = "/lowpoly.glb";
 
 function BustModel({
-  url,
   dragRef,
 }: {
-  url: string;
   dragRef: React.RefObject<{ active: boolean; deltaX: number }>;
 }) {
-  const rawGeometry = useLoader(STLLoader, url);
+  const { scene } = useGLTF(MODEL_URL);
   const meshRef = useRef<THREE.Group>(null);
 
   const { geo, scale } = useMemo(() => {
-    const geo = rawGeometry.clone();
+    let found: THREE.BufferGeometry | null = null;
+    scene.traverse((child) => {
+      if (!found && (child as THREE.Mesh).isMesh) {
+        found = (child as THREE.Mesh).geometry.clone();
+      }
+    });
+    if (!found) throw new Error("No mesh found in GLB");
+    const geo: THREE.BufferGeometry = found;
     geo.rotateX(-Math.PI / 2);
     geo.center();
     geo.computeVertexNormals();
@@ -28,7 +34,7 @@ function BustModel({
     geo.boundingBox!.getSize(size);
     const maxDim = Math.max(size.x, size.y, size.z);
     return { geo, scale: 2.4 / maxDim };
-  }, [rawGeometry]);
+  }, [scene]);
 
   useFrame((_, delta) => {
     if (!meshRef.current) return;
@@ -92,7 +98,7 @@ export default function BustViewer3D() {
         style={{ background: "#EE7374" }}
       >
         <Suspense fallback={null}>
-          <BustModel url="/lowpoly.stl" dragRef={dragRef} />
+          <BustModel dragRef={dragRef} />
         </Suspense>
       </Canvas>
     </div>
