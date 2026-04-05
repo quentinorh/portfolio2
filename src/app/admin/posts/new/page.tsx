@@ -48,7 +48,8 @@ export default function NewPostPage() {
         throw new Error(err.error || "Erreur création");
       }
 
-      router.push("/admin");
+      const created = await res.json();
+      router.push(`/admin/posts/${created.id}`);
       router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur lors de la création");

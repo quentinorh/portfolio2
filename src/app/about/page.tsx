@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
+import BustViewer3D from "@/components/BustViewer3D";
 
 export default function AboutPage() {
   return (
@@ -12,15 +12,9 @@ export default function AboutPage() {
           {/* Hero */}
           <div className="grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16 mb-16">
             <div className="flex flex-col items-center lg:items-start">
-              <Image
-                src="/avatar2.png"
-                alt="Quentin Orhant"
-                width={250}
-                height={250}
-                className="rounded-2xl object-cover shadow-lg shadow-stone-200/50 mb-6"
-              />
+              <BustViewer3D />
               <div className="text-center lg:text-left">
-                <h1 className="text-2xl font-semibold text-stone-900 mb-6">
+                <h1 className="text-2xl font-semibold text-stone-900 mb-6 mt-6">
                   Quentin Orhant
                 </h1>
                 <div className="flex flex-col items-center lg:items-start gap-3">

@@ -24,7 +24,7 @@ export async function getPosts() {
       where: {
         record_type: "Post",
         record_id: { in: postIds },
-        name: "photos",
+        name: { in: ["photos", "cover"] },
       },
       include: { blob: true },
       orderBy: { id: "asc" },
@@ -39,11 +39,19 @@ export async function getPosts() {
   ]);
 
   // 3. Créer des maps pour accès rapide O(1)
-  const photosByPostId = new Map<bigint, string>();
+  const firstGalleryPhotoByPostId = new Map<bigint, string>();
+  const coverByPostId = new Map<bigint, string>();
   for (const att of allAttachments) {
-    // Garder seulement la première image par post
-    if (!photosByPostId.has(att.record_id)) {
-      photosByPostId.set(att.record_id, att.blob?.key ?? "");
+    const key = att.blob?.key;
+    if (!key) continue;
+    if (att.name === "cover") {
+      if (!coverByPostId.has(att.record_id)) {
+        coverByPostId.set(att.record_id, key);
+      }
+    } else if (att.name === "photos") {
+      if (!firstGalleryPhotoByPostId.has(att.record_id)) {
+        firstGalleryPhotoByPostId.set(att.record_id, key);
+      }
     }
   }
 
@@ -64,7 +72,10 @@ export async function getPosts() {
     slug: post.slug,
     draft: post.draft,
     featured: post.featured,
-    photoKey: photosByPostId.get(post.id) || null,
+    photoKey:
+      coverByPostId.get(post.id) ||
+      firstGalleryPhotoByPostId.get(post.id) ||
+      null,
     tagNames: tagsByPostId.get(post.id) || [],
   }));
 }

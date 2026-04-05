@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { sanitizeHtml } from "@/lib/sanitize";
-import { getCloudinaryUrlRaw } from "@/lib/cloudinary";
+import { getCloudinaryUrl, getCloudinaryUrlRaw } from "@/lib/cloudinary";
 import Header from "@/components/Header";
 
 export default async function PostPage({
@@ -22,7 +22,7 @@ export default async function PostPage({
 
   if (!post) notFound();
 
-  const [attachments, taggings] = await Promise.all([
+  const [attachments, coverAttachment, taggings] = await Promise.all([
     prisma.activeStorageAttachment.findMany({
       where: {
         record_type: "Post",
@@ -31,6 +31,15 @@ export default async function PostPage({
       },
       include: { blob: true },
       orderBy: { id: "asc" },
+    }),
+    prisma.activeStorageAttachment.findFirst({
+      where: {
+        record_type: "Post",
+        record_id: post.id,
+        name: "cover",
+      },
+      include: { blob: true },
+      orderBy: { id: "desc" },
     }),
     prisma.tagging.findMany({
       where: {
@@ -42,6 +51,9 @@ export default async function PostPage({
   ]);
 
   const photoKeys = attachments.map((a) => a.blob?.key).filter(Boolean) as string[];
+  const coverKey = coverAttachment?.blob?.key ?? null;
+  const heroKey = coverKey ?? photoKeys[0] ?? null;
+  const heroUrl = heroKey ? getCloudinaryUrl(heroKey, "hero") : null;
   const tagNames = taggings.map((t) => t.tag?.name).filter(Boolean) as string[];
 
   // Extraire les URLs du champ source (séparées par espaces ou retours à la ligne)
@@ -56,29 +68,27 @@ export default async function PostPage({
       <Header />
 
       {/* Main Content - Two Column Layout */}
-      <main className="pt-24 pb-16 px-6 lg:px-8">
+      <main className="pt-16 pb-16 px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          {/* Back link */}
-          <div className="mb-8">
-            <Link
-              href="/projets"
-              className="inline-flex items-center gap-2 text-sm text-stone-500 hover:text-accent transition-colors group"
-            >
-              <svg
-                className="w-4 h-4 transition-transform group-hover:-translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Retour aux projets
-            </Link>
-          </div>
+          {/* Bannière hero — mobile / tablette uniquement (< lg) */}
+          {heroUrl && (
+            <div className="lg:hidden -mx-6 mb-10 sm:mb-12">
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-stone-200">
+                <Image
+                  src={heroUrl}
+                  alt={post.alt_text || post.title || "Illustration du projet"}
+                  fill
+                  className="object-cover object-center"
+                  sizes="100vw"
+                  priority
+                />
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
             {/* Left Column - Gallery */}
-            <div className="order-2 lg:order-1">
+            <div className="order-2 lg:order-1 pt-0 lg:pt-8">
               {photoKeys.length > 0 && (
                 <div className="space-y-4 lg:sticky lg:top-24">
                   {photoKeys.map((key, i) => {
@@ -143,7 +153,7 @@ export default async function PostPage({
 
                 {/* Sources */}
                 {sourceUrls.length > 0 && (
-                  <div className="mb-8 border-t border-stone-200">
+                  <div className="mb-0 lg:mb-8">
                     <h2 className="pt-8 font-medium uppercase tracking-wider text-stone-500 mb-3 text-sm">
                       Sources
                     </h2>

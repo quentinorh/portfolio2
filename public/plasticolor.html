@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <title>PlastiColor</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #ffffff;
+      color: #1a1a1a;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      padding: 12px 24px;
+      background: #fafafa;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .logo  { font-size: 1.4rem; font-weight: 800; letter-spacing: 3px; color: #1a1a1a; }
+    .tagline { font-size: 0.78rem; color: #888; }
+
+    /* ─── FOOTER ─── */
+    .site-footer {
+      flex-shrink: 0;
+      padding: 8px 20px;
+      background: #fafafa;
+      border-top: 1px solid #e0e0e0;
+      font-size: 0.72rem;
+      color: #999;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .site-footer a {
+      color: #555;
+      text-decoration: none;
+    }
+    .site-footer a:hover { text-decoration: underline; color: #111; }
+
+    /* ─── LAYOUT ─── */
+    main { display: flex; flex: 1; overflow: hidden; }
+
+    /* ─── LEFT PANEL ─── */
+    aside {
+      width: 285px;
+      min-width: 285px;
+      background: #fafafa;
+      border-right: 1px solid #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-section { padding: 14px 16px; border-bottom: 1px solid #e0e0e0; flex-shrink: 0; }
+    .section-title {
+      font-size: 0.67rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #999;
+      margin-bottom: 10px;
+    }
+    #colors-list-section { flex: 1; overflow-y: auto; padding: 14px 16px; border-bottom: 1px solid #e0e0e0; }
+
+    #add-btn {
+      width: 100%;
+      padding: 9px 14px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      color: #333;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    #add-btn:hover { background: #f0f0f0; border-color: #aaa; }
+
+    .palette-io-row {
+      display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
+    }
+    .io-btn {
+      flex: 1; min-width: 0; padding: 7px 10px;
+      background: #fff; border: 1px solid #ccc; border-radius: 8px;
+      color: #555; font-size: 0.78rem; font-weight: 500; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .io-btn:hover:not(:disabled) {
+      background: #f0f0f0; border-color: #aaa; color: #222;
+    }
+    .io-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* Color rows */
+    .color-row {
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
+      box-sizing: border-box;
+      width: 100%;
+      overflow: hidden;
+    }
+    .color-row-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .color-swatch {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      border: 2px solid rgba(0,0,0,0.1);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .color-swatch:hover { transform: scale(1.12); border-color: rgba(0,0,0,0.3); }
+    .color-hex { font-size: 0.76rem; font-family: monospace; color: #555; flex: 1; }
+    .icon-btn {
+      background: none; border: none; cursor: pointer;
+      padding: 3px 5px; border-radius: 4px; font-size: 0.85rem; line-height: 1;
+      transition: background 0.15s;
+    }
+    .edit-btn  { color: #666; }
+    .edit-btn:hover  { background: rgba(0,0,0,0.06); }
+    .remove-btn { color: #c44; }
+    .remove-btn:hover { background: rgba(204,68,68,0.1); }
+
+    .slider-row { display: flex; align-items: center; gap: 6px; }
+    .slider-lbl { font-size: 0.68rem; color: #888; width: 58px; flex-shrink: 0; }
+    input[type="range"].prop-slider {
+      flex: 1; min-width: 0; -webkit-appearance: none; appearance: none;
+      height: 4px; background: #ddd; border-radius: 2px; outline: none; cursor: pointer;
+    }
+    input[type="range"].prop-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+      background: #555; cursor: pointer;
+    }
+    input[type="range"].prop-slider::-moz-range-thumb {
+      width: 14px; height: 14px; border-radius: 50%; background: #555; border: none; cursor: pointer;
+    }
+    .slider-val { font-size: 0.73rem; font-family: monospace; color: #555; min-width: 34px; text-align: right; flex-shrink: 0; }
+
+    /* Resultant + onglets Couches */
+    .result-mode-tabs {
+      display: flex; gap: 4px; margin-bottom: 10px;
+      background: #f3f3f3; padding: 4px; border-radius: 8px; border: 1px solid #e0e0e0;
+    }
+    .result-tab {
+      flex: 1; padding: 7px 10px; border: none; border-radius: 6px; cursor: pointer;
+      font-size: 0.78rem; font-weight: 600; color: #888; background: transparent;
+      transition: background 0.15s, color 0.15s;
+    }
+    .result-tab:hover { color: #333; }
+    .result-tab.active {
+      background: #fff;
+      color: #1a1a1a; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    #result-display-wrap {
+      position: relative; width: 100%; height: 250px; border-radius: 8px;
+      overflow: hidden; border: 1px solid #e0e0e0; margin-bottom: 6px; background: #f5f5f5;
+    }
+    .result-pane {
+      position: absolute; inset: 0; display: none; width: 100%; height: 100%;
+      z-index: 1;
+    }
+    .result-pane.active { display: block; z-index: 2; }
+    #result-swatch { border: none; border-radius: 0; margin: 0; transition: background 0.2s; }
+    /* Ne pas mettre display:block sur les canvas : ça écrase display:none de .result-pane */
+    #layers-canvas, #sparkle-canvas {
+      width: 100%; height: 100%;
+      image-rendering: pixelated; image-rendering: crisp-edges;
+      vertical-align: top;
+    }
+    #result-hex { font-size: 0.78rem; font-family: monospace; color: #555; text-align: center; }
+    #layers-mix-row {
+      display: flex; align-items: center; gap: 8px; margin-top: 8px; margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+    #layers-mix-row.hidden { display: none; }
+    #layers-mix-row label {
+      font-size: 0.7rem; color: #888; flex-shrink: 0; width: 100%;
+    }
+    #layers-mix-slider {
+      flex: 1; min-width: 0; -webkit-appearance: none; appearance: none;
+      height: 4px; background: #ddd; border-radius: 2px; outline: none; cursor: pointer;
+    }
+    #layers-mix-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+      background: #555; cursor: pointer;
+    }
+    #layers-mix-slider::-moz-range-thumb {
+      width: 14px; height: 14px; border-radius: 50%; background: #555; border: none; cursor: pointer;
+    }
+    .layers-mix-val { font-size: 0.72rem; font-family: monospace; color: #555; min-width: 36px; text-align: right; flex-shrink: 0; }
+    #empty-colors { color: #aaa; font-size: 0.8rem; text-align: center; padding: 18px 8px; }
+
+    /* ─── RIGHT PANEL ─── */
+    section { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+    #swatch-controls {
+      padding: 12px 16px;
+      background: #fafafa;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .ctrl-group {
+      display: flex; align-items: center; gap: 8px;
+      background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 6px 12px;
+    }
+    .ctrl-lbl { font-size: 0.72rem; color: #888; }
+    .ctrl-group select {
+      background: transparent; border: none; color: #333; font-size: 0.85rem; outline: none; cursor: pointer;
+    }
+    #generate-btn {
+      padding: 8px 20px;
+      background: #1a1a1a;
+      border: none; border-radius: 8px; color: #fff;
+      font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    #generate-btn:hover { background: #333; }
+    #swatch-count { font-size: 0.75rem; color: #888; }
+
+    #swatch-scroll { flex: 1; overflow-y: auto; padding: 16px; user-select: none; }
+
+    /* Swatches */
+    .swatch-legend {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      font-size: 0.72rem; font-family: monospace; color: #555; margin-bottom: 12px;
+    }
+    .swatch-legend-item { display: flex; align-items: center; gap: 5px; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.12); flex-shrink: 0; }
+
+    .swatch-cell {
+      border-radius: 4px; cursor: pointer; flex-shrink: 0;
+      border: 2px solid transparent;
+      transition: transform 0.12s, border-color 0.12s;
+      position: relative;
+    }
+    .swatch-cell:hover { transform: scale(1.18); z-index: 2; }
+    .swatch-cell.selected { border-color: #1a1a1a !important; transform: scale(1.18); z-index: 3; }
+
+    /* Pastilles de couleurs composantes dans chaque case */
+    .comp-dots {
+      position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 2px; pointer-events: none;
+    }
+    .comp-dot {
+      border-radius: 50%; flex-shrink: 0;
+      outline: 1px solid rgba(0,0,0,0.35);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.4);
+    }
+
+    .swatch-empty { color: #aaa; font-size: 0.85rem; text-align: center; padding: 50px 20px; }
+
+    /* ─── BULLE FLOTTANTE ─── */
+    #swatch-tooltip {
+      position: fixed;
+      z-index: 500;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 12px 14px;
+      min-width: 210px;
+      max-width: 270px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+      pointer-events: none;
+      user-select: none;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    #swatch-tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .tip-swatch { width: 100%; height: 172px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.08); margin-bottom: 6px; }
+    .tip-hex { font-family: monospace; font-size: 0.88rem; color: #1a1a1a; text-align: center; }
+    .tip-rgb { font-family: monospace; font-size: 0.68rem; color: #888; margin-top: 2px; text-align: center; margin-bottom: 10px; }
+    .tip-props { display: flex; flex-direction: column; gap: 6px; }
+    .tip-row { display: flex; align-items: center; gap: 7px; }
+    .tip-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.15); }
+    .tip-bar-bg { flex: 1; height: 5px; background: #eee; border-radius: 3px; overflow: hidden; }
+    .tip-bar { height: 100%; background: #888; border-radius: 3px; }
+    .tip-pct { font-size: 0.73rem; font-family: monospace; color: #333; width: 32px; text-align: right; flex-shrink: 0; }
+
+    /* ─── MODAL ─── */
+    #modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+      display: flex; align-items: center; justify-content: center; z-index: 999;
+    }
+    #modal-overlay.hidden { display: none; }
+    #color-modal {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 16px;
+      padding: 22px;
+      width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h3 { font-size: 0.95rem; }
+    .modal-ral-block {
+      padding-bottom: 10px;
+      margin-bottom: 2px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .modal-row.ral-row { flex-wrap: nowrap; align-items: center; }
+    .modal-row.ral-row label { width: 68px; flex-shrink: 0; }
+    #ral-input { flex: 1; min-width: 0; }
+    .ral-apply-btn {
+      flex-shrink: 0;
+      padding: 6px 12px;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      color: #333;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .ral-apply-btn:hover { background: #e0e0e0; }
+    .ral-hint {
+      font-size: 0.68rem;
+      color: #888;
+      margin: 6px 0 0 78px;
+      line-height: 1.35;
+      min-height: 1.2em;
+    }
+    .ral-hint.ral-hint-error { color: #c44; }
+    #modal-close-btn { background: none; border: none; color: #999; font-size: 1rem; cursor: pointer; padding: 4px; }
+    #modal-close-btn:hover { color: #333; }
+
+    /* Wheel + preview côte à côte, preview s'étend sur toute la hauteur du panneau */
+    #modal-body-row { display: flex; gap: 14px; align-items: stretch; }
+    #modal-left-col  { display: flex; flex-direction: column; gap: 14px; flex-shrink: 0; width: 260px; }
+    #wheel-wrap { position: relative; width: 260px; height: 260px; flex-shrink: 0; }
+    #wheel-canvas, #cursor-canvas { position: absolute; top: 0; left: 0; border-radius: 50%; }
+    #cursor-canvas { cursor: crosshair; }
+    #preview-col { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+
+    /* Lightness */
+    .modal-row { display: flex; align-items: center; gap: 10px; }
+    .modal-row label { font-size: 0.72rem; color: #888; width: 75px; flex-shrink: 0; }
+    #lightness-slider {
+      flex: 1; -webkit-appearance: none; appearance: none;
+      height: 12px; border-radius: 6px; outline: none; cursor: pointer; border: 1px solid #ddd;
+    }
+    #lightness-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+      background: white; cursor: pointer; border: 2px solid #bbb; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    /* Inputs */
+    .modal-input {
+      background: #fff; border: 1px solid #ddd; border-radius: 6px;
+      color: #333; padding: 6px 10px; font-family: monospace; font-size: 0.82rem; outline: none;
+    }
+    .modal-input:focus { border-color: #aaa; }
+    #hex-input { flex: 1; }
+    input[type="number"].modal-input { width: 56px; -moz-appearance: textfield; }
+    input[type="number"].modal-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    /* Preview (colonne à droite de la roue) */
+    #old-preview, #new-preview { flex: 1; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); min-height: 60px; }
+
+    /* Footer */
+    .modal-footer { display: flex; gap: 10px; justify-content: space-between; }
+    #modal-cancel-btn {
+      padding: 8px 18px; background: #f5f5f5; border: 1px solid #ddd;
+      border-radius: 8px; color: #555; cursor: pointer; font-size: 0.83rem; transition: background 0.15s;
+    }
+    #modal-cancel-btn:hover { background: #eaeaea; }
+    #modal-confirm-btn {
+      padding: 8px 18px; background: #1a1a1a;
+      border: none; border-radius: 8px; color: #fff; cursor: pointer; font-size: 0.83rem; font-weight: 600;
+    }
+    #modal-confirm-btn:hover { background: #333; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #aaa; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">PLASTICOLOR</div>
+    <div class="tagline">Simulateur de mélange de couleurs plastiques</div>
+  </div>
+</header>
+
+<main>
+  <!-- ── LEFT PANEL ── -->
+  <aside>
+    <div class="panel-section">
+      <button id="add-btn">＋ Ajouter une couleur</button>
+    </div>
+
+    <div id="colors-list-section">
+      <div class="section-title">Couleurs sélectionnées</div>
+      <div class="palette-io-row">
+        <button type="button" class="io-btn" id="export-palette-btn" title="Enregistrer les couleurs et proportions dans un fichier JSON">Exporter</button>
+        <button type="button" class="io-btn" id="import-palette-btn" title="Charger un fichier JSON précédemment exporté">Importer</button>
+      </div>
+      <input type="file" id="import-palette-input" accept=".json,application/json" hidden>
+      <div id="colors-list">
+        <div id="empty-colors">Aucune couleur ajoutée</div>
+      </div>
+    </div>
+
+    <div class="panel-section" id="resultant-section" style="display:none;">
+      <div class="result-mode-tabs" role="tablist">
+        <button type="button" class="result-tab active" data-mode="blend" role="tab" aria-selected="true">Mélange</button>
+        <button type="button" class="result-tab" data-mode="layers" role="tab" aria-selected="false">Couches</button>
+        <button type="button" class="result-tab" data-mode="sparkle" role="tab" aria-selected="false">Paillettes</button>
+      </div>
+      <div id="result-display-wrap">
+        <div id="result-swatch" class="result-pane active" data-pane="blend"></div>
+        <canvas id="layers-canvas" class="result-pane" data-pane="layers" width="1" height="1" aria-label="Lignes horizontales selon les proportions"></canvas>
+        <canvas id="sparkle-canvas" class="result-pane" data-pane="sparkle" width="1" height="1" aria-label="Paillettes selon les proportions"></canvas>
+      </div>
+      <div id="layers-mix-row" class="hidden">
+        <label for="layers-mix-slider">Fusion entre les lignes</label>
+        <input type="range" id="layers-mix-slider" min="0" max="100" value="0" step="1" title="Intensité du mélange">
+        <span class="layers-mix-val" id="layers-mix-val">0%</span>
+      </div>
+      <div id="result-hex">#ffffff</div>
+    </div>
+  </aside>
+
+  <!-- ── RIGHT PANEL ── -->
+  <section>
+    <div id="swatch-controls">
+      <div class="ctrl-group">
+        <span class="ctrl-lbl">Précision</span>
+        <select id="steps-sel">
+          <option value="5">Faible</option>
+          <option value="10" selected>Normale</option>
+          <option value="15">Haute</option>
+          <option value="20">Très haute</option>
+        </select>
+      </div>
+      <button id="generate-btn">▶ Générer le nuancier</button>
+      <span id="swatch-count"></span>
+    </div>
+
+    <div id="swatch-scroll">
+      <div class="swatch-empty">
+        Ajoutez des couleurs puis cliquez sur <strong>Générer le nuancier</strong>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>Crédits&nbsp;: <a href="https://quentino.io" target="_blank" rel="noopener noreferrer">Quentin Orhant</a></span>
+  <span aria-hidden="true"> · </span>
+  <span>Licence <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">CC&nbsp;BY-SA&nbsp;4.0</a></span>
+</footer>
+
+<!-- ── BULLE PROPORTIONS ── -->
+<div id="swatch-tooltip"></div>
+
+<!-- ── MODAL ── -->
+<div id="modal-overlay" class="hidden">
+  <div id="color-modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Ajouter une couleur</h3>
+      <button id="modal-close-btn">✕</button>
+    </div>
+
+    <div class="modal-ral-block">
+      <div class="modal-row ral-row">
+        <label for="ral-input">Code RAL</label>
+        <input type="text" id="ral-input" class="modal-input" placeholder="ex. 5015, RAL 3020" maxlength="20" autocomplete="off">
+        <button type="button" class="ral-apply-btn" id="ral-apply-btn">Appliquer</button>
+      </div>
+      <p id="ral-hint" class="ral-hint" aria-live="polite"></p>
+    </div>
+
+    <div id="modal-body-row">
+      <div id="modal-left-col">
+        <div id="wheel-wrap">
+          <canvas id="wheel-canvas" width="260" height="260"></canvas>
+          <canvas id="cursor-canvas" width="260" height="260"></canvas>
+        </div>
+        <div class="modal-row">
+          <label>Luminosité</label>
+          <input type="range" id="lightness-slider" min="1" max="99" value="50">
+        </div>
+        <div class="modal-row">
+          <label>HEX</label>
+          <input type="text" class="modal-input" id="hex-input" value="#ff0000" maxlength="7">
+        </div>
+        <div class="modal-row">
+          <label>RGB</label>
+          <input type="number" class="modal-input" id="r-input" min="0" max="255" value="255">
+          <input type="number" class="modal-input" id="g-input" min="0" max="255" value="0">
+          <input type="number" class="modal-input" id="b-input" min="0" max="255" value="0">  
+        </div>
+        <div class="modal-footer">
+          <button id="modal-cancel-btn">Annuler</button>
+          <button id="modal-confirm-btn">Confirmer</button>
+        </div> 
+      </div>
+      <div id="preview-col">
+        <div id="old-preview" title="Couleur actuelle" style="display:none;"></div>
+        <div id="new-preview" title="Nouvelle couleur" style="background:#ff0000;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const RAL_CODES = {"1000":{"code":"1000","name":"Beige vert","rgb":"190,189,127","hex":"#BEBD7F"},"1001":{"code":"1001","name":"Beige","rgb":"194,176,120","hex":"#C2B078"},"1002":{"code":"1002","name":"Jaune sable","rgb":"198,166,100","hex":"#C6A664"},"1003":{"code":"1003","name":"Jaune de sécurité","rgb":"229,190,001","hex":"#E5BE01"},"1004":{"code":"1004","name":"Jaune or","rgb":"205,164,052","hex":"#CDA434"},"1005":{"code":"1005","name":"Jaune miel","rgb":"169,131,007","hex":"#A98307"},"1006":{"code":"1006","name":"Jaune maïs","rgb":"228,160,016","hex":"#E4A010"},"1007":{"code":"1007","name":"Jaune narcisse","rgb":"220,156,000","hex":"#DC9D00"},"1011":{"code":"1011","name":"Beige brun","rgb":"138,102,066","hex":"#8A6642"},"1012":{"code":"1012","name":"Jaune citron","rgb":"199,180,070","hex":"#C7B446"},"1013":{"code":"1013","name":"Blanc perlé","rgb":"234,230,202","hex":"#EAE6CA"},"1014":{"code":"1014","name":"Ivoire","rgb":"225,204,079","hex":"#E1CC4F"},"1015":{"code":"1015","name":"Ivoire clair","rgb":"230,214,144","hex":"#E6D690"},"1016":{"code":"1016","name":"Jaune soufre","rgb":"237,255,033","hex":"#EDFF21"},"1017":{"code":"1017","name":"Jaune safran","rgb":"245,208,051","hex":"#F5D033"},"1018":{"code":"1018","name":"Jaune zinc","rgb":"248,243,053","hex":"#F8F32B"},"1019":{"code":"1019","name":"Beige gris","rgb":"158,151,100","hex":"#9E9764"},"1020":{"code":"1020","name":"Jaune olive","rgb":"153,153,080","hex":"#999950"},"1021":{"code":"1021","name":"Jaune colza","rgb":"243,218,011","hex":"#F3DA0B"},"1023":{"code":"1023","name":"Jaune signalisation","rgb":"250,210,001","hex":"#FAD201"},"1024":{"code":"1024","name":"Jaune ocre","rgb":"174,160,075","hex":"#AEA04B"},"1026":{"code":"1026","name":"Jaune brillant","rgb":"255,255,000","hex":"#FFFF00"},"1027":{"code":"1027","name":"Jaune curry","rgb":"157,145,001","hex":"#9D9101"},"1028":{"code":"1028","name":"Jaune melon","rgb":"244,169,000","hex":"#F4A900"},"1032":{"code":"1032","name":"Jaune genêt","rgb":"214,174,001","hex":"#D6AE01"},"1033":{"code":"1033","name":"Jaune dahlia","rgb":"243,165,005","hex":"#F3A505"},"1034":{"code":"1034","name":"Jaune pastel","rgb":"239,169,074","hex":"#EFA94A"},"1035":{"code":"1035","name":"Beige nacré","rgb":"106,093,077","hex":"#6A5D4D"},"1036":{"code":"1036","name":"Or nacré","rgb":"112,083,053","hex":"#705335"},"1037":{"code":"1037","name":"Jaune soleil","rgb":"243,159,024","hex":"#F39F18"},"2000":{"code":"2000","name":"Orangé jaune","rgb":"237,118,014","hex":"#ED760E"},"2001":{"code":"2001","name":"Orangé rouge","rgb":"201,060,032","hex":"#C93C20"},"2002":{"code":"2002","name":"Orangé sang","rgb":"203,040,033","hex":"#CB2821"},"2003":{"code":"2003","name":"Orangé pastel","rgb":"255,117,020","hex":"#FF7514"},"2004":{"code":"2004","name":"Orangé pur","rgb":"244,070,017","hex":"#F44611"},"2005":{"code":"2005","name":"Orangé brillant","rgb":"255,035,001","hex":"#FF2301"},"2007":{"code":"2007","name":"Orangé clair rillant","rgb":"255,164,032","hex":"#FFA420"},"2008":{"code":"2008","name":"Orangé rouge clair","rgb":"247,094,037","hex":"#F75E25"},"2009":{"code":"2009","name":"Orangé signalisation","rgb":"245,064,033","hex":"#F54021"},"2010":{"code":"2010","name":"Orangé de sécurité","rgb":"216,075,032","hex":"#D84B20"},"2011":{"code":"2011","name":"Orangé foncé","rgb":"236,124,038","hex":"#EC7C26"},"2012":{"code":"2012","name":"Orangé saumon","rgb":"235,106,014","hex":"#E55137"},"2013":{"code":"2013","name":"Orangé nacré","rgb":"195,088,049","hex":"#C35831"},"3000":{"code":"3000","name":"Rouge feu","rgb":"175,043,030","hex":"#AF2B1E"},"3001":{"code":"3001","name":"Rouge de sécurité","rgb":"165,032,025","hex":"#A52019"},"3002":{"code":"3002","name":"Rouge carmin","rgb":"162,035,029","hex":"#A2231D"},"3003":{"code":"3003","name":"Rouge rubis","rgb":"155,017,030","hex":"#9B111E"},"3004":{"code":"3004","name":"Rouge pourpre","rgb":"117,021,030","hex":"#75151E"},"3005":{"code":"3005","name":"Rouge vin","rgb":"094,033,041","hex":"#5E2129"},"3007":{"code":"3007","name":"Rouge noir","rgb":"065,034,039","hex":"#412227"},"3009":{"code":"3009","name":"Rouge oxyde","rgb":"100,036,036","hex":"#642424"},"3011":{"code":"3011","name":"Rouge brun","rgb":"120,031,025","hex":"#781F19"},"3012":{"code":"3012","name":"Rouge beige","rgb":"193,135,107","hex":"#C1876B"},"3013":{"code":"3013","name":"Rouge tomate","rgb":"161,035,018","hex":"#A12312"},"3014":{"code":"3014","name":"Vieux rose","rgb":"211,110,112","hex":"#D36E70"},"3015":{"code":"3015","name":"Rose clair","rgb":"234,137,154","hex":"#EA899A"},"3016":{"code":"3016","name":"Rouge corail","rgb":"179,040,033","hex":"#B32821"},"3017":{"code":"3017","name":"Rosé","rgb":"230,050,068","hex":"#E63244"},"3018":{"code":"3018","name":"Rouge fraise","rgb":"213,048,050","hex":"#D53032"},"3020":{"code":"3020","name":"Rouge signalisation","rgb":"204,006,005","hex":"#CC0605"},"3022":{"code":"3022","name":"Rouge saumon","rgb":"217,080,048","hex":"#D95030"},"3024":{"code":"3024","name":"Rouge brillant","rgb":"248,000,000","hex":"#F80000"},"3026":{"code":"3026","name":"Rouge clair brillant","rgb":"254,000,000","hex":"#FE0000"},"3027":{"code":"3027","name":"Rouge framboise","rgb":"197,029,052","hex":"#C51D34"},"3028":{"code":"3028","name":"Rouge puro","rgb":"203,050,052","hex":"#CB3234"},"3031":{"code":"3031","name":"Rouge oriental","rgb":"179,036,040","hex":"#B32428"},"3032":{"code":"3032","name":"Rouge rubis nacré","rgb":"114,020,034","hex":"#721422"},"3033":{"code":"3033","name":"Rose nacré","rgb":"180,076,067","hex":"#B44C43"},"4001":{"code":"4001","name":"Lilas rouge","rgb":"109,063,091","hex":"#6D3F5B"},"4002":{"code":"4002","name":"Violet rouge","rgb":"146,043,062","hex":"#922B3E"},"4003":{"code":"4003","name":"Violet bruyère","rgb":"222,076,138","hex":"#DE4C8A"},"4004":{"code":"4004","name":"Violet bordeaux","rgb":"110,028,052","hex":"#641C34"},"4005":{"code":"4005","name":"Lilas bleu","rgb":"108,070,117","hex":"#6C4675"},"4006":{"code":"4006","name":"Pourpre signalisation","rgb":"160,052,114","hex":"#A03472"},"4007":{"code":"4007","name":"Violet pourpre","rgb":"074,025,044","hex":"#4A192C"},"4008":{"code":"4008","name":"Violet de sécurité","rgb":"144,070,132","hex":"#924E7D"},"4009":{"code":"4009","name":"Violet pastel","rgb":"164,125,144","hex":"#A18594"},"4010":{"code":"4010","name":"Telemagenta","rgb":"215,045,109","hex":"#CF3476"},"4011":{"code":"4011","name":"Violet nacré","rgb":"134,115,161","hex":"#8673A1"},"4012":{"code":"4012","name":"Mûre nacré","rgb":"108,104,129","hex":"#6C6874"},"5000":{"code":"5000","name":"Bleu violet","rgb":"042,046,075","hex":"#354D73"},"5001":{"code":"5001","name":"Bleu vert","rgb":"031,052,056","hex":"#1F3438"},"5002":{"code":"5002","name":"Bleu outremer","rgb":"032,033,079","hex":"#20214F"},"5003":{"code":"5003","name":"Bleu saphir","rgb":"029,030,051","hex":"#1D1E33"},"5004":{"code":"5004","name":"Bleu noir","rgb":"024,023,028","hex":"#18171C"},"5005":{"code":"5005","name":"Bleu de sécurité","rgb":"030,045,110","hex":"#1E2460"},"5007":{"code":"5007","name":"Bleu brillant","rgb":"062,095,138","hex":"#3E5F8A"},"5008":{"code":"5008","name":"Bleu gris","rgb":"038,037,045","hex":"#26252D"},"5009":{"code":"5009","name":"Bleu azur","rgb":"002,086,105","hex":"#025669"},"5010":{"code":"5010","name":"Bleu gentiane","rgb":"014,041,075","hex":"#0E294B"},"5011":{"code":"5011","name":"Bleu acier","rgb":"035,026,036","hex":"#231A24"},"5012":{"code":"5012","name":"Bleu clair","rgb":"059,131,189","hex":"#3B83BD"},"5013":{"code":"5013","name":"Bleu cobalt","rgb":"037,041,074","hex":"#1E213D"},"5014":{"code":"5014","name":"Bleu pigeon","rgb":"096,111,140","hex":"#606E8C"},"5015":{"code":"5015","name":"Bleu ciel","rgb":"034,113,179","hex":"#2271B3"},"5017":{"code":"5017","name":"Bleu signalisation","rgb":"006,057,113","hex":"#063971"},"5018":{"code":"5018","name":"Bleu turquoise","rgb":"063,136,143","hex":"#3F888F"},"5019":{"code":"5019","name":"Bleu capri","rgb":"027,085,131","hex":"#1B5583"},"5020":{"code":"5020","name":"Bleu océan","rgb":"029,051,074","hex":"#1D334A"},"5021":{"code":"5021","name":"Bleu d’eau","rgb":"037,109,123","hex":"#256D7B"},"5022":{"code":"5022","name":"Bleu nocturne","rgb":"037,040,080","hex":"#252850"},"5023":{"code":"5023","name":"Bleu distant","rgb":"073,103,141","hex":"#49678D"},"5024":{"code":"5024","name":"Bleu pastel","rgb":"093,155,155","hex":"#5D9B9B"},"5025":{"code":"5025","name":"Gentiane nacré","rgb":"042,100,120","hex":"#2A6478"},"5026":{"code":"5026","name":"Bleu nuit nacré","rgb":"016,044,084","hex":"#102C54"},"6000":{"code":"6000","name":"Vert patine","rgb":"049,102,080","hex":"#316650"},"6001":{"code":"6001","name":"Vert émeraude","rgb":"040,114,051","hex":"#287233"},"6002":{"code":"6002","name":"Vert feuillage","rgb":"045,087,044","hex":"#2D572C"},"6003":{"code":"6003","name":"Vert olive","rgb":"066,070,050","hex":"#424632"},"6004":{"code":"6004","name":"Vert bleu","rgb":"031,058,061","hex":"#1F3A3D"},"6005":{"code":"6005","name":"Vert mousse","rgb":"047,069,056","hex":"#2F4538"},"6006":{"code":"6006","name":"Olive gris","rgb":"062,059,050","hex":"#3E3B32"},"6007":{"code":"6007","name":"Vert bouteille","rgb":"052,059,041","hex":"#343B29"},"6008":{"code":"6008","name":"Vert brun","rgb":"057,053,042","hex":"#39352A"},"6009":{"code":"6009","name":"Vert sapin","rgb":"049,055,043","hex":"#31372B"},"6010":{"code":"6010","name":"Vert herbe","rgb":"053,104,045","hex":"#35682D"},"6011":{"code":"6011","name":"Vert réséda","rgb":"088,114,070","hex":"#587246"},"6012":{"code":"6012","name":"Vert noir","rgb":"052,062,064","hex":"#343E40"},"6013":{"code":"6013","name":"Vert jonc","rgb":"108,113,086","hex":"#6C7156"},"6014":{"code":"6014","name":"Olive jaune","rgb":"071,064,046","hex":"#47402E"},"6015":{"code":"6015","name":"Olive noir","rgb":"059,060,054","hex":"#3B3C36"},"6016":{"code":"6016","name":"Vert turquoise","rgb":"030,089,069","hex":"#1E5945"},"6017":{"code":"6017","name":"Vert mai","rgb":"076,145,065","hex":"#4C9141"},"6018":{"code":"6018","name":"Vert jaune","rgb":"087,166,057","hex":"#57A639"},"6019":{"code":"6019","name":"Vert blanc","rgb":"189,236,182","hex":"#BDECB6"},"6020":{"code":"6020","name":"Vert oxyde chromique","rgb":"046,058,035","hex":"#2E3A23"},"6021":{"code":"6021","name":"Vert pâle","rgb":"137,172,118","hex":"#89AC76"},"6022":{"code":"6022","name":"Olive brun","rgb":"037,034,027","hex":"#25221B"},"6024":{"code":"6024","name":"Vert signalisation","rgb":"048,132,070","hex":"#308446"},"6025":{"code":"6025","name":"Vert fougère","rgb":"061,100,045","hex":"#3D642D"},"6026":{"code":"6026","name":"Vert opale","rgb":"001,093,082","hex":"#015D52"},"6027":{"code":"6027","name":"Vert clair","rgb":"132,195,190","hex":"#84C3BE"},"6028":{"code":"6028","name":"Vert pin","rgb":"044,085,069","hex":"#2C5545"},"6029":{"code":"6029","name":"Vert menthe","rgb":"032,096,061","hex":"#20603D"},"6032":{"code":"6032","name":"Vert de sécurité","rgb":"049,127,067","hex":"#317F43"},"6033":{"code":"6033","name":"Turquoise menthe","rgb":"073,126,118","hex":"#497E76"},"6034":{"code":"6034","name":"Turquoise pastel","rgb":"127,181,181","hex":"#7FB5B5"},"6035":{"code":"6035","name":"Vert nacré","rgb":"028,084,045","hex":"#1C542D"},"6036":{"code":"6036","name":"Vert opal nacré","rgb":"022,053,055","hex":"#193737"},"6037":{"code":"6037","name":"Vert pur","rgb":"000,143,057","hex":"#008F39"},"6038":{"code":"6038","name":"Vert brillant","rgb":"000,187,045","hex":"#00BB2D"},"7000":{"code":"7000","name":"Gris petit-gris","rgb":"120,133,139","hex":"#78858B"},"7001":{"code":"7001","name":"Gris argent","rgb":"138,149,151","hex":"#8A9597"},"7002":{"code":"7002","name":"Gris olive","rgb":"126,123,082","hex":"#7E7B52"},"7003":{"code":"7003","name":"Gris mousse","rgb":"108,112,089","hex":"#6C7059"},"7004":{"code":"7004","name":"Gris de sécurité","rgb":"150,153,146","hex":"#969992"},"7005":{"code":"7005","name":"Gris souris","rgb":"100,107,099","hex":"#646B63"},"7006":{"code":"7006","name":"Gris beige","rgb":"109,101,082","hex":"#6D6552"},"7008":{"code":"7008","name":"Gris kaki","rgb":"106,095,049","hex":"#6A5F31"},"7009":{"code":"7009","name":"Gris vert","rgb":"077,086,069","hex":"#4D5645"},"7010":{"code":"7010","name":"Gris tente","rgb":"076,081,074","hex":"#4C514A"},"7011":{"code":"7011","name":"Gris fer","rgb":"067,075,077","hex":"#434B4D"},"7012":{"code":"7012","name":"Gris basalte","rgb":"078,087,084","hex":"#4E5754"},"7013":{"code":"7013","name":"Gris brun","rgb":"070,069,049","hex":"#464531"},"7015":{"code":"7015","name":"Gris ardoise","rgb":"067,071,080","hex":"#434750"},"7016":{"code":"7016","name":"Gris anthracite","rgb":"041,049,051","hex":"#293133"},"7021":{"code":"7021","name":"Gris noir","rgb":"035,040,043","hex":"#23282B"},"7022":{"code":"7022","name":"Gris terre d’ombre","rgb":"051,047,044","hex":"#332F2C"},"7023":{"code":"7023","name":"Gris béton","rgb":"104,108,094","hex":"#686C5E"},"7024":{"code":"7024","name":"Gris graphite","rgb":"071,074,081","hex":"#474A51"},"7026":{"code":"7026","name":"Gris granit","rgb":"047,053,059","hex":"#2F353B"},"7030":{"code":"7030","name":"Gris pierre","rgb":"139,140,122","hex":"#8B8C7A"},"7031":{"code":"7031","name":"Gris bleu","rgb":"071,075,078","hex":"#474B4E"},"7032":{"code":"7032","name":"Gris silex","rgb":"184,183,153","hex":"#B8B799"},"7033":{"code":"7033","name":"Gris ciment","rgb":"125,132,113","hex":"#7D8471"},"7034":{"code":"7034","name":"Gris jaune","rgb":"143,139,102","hex":"#8F8B66"},"7035":{"code":"7035","name":"Gris clair","rgb":"203,208,204","hex":"#CBD0CC"},"7036":{"code":"7036","name":"Gris platine","rgb":"127,118,121","hex":"#7F7679"},"7037":{"code":"7037","name":"Gris poussière","rgb":"125,127,120","hex":"#7D7F7D"},"7038":{"code":"7038","name":"Gris agate","rgb":"195,195,195","hex":"#B5B8B1"},"7039":{"code":"7039","name":"Gris quartz","rgb":"108,105,096","hex":"#6C6960"},"7040":{"code":"7040","name":"Gris fenêtre","rgb":"157,161,170","hex":"#9DA1AA"},"7042":{"code":"7042","name":"Gris signalisation A","rgb":"141,148,141","hex":"#8D948D"},"7043":{"code":"7043","name":"Gris signalisation B","rgb":"078,084,082","hex":"#4E5452"},"7044":{"code":"7044","name":"Gris soie","rgb":"202,196,176","hex":"#CAC4B0"},"7045":{"code":"7045","name":"Telegris 1","rgb":"144,144,144","hex":"#909090"},"7046":{"code":"7046","name":"Telegris 2","rgb":"130,137,143","hex":"#82898F"},"7047":{"code":"7047","name":"Telegris 4","rgb":"208,208,208","hex":"#D0D0D0"},"7048":{"code":"7048","name":"Gris souris nacré","rgb":"137,129,118","hex":"#898176"},"8000":{"code":"8000","name":"Brun vert","rgb":"130,108,052","hex":"#826C34"},"8001":{"code":"8001","name":"Brun terre de Sienne","rgb":"149,095,032","hex":"#955F20"},"8002":{"code":"8002","name":"Brun de sécurité","rgb":"108,059,042","hex":"#6C3B2A"},"8003":{"code":"8003","name":"Brun argile","rgb":"115,066,034","hex":"#734222"},"8004":{"code":"8004","name":"Brun cuivré","rgb":"142,064,042","hex":"#8E402A"},"8007":{"code":"8007","name":"Brun fauve","rgb":"089,053,031","hex":"#59351F"},"8008":{"code":"8008","name":"Brun olive","rgb":"111,079,040","hex":"#6F4F28"},"8011":{"code":"8011","name":"Brun noisette","rgb":"091,058,041","hex":"#5B3A29"},"8012":{"code":"8012","name":"Brun rouge","rgb":"089,035,033","hex":"#592321"},"8014":{"code":"8014","name":"Brun sépia","rgb":"056,044,030","hex":"#382C1E"},"8015":{"code":"8015","name":"Marron","rgb":"099,058,052","hex":"#633A34"},"8016":{"code":"8016","name":"Brun acajou","rgb":"076,047,039","hex":"#4C2F27"},"8017":{"code":"8017","name":"Brun chocolat","rgb":"069,050,046","hex":"#45322E"},"8019":{"code":"8019","name":"Brun gris","rgb":"064,058,058","hex":"#403A3A"},"8022":{"code":"8022","name":"Brun noir","rgb":"033,033,033","hex":"#212121"},"8023":{"code":"8023","name":"Brun orangé","rgb":"166,094,046","hex":"#A65E2E"},"8024":{"code":"8024","name":"Brun beige","rgb":"121,085,061","hex":"#79553D"},"8025":{"code":"8025","name":"Brun pâle","rgb":"117,092,072","hex":"#755C48"},"8028":{"code":"8028","name":"Brun terre","rgb":"078,059,049","hex":"#4E3B31"},"8029":{"code":"8029","name":"Cuivre nacré","rgb":"118,060,040","hex":"#763C28"},"9001":{"code":"9001","name":"Blanc crème","rgb":"250,244,227","hex":"#FDF4E3"},"9002":{"code":"9002","name":"Blanc gris","rgb":"231,235,218","hex":"#E7EBDA"},"9003":{"code":"9003","name":"Blanc de sécurité","rgb":"244,244,244","hex":"#F4F4F4"},"9004":{"code":"9004","name":"Noir de sécurité","rgb":"040,040,040","hex":"#282828"},"9005":{"code":"9005","name":"Noir foncé","rgb":"010,010,013","hex":"#0A0A0A"},"9006":{"code":"9006","name":"Aluminium blanc","rgb":"165,165,165","hex":"#A5A5A5"},"9007":{"code":"9007","name":"Aluminium gris","rgb":"143,143,143","hex":"#8F8F8F"},"9010":{"code":"9010","name":"Blanc pur","rgb":"255,255,255","hex":"#FFFFFF"},"9011":{"code":"9011","name":"Noir graphite","rgb":"028,028,028","hex":"#1C1C1C"},"9016":{"code":"9016","name":"Blanc signalisation","rgb":"246,246,246","hex":"#F6F6F6"},"9017":{"code":"9017","name":"Noir signalisation","rgb":"030,030,030","hex":"#1E1E1E"},"9018":{"code":"9018","name":"Blanc papyrus","rgb":"207,211,205","hex":"#CFD3CD"},"9022":{"code":"9022","name":"Gris clair nacré","rgb":"156,156,156","hex":"#9C9C9C"},"9023":{"code":"9023","name":"Gris fonçé nacré","rgb":"130,130,130","hex":"#828282"}};
+
+// ════════════════════════════════════════════════════════
+// COLOR MATH
+// ════════════════════════════════════════════════════════
+
+function hslToRgb(h, s, l) {
+  // h: 0-360, s: 0-1, l: 0-1
+  const a = s * Math.min(l, 1 - l);
+  const f = n => {
+    const k = (n + h / 30) % 12;
+    return Math.round((l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))) * 255);
+  };
+  return [f(0), f(8), f(4)];
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  if (max === min) return [0, 0, l];
+  const d = max - min;
+  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  let h;
+  switch (max) {
+    case r: h = ((g - b) / d + (g < b ? 6 : 0)) * 60; break;
+    case g: h = ((b - r) / d + 2) * 60; break;
+    case b: h = ((r - g) / d + 4) * 60; break;
+  }
+  return [h, s, l];
+}
+
+// Mélange soustractif CMY (identique à l'algo Python original)
+function cmyMix(colors, proportions) {
+  const total = proportions.reduce((a, b) => a + b, 0);
+  if (total === 0) return [255, 255, 255];
+  let C = 0, M = 0, Y = 0;
+  colors.forEach(([r, g, b], i) => {
+    const p = proportions[i];
+    C += (1 - r / 255) * p;
+    M += (1 - g / 255) * p;
+    Y += (1 - b / 255) * p;
+  });
+  return [
+    Math.round((1 - C / total) * 255),
+    Math.round((1 - M / total) * 255),
+    Math.round((1 - Y / total) * 255),
+  ];
+}
+
+function toHex(rgb) {
+  return '#' + rgb.map(v => clamp(v, 0, 255).toString(16).padStart(2, '0')).join('');
+}
+
+function fromHex(hex) {
+  hex = hex.replace(/^#/, '');
+  if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+  if (!/^[0-9a-fA-F]{6}$/.test(hex)) return null;
+  const n = parseInt(hex, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+// ════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════
+
+let palette = [];   // [{id, color:[r,g,b], proportion:Number}]
+let uid = 0;
+let editId = null;
+let pH = 0, pS = 1, pL = 0.5;   // color picker HSL state
+
+// ════════════════════════════════════════════════════════
+// COLOR WHEEL (canvas)
+// ════════════════════════════════════════════════════════
+
+const WC = document.getElementById('wheel-canvas');
+const CC = document.getElementById('cursor-canvas');
+const WSIZE = 260, WRAD = 128;
+
+function drawWheel(l) {
+  const ctx = WC.getContext('2d');
+  const imgData = ctx.createImageData(WSIZE, WSIZE);
+  const px = imgData.data;
+  const cx = WSIZE / 2, cy = WSIZE / 2;
+  for (let y = 0; y < WSIZE; y++) {
+    for (let x = 0; x < WSIZE; x++) {
+      const dx = x - cx, dy = y - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const i = (y * WSIZE + x) * 4;
+      if (dist <= WRAD) {
+        const h = ((Math.atan2(dy, dx) * 180 / Math.PI) + 360) % 360;
+        const [r, g, b] = hslToRgb(h, dist / WRAD, l);
+        px[i] = r; px[i+1] = g; px[i+2] = b; px[i+3] = 255;
+      } else {
+        px[i+3] = 0;
+      }
+    }
+  }
+  ctx.putImageData(imgData, 0, 0);
+}
+
+function drawCursor(h, s) {
+  const ctx = CC.getContext('2d');
+  ctx.clearRect(0, 0, WSIZE, WSIZE);
+  const cx = WSIZE / 2, cy = WSIZE / 2;
+  const ang = h * Math.PI / 180;
+  const r = s * WRAD;
+  const x = cx + r * Math.cos(ang);
+  const y = cy + r * Math.sin(ang);
+  ctx.beginPath();
+  ctx.arc(x, y, 9, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(0,0,0,0.65)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(x, y, 9, 0, Math.PI * 2);
+  ctx.strokeStyle = 'white';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function refreshWheel() {
+  drawWheel(pL);
+  drawCursor(pH, pS);
+  syncInputs();
+}
+
+function syncInputs() {
+  const rgb = hslToRgb(pH, pS, pL);
+  document.getElementById('new-preview').style.background = toHex(rgb);
+  document.getElementById('hex-input').value = toHex(rgb);
+  document.getElementById('r-input').value = rgb[0];
+  document.getElementById('g-input').value = rgb[1];
+  document.getElementById('b-input').value = rgb[2];
+  // Update lightness slider gradient to reflect current hue/saturation
+  const lo = toHex(hslToRgb(pH, pS, 0.02));
+  const mid = toHex(hslToRgb(pH, pS, 0.5));
+  const hi = toHex(hslToRgb(pH, pS, 0.98));
+  document.getElementById('lightness-slider').style.background =
+    `linear-gradient(to right, ${lo}, ${mid}, ${hi})`;
+}
+
+// ── Wheel mouse interaction ──
+let dragging = false;
+
+function pickFromWheel(e) {
+  const rect = CC.getBoundingClientRect();
+  const sx = WSIZE / rect.width, sy = WSIZE / rect.height;
+  const x = (e.clientX - rect.left) * sx;
+  const y = (e.clientY - rect.top) * sy;
+  const dx = x - WSIZE / 2, dy = y - WSIZE / 2;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist <= WRAD) {
+    pH = ((Math.atan2(dy, dx) * 180 / Math.PI) + 360) % 360;
+    pS = Math.min(1, dist / WRAD);
+    drawCursor(pH, pS);
+    syncInputs();
+  }
+}
+
+CC.addEventListener('mousedown', e => { dragging = true; pickFromWheel(e); });
+document.addEventListener('mousemove', e => { if (dragging) pickFromWheel(e); });
+document.addEventListener('mouseup', () => { dragging = false; });
+
+document.getElementById('lightness-slider').addEventListener('input', e => {
+  pL = e.target.value / 100;
+  refreshWheel();
+});
+
+document.getElementById('hex-input').addEventListener('change', e => {
+  const rgb = fromHex(e.target.value.trim());
+  if (rgb) {
+    [pH, pS, pL] = rgbToHsl(...rgb);
+    document.getElementById('lightness-slider').value = Math.round(pL * 100);
+    refreshWheel();
+  }
+});
+
+['r-input', 'g-input', 'b-input'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => {
+    const r = clamp(+document.getElementById('r-input').value || 0, 0, 255);
+    const g = clamp(+document.getElementById('g-input').value || 0, 0, 255);
+    const b = clamp(+document.getElementById('b-input').value || 0, 0, 255);
+    [pH, pS, pL] = rgbToHsl(r, g, b);
+    document.getElementById('lightness-slider').value = Math.round(pL * 100);
+    refreshWheel();
+  });
+});
+
+// ── RAL (données intégrées depuis RAL.json : nom FR, rgb, hex) ──
+function parseRalRgbString(rgbStr) {
+  const parts = String(rgbStr).split(/[-–,]/).map(x => parseInt(String(x).trim(), 10));
+  if (parts.length >= 3 && parts.slice(0, 3).every(n => !Number.isNaN(n)))
+    return [clamp(parts[0], 0, 255), clamp(parts[1], 0, 255), clamp(parts[2], 0, 255)];
+  return null;
+}
+
+function rgbFromRalEntry(entry) {
+  if (!entry) return null;
+  let rgb = fromHex(entry.hex);
+  if (rgb) return rgb;
+  return parseRalRgbString(entry.rgb);
+}
+
+function normalizeRalQuery(s) {
+  return String(s || '').trim().replace(/^RAL[\s._-]*/i, '').replace(/\s+/g, '');
+}
+
+function lookupRalEntry(query) {
+  const k = normalizeRalQuery(query);
+  if (!k) return null;
+  if (RAL_CODES[k]) return RAL_CODES[k];
+  const trimmed = k.replace(/^0+/, '') || '0';
+  if (RAL_CODES[trimmed]) return RAL_CODES[trimmed];
+  return null;
+}
+
+function setRalHint(msg, isError) {
+  const hint = document.getElementById('ral-hint');
+  if (!hint) return;
+  hint.textContent = msg || '';
+  hint.classList.toggle('ral-hint-error', !!isError);
+}
+
+function applyRalCodeToPicker() {
+  const input = document.getElementById('ral-input');
+  const entry = lookupRalEntry(input && input.value);
+  if (!entry) {
+    setRalHint('Code RAL introuvable dans la base.', true);
+    return;
+  }
+  const rgb = rgbFromRalEntry(entry);
+  if (!rgb) {
+    setRalHint('Données couleur invalides pour ce RAL.', true);
+    return;
+  }
+  [pH, pS, pL] = rgbToHsl(...rgb);
+  document.getElementById('lightness-slider').value = Math.round(pL * 100);
+  setRalHint(`RAL ${entry.code} — ${entry.name}`, false);
+  refreshWheel();
+}
+
+document.getElementById('ral-apply-btn').addEventListener('click', applyRalCodeToPicker);
+document.getElementById('ral-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    applyRalCodeToPicker();
+  }
+});
+
+// ════════════════════════════════════════════════════════
+// MODAL
+// ════════════════════════════════════════════════════════
+
+function openModal(existingColor, colorId) {
+  editId = colorId ?? null;
+  document.getElementById('modal-title').textContent =
+    editId !== null ? 'Modifier la couleur' : 'Ajouter une couleur';
+
+  document.getElementById('ral-input').value = '';
+  setRalHint('', false);
+
+  const oldPrev = document.getElementById('old-preview');
+  if (existingColor) {
+    [pH, pS, pL] = rgbToHsl(...existingColor);
+    oldPrev.style.background = toHex(existingColor);
+    oldPrev.style.display = 'block';
+  } else {
+    pH = 0; pS = 1; pL = 0.5;
+    oldPrev.style.display = 'none';
+  }
+  document.getElementById('lightness-slider').value = Math.round(pL * 100);
+  document.getElementById('modal-overlay').classList.remove('hidden');
+  refreshWheel();
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.add('hidden');
+  editId = null;
+}
+
+document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target.id === 'modal-overlay') closeModal();
+});
+
+document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+  const rgb = hslToRgb(pH, pS, pL);
+  if (editId !== null) {
+    const item = palette.find(d => d.id === editId);
+    if (item) { item.color = rgb; renderList(); refreshResultant(); }
+  } else {
+    palette.push({ id: uid++, color: rgb, proportion: 1 });
+    renderList(); refreshResultant();
+  }
+  closeModal();
+});
+
+document.getElementById('add-btn').addEventListener('click', () => openModal(null, null));
+
+// ════════════════════════════════════════════════════════
+// PALETTE LIST
+// ════════════════════════════════════════════════════════
+
+function renderList() {
+  const el = document.getElementById('colors-list');
+  el.innerHTML = '';
+
+  if (palette.length === 0) {
+    el.innerHTML = '<div id="empty-colors">Aucune couleur ajoutée</div>';
+    document.getElementById('resultant-section').style.display = 'none';
+    return;
+  }
+  document.getElementById('resultant-section').style.display = 'block';
+
+  palette.forEach(item => {
+    const hex = toHex(item.color);
+    const row = document.createElement('div');
+    row.className = 'color-row';
+    row.innerHTML = `
+      <div class="color-row-top">
+        <div class="color-swatch" style="background:${hex}" title="Modifier"></div>
+        <span class="color-hex">${hex.toUpperCase()}</span>
+        <button class="icon-btn edit-btn" title="Modifier">✎</button>
+        <button class="icon-btn remove-btn" title="Supprimer">✕</button>
+      </div>
+      <div class="slider-row">
+        <span class="slider-lbl">Proportion</span>
+        <input type="range" class="prop-slider" min="0" max="10" step="0.1" value="${item.proportion}">
+        <span class="slider-val">${parseFloat(item.proportion).toFixed(1)}</span>
+      </div>`;
+
+    row.querySelector('.color-swatch').addEventListener('click', () => openModal(item.color, item.id));
+    row.querySelector('.edit-btn').addEventListener('click', () => openModal(item.color, item.id));
+    row.querySelector('.remove-btn').addEventListener('click', () => {
+      palette = palette.filter(d => d.id !== item.id);
+      renderList(); refreshResultant();
+    });
+
+    const slider = row.querySelector('.prop-slider');
+    const valEl  = row.querySelector('.slider-val');
+    slider.addEventListener('input', () => {
+      item.proportion = parseFloat(slider.value);
+      valEl.textContent = item.proportion.toFixed(1);
+      refreshResultant();
+    });
+
+    el.appendChild(row);
+  });
+}
+
+function refreshResultant() {
+  if (palette.length === 0) return;
+  const r = cmyMix(palette.map(d => d.color), palette.map(d => d.proportion));
+  document.getElementById('result-swatch').style.background = toHex(r);
+  document.getElementById('result-hex').textContent =
+    toHex(r).toUpperCase() + `  (${r.join(', ')})`;
+  const mode = getResultViewMode();
+  if (mode === 'layers') drawLayersCanvas();
+  else if (mode === 'sparkle') drawSparkleCanvas();
+}
+
+// ── Export / import palette (JSON) ──
+function parsePaletteImport(data) {
+  if (data == null || typeof data !== 'object') return null;
+  let raw = null;
+  if (data.format === 'plasticolor-palette' && Array.isArray(data.colors)) raw = data.colors;
+  else if (Array.isArray(data.colors)) raw = data.colors;
+  else if (Array.isArray(data)) raw = data;
+  if (!Array.isArray(raw)) return null;
+
+  const out = [];
+  for (const entry of raw) {
+    let rgb = null;
+    let prop = 1;
+    if (Array.isArray(entry) && entry.length >= 3) {
+      rgb = [entry[0], entry[1], entry[2]];
+      if (entry.length >= 4 && entry[3] != null) prop = entry[3];
+    } else if (entry && typeof entry === 'object') {
+      if (Array.isArray(entry.rgb) && entry.rgb.length >= 3) rgb = entry.rgb.slice(0, 3);
+      else if (Array.isArray(entry.color) && entry.color.length >= 3) rgb = entry.color.slice(0, 3);
+      else if (entry.r != null && entry.g != null && entry.b != null) rgb = [entry.r, entry.g, entry.b];
+      else if (typeof entry.hex === 'string') rgb = fromHex(entry.hex);
+      if (entry.proportion != null) prop = entry.proportion;
+      else if (entry.p != null) prop = entry.p;
+    }
+    if (!rgb) continue;
+    out.push({
+      color: [
+        clamp(Math.round(Number(rgb[0]) || 0), 0, 255),
+        clamp(Math.round(Number(rgb[1]) || 0), 0, 255),
+        clamp(Math.round(Number(rgb[2]) || 0), 0, 255),
+      ],
+      proportion: Math.max(0, Number(prop) || 0),
+    });
+  }
+  return out;
+}
+
+function applyImportedPalette(entries) {
+  palette = entries.map(({ color, proportion }) => ({
+    id: uid++,
+    color,
+    proportion,
+  }));
+  hideTooltip();
+  renderList();
+  if (palette.length > 0) refreshResultant();
+  else {
+    document.getElementById('resultant-section').style.display = 'none';
+    document.getElementById('result-hex').textContent = '#ffffff';
+  }
+}
+
+document.getElementById('export-palette-btn').addEventListener('click', () => {
+  const payload = {
+    format: 'plasticolor-palette',
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    colors: palette.map(({ color, proportion }) => ({
+      rgb: [color[0], color[1], color[2]],
+      proportion,
+    })),
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `plasticolor-palette-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('import-palette-btn').addEventListener('click', () => {
+  document.getElementById('import-palette-input').click();
+});
+
+document.getElementById('import-palette-input').addEventListener('change', (e) => {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = '';
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    let data;
+    try {
+      data = JSON.parse(reader.result);
+    } catch {
+      alert('Fichier JSON invalide ou illisible.');
+      return;
+    }
+    const entries = parsePaletteImport(data);
+    if (!entries) {
+      alert('Format non reconnu. Utilisez un fichier exporté par Plasticolor ou un tableau de couleurs { rgb, proportion }.');
+      return;
+    }
+    if (palette.length > 0) {
+      if (!confirm('Remplacer la palette actuelle par les couleurs importées ?')) return;
+    }
+    applyImportedPalette(entries);
+  };
+  reader.onerror = () => alert('Impossible de lire le fichier.');
+  reader.readAsText(file, 'UTF-8');
+});
+
+// ── Vues Couches (lignes horizontales) & Paillettes ──
+function shuffleInPlace(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+/** Répartition entière de `total` unités selon les proportions (plus grands restes). */
+function proportionCounts(total, props) {
+  const n = props.length;
+  const pos = props.map(p => Math.max(0, p));
+  const totalP = pos.reduce((a, b) => a + b, 0);
+  const weights = totalP <= 0 ? pos.map(() => 1) : pos;
+  const tot = totalP <= 0 ? n : totalP;
+  const exact = weights.map(p => (p / tot) * total);
+  const counts = exact.map(e => Math.floor(e));
+  let rem = total - counts.reduce((a, b) => a + b, 0);
+  const fracs = exact.map((e, i) => ({ i, f: e - counts[i] }));
+  fracs.sort((a, b) => b.f - a.f);
+  for (let k = 0; k < rem; k++) counts[fracs[k].i]++;
+  return counts;
+}
+
+function getResultViewMode() {
+  const t = document.querySelector('.result-tab.active');
+  const m = t && t.dataset.mode;
+  if (m === 'layers' || m === 'sparkle') return m;
+  return 'blend';
+}
+
+function setupPreviewCanvas(canvas, wrap) {
+  const rect = wrap.getBoundingClientRect();
+  const w = Math.max(1, Math.floor(rect.width));
+  const h = Math.max(1, Math.floor(rect.height));
+  const dpr = Math.min(window.devicePixelRatio || 1, 3);
+  const cw = Math.round(w * dpr);
+  const ch = Math.round(h * dpr);
+  canvas.width = cw;
+  canvas.height = ch;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  return { ctx: canvas.getContext('2d'), cw, ch, w, h };
+}
+
+function lerpChannel(a, b, t) {
+  return Math.round(a + (b - a) * t);
+}
+function lerpRgb(a, b, t) {
+  if (t <= 0) return a.slice();
+  if (t >= 1) return b.slice();
+  return [
+    lerpChannel(a[0], b[0], t),
+    lerpChannel(a[1], b[1], t),
+    lerpChannel(a[2], b[2], t),
+  ];
+}
+
+/** Mélange chaque ligne avec la moyenne des couches voisines (intensité 0–1). */
+function blendLayerStripes(stripes, mix) {
+  const rows = stripes.length;
+  if (mix <= 0 || rows === 0) return stripes.map(c => c.slice());
+  const out = [];
+  for (let y = 0; y < rows; y++) {
+    const c = stripes[y];
+    const prev = y > 0 ? stripes[y - 1] : c;
+    const next = y < rows - 1 ? stripes[y + 1] : c;
+    const neighborAvg = [
+      (prev[0] + next[0]) / 2,
+      (prev[1] + next[1]) / 2,
+      (prev[2] + next[2]) / 2,
+    ];
+    out.push(lerpRgb(c, neighborAvg, mix));
+  }
+  return out;
+}
+
+/** Lignes horizontales 1 px (CSS), proportions puis ordre aléatoire ; fusion réglable. */
+function drawLayersCanvas() {
+  const wrap = document.getElementById('result-display-wrap');
+  const canvas = document.getElementById('layers-canvas');
+  if (!wrap || !canvas || palette.length === 0) return;
+
+  const { ctx, cw, ch, w, h } = setupPreviewCanvas(canvas, wrap);
+  const colors = palette.map(d => d.color);
+  const props = palette.map(d => d.proportion);
+
+  const mixSlider = document.getElementById('layers-mix-slider');
+  const mix = mixSlider ? Math.min(1, Math.max(0, Number(mixSlider.value) / 100)) : 0;
+
+  const rows = h;
+  const counts = proportionCounts(rows, props);
+  const stripes = [];
+  for (let i = 0; i < colors.length; i++)
+    for (let k = 0; k < counts[i]; k++) stripes.push(colors[i]);
+  shuffleInPlace(stripes);
+
+  let rowColors = blendLayerStripes(stripes, mix);
+  // Second passage doux quand la fusion est forte (dégradé plus continu)
+  if (mix > 0.45) {
+    const mix2 = (mix - 0.45) / 0.55 * 0.55;
+    rowColors = blendLayerStripes(rowColors, mix2);
+  }
+
+  let py = 0;
+  for (let y = 0; y < rows; y++) {
+    const rgb = rowColors[y] || [255, 255, 255];
+    ctx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+    const next = Math.round((y + 1) * (ch / rows));
+    const segH = Math.max(1, next - py);
+    ctx.fillRect(0, py, cw, segH);
+    py = next;
+  }
+}
+
+/** Une paillette : forme irrégulière autour de (cx, cy), taille de référence ~base. */
+function drawIrregularSparkle(ctx, cx, cy, base, rgb) {
+  const fill = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+  ctx.fillStyle = fill;
+  const t = Math.random();
+
+  if (t < 0.32) {
+    // Polygone à sommets en rayon / angle bruités
+    const n = 4 + Math.floor(Math.random() * 5);
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      const ang = (i / n) * Math.PI * 2 + (Math.random() - 0.5) * 0.85;
+      const r = base * (0.35 + Math.random() * 0.75);
+      const px = cx + Math.cos(ang) * r;
+      const py = cy + Math.sin(ang) * r;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fill();
+  } else if (t < 0.55) {
+    // Ovale déformé et penché
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate((Math.random() - 0.5) * Math.PI);
+    const rx = base * (0.2 + Math.random() * 0.55);
+    const ry = base * (0.2 + Math.random() * 0.55);
+    const tilt = (Math.random() - 0.5) * 1.2;
+    ctx.beginPath();
+    if (typeof ctx.ellipse === 'function')
+      ctx.ellipse(0, 0, rx, ry, tilt, 0, Math.PI * 2);
+    else {
+      ctx.rotate(tilt);
+      ctx.scale(1, ry / Math.max(rx, 0.001));
+      ctx.arc(0, 0, rx, 0, Math.PI * 2);
+    }
+    ctx.fill();
+    ctx.restore();
+  } else if (t < 0.72) {
+    // Grumeau : 2–4 pastilles qui se chevauchent
+    const blobs = 2 + Math.floor(Math.random() * 3);
+    for (let b = 0; b < blobs; b++) {
+      const ox = (Math.random() - 0.5) * base * 1.1;
+      const oy = (Math.random() - 0.5) * base * 1.1;
+      const br = base * (0.22 + Math.random() * 0.42);
+      ctx.beginPath();
+      ctx.arc(cx + ox, cy + oy, br, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  } else if (t < 0.88) {
+    // Éclat allongé (rectangle très étroit, pivoté)
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(Math.random() * Math.PI);
+    const rw = base * (0.12 + Math.random() * 0.22);
+    const rh = base * (0.9 + Math.random() * 1.1);
+    ctx.fillRect(-rw / 2, -rh / 2, rw, rh);
+    ctx.restore();
+  } else {
+    // Trapèze / quadri latéralement déformé
+    const w = base * (0.5 + Math.random() * 0.5);
+    const h = base * (0.45 + Math.random() * 0.55);
+    const skew = (Math.random() - 0.5) * base * 0.35;
+    ctx.beginPath();
+    ctx.moveTo(cx - w / 2 + skew, cy - h / 2);
+    ctx.lineTo(cx + w / 2 - skew * 0.3, cy - h / 2);
+    ctx.lineTo(cx + w / 2 + skew, cy + h / 2);
+    ctx.lineTo(cx - w / 2 - skew * 0.5, cy + h / 2);
+    ctx.closePath();
+    ctx.fill();
+  }
+}
+
+/** Paillettes irrégulières réparties selon les proportions, positions aléatoires. */
+function drawSparkleCanvas() {
+  const wrap = document.getElementById('result-display-wrap');
+  const canvas = document.getElementById('sparkle-canvas');
+  if (!wrap || !canvas || palette.length === 0) return;
+
+  const { ctx, cw, ch } = setupPreviewCanvas(canvas, wrap);
+  const colors = palette.map(d => d.color);
+  const props = palette.map(d => d.proportion);
+
+  ctx.fillStyle = '#f5f5f5';
+  ctx.fillRect(0, 0, cw, ch);
+
+  const nSparkles = Math.min(10000, Math.max(400, Math.floor((cw * ch) / 10)));
+  const counts = proportionCounts(nSparkles, props);
+  const sparkles = [];
+  for (let i = 0; i < colors.length; i++)
+    for (let k = 0; k < counts[i]; k++) sparkles.push(colors[i]);
+  shuffleInPlace(sparkles);
+
+  for (let k = 0; k < nSparkles; k++) {
+    const rgb = sparkles[k] || [255, 255, 255];
+    const cx = Math.random() * cw;
+    const cy = Math.random() * ch;
+    const base = 5 * (1 + Math.floor(Math.random() * 3));
+    drawIrregularSparkle(ctx, cx, cy, base, rgb);
+  }
+}
+
+function redrawActivePreview() {
+  const m = getResultViewMode();
+  if (m === 'layers') drawLayersCanvas();
+  else if (m === 'sparkle') drawSparkleCanvas();
+}
+
+document.querySelectorAll('.result-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mode = btn.dataset.mode;
+    // Re-clic sur l’onglet actif Couches / Paillettes → nouvelle disposition aléatoire
+    if (btn.classList.contains('active') && (mode === 'layers' || mode === 'sparkle')) {
+      redrawActivePreview();
+      return;
+    }
+    document.querySelectorAll('.result-tab').forEach(b => {
+      b.classList.toggle('active', b === btn);
+      b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+    });
+    document.querySelectorAll('.result-pane').forEach(p => {
+      p.classList.toggle('active', p.dataset.pane === mode);
+    });
+    const mixRow = document.getElementById('layers-mix-row');
+    if (mode === 'layers' || mode === 'sparkle') redrawActivePreview();
+    if (mixRow) {
+      if (mode === 'layers') mixRow.classList.remove('hidden');
+      else mixRow.classList.add('hidden');
+    }
+  });
+});
+
+const layersMixSlider = document.getElementById('layers-mix-slider');
+const layersMixVal = document.getElementById('layers-mix-val');
+function updateLayersMixLabel() {
+  if (layersMixVal && layersMixSlider) layersMixVal.textContent = `${layersMixSlider.value}%`;
+}
+if (layersMixSlider) {
+  layersMixSlider.addEventListener('input', () => {
+    updateLayersMixLabel();
+    if (getResultViewMode() === 'layers') drawLayersCanvas();
+  });
+  updateLayersMixLabel();
+}
+
+let _layersResizeObs;
+function initLayersResizeObserver() {
+  const wrap = document.getElementById('result-display-wrap');
+  if (!wrap || typeof ResizeObserver === 'undefined') return;
+  if (_layersResizeObs) _layersResizeObs.disconnect();
+  _layersResizeObs = new ResizeObserver(() => {
+    if (palette.length > 0 && (getResultViewMode() === 'layers' || getResultViewMode() === 'sparkle'))
+      redrawActivePreview();
+  });
+  _layersResizeObs.observe(wrap);
+}
+initLayersResizeObserver();
+
+// ════════════════════════════════════════════════════════
+// SWATCH GENERATION
+// ════════════════════════════════════════════════════════
+
+let selectedCell = null;
+
+document.getElementById('generate-btn').addEventListener('click', () => {
+  const steps = +document.getElementById('steps-sel').value;
+  const n = palette.length;
+  const scroll = document.getElementById('swatch-scroll');
+  scroll.innerHTML = '';
+  hideTooltip();
+  selectedCell = null;
+
+  if (n === 0) {
+    scroll.innerHTML = '<div class="swatch-empty">Ajoutez au moins une couleur.</div>';
+    return;
+  }
+
+  const colors = palette.map(d => d.color);
+  const props  = palette.map(d => d.proportion);
+
+  if      (n === 1) gen1(colors, props, scroll);
+  else if (n === 2) gen2(colors, steps, scroll);
+  else              genN(colors, steps, scroll);
+});
+
+// ── Helpers ──
+
+function makeLegend(colors) {
+  const el = document.createElement('div');
+  el.className = 'swatch-legend';
+  colors.forEach((c, i) => {
+    const item = document.createElement('div');
+    item.className = 'swatch-legend-item';
+    item.innerHTML =
+      `<div class="legend-dot" style="background:${toHex(c)}"></div>Couleur ${i+1} — ${toHex(c).toUpperCase()}`;
+    el.appendChild(item);
+  });
+  return el;
+}
+
+function makeCell(result, colors, props, size) {
+  const cell = document.createElement('div');
+  cell.className = 'swatch-cell';
+  cell.style.cssText = `width:${size}px;height:${size}px;background:${toHex(result)};`;
+
+  // ── Pastilles des couleurs composantes ──
+  if (size >= 13) {
+    const dotSize = size >= 28 ? 5 : (size >= 20 ? 4 : 3);
+    const dotGap  = 2;
+    const maxFit  = Math.max(1, Math.floor((size - 6) / (dotSize + dotGap)));
+
+    const dots = props
+      .map((p, i) => ({ p, i }))
+      .filter(x => x.p > 0)
+      .sort((a, b) => b.p - a.p)
+      .slice(0, maxFit);
+
+    if (dots.length > 0) {
+      const row = document.createElement('div');
+      row.className = 'comp-dots';
+      dots.forEach(({ i }) => {
+        const d = document.createElement('div');
+        d.className = 'comp-dot';
+        d.style.cssText = `width:${dotSize}px;height:${dotSize}px;background:${toHex(colors[i])};`;
+        row.appendChild(d);
+      });
+      cell.appendChild(row);
+    }
+  }
+
+  cell.addEventListener('click', e => {
+    e.stopPropagation();
+    if (selectedCell) selectedCell.classList.remove('selected');
+    cell.classList.add('selected');
+    selectedCell = cell;
+    showTooltip(cell, result, colors, props);
+  });
+  return cell;
+}
+
+// 1 couleur
+function gen1(colors, props, container) {
+  const r = cmyMix(colors, props);
+  const w = document.createElement('div');
+  w.style.padding = '10px 0';
+  w.appendChild(makeCell(r, colors, props, 70));
+  container.appendChild(w);
+  document.getElementById('swatch-count').textContent = '1 teinte';
+}
+
+// 2 couleurs → gradient linéaire
+function gen2(colors, steps, container) {
+  const row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:3px;padding:4px 0;';
+  const availW = document.getElementById('swatch-scroll').clientWidth - 32;
+  const size = Math.max(20, Math.floor((availW - steps * 3) / (steps + 1)));
+  for (let i = 0; i <= steps; i++) {
+    const p = [steps - i, i];
+    row.appendChild(makeCell(cmyMix(colors, p), colors, p, size));
+  }
+  container.appendChild(row);
+  document.getElementById('swatch-count').textContent = `${steps + 1} teintes`;
+}
+
+// 3 couleurs → grille triangulaire
+function gen3(colors, steps, container) {
+
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display:flex;flex-direction:column;gap:3px;padding:4px 0;';
+  const GAP = 3;
+  const availW = document.getElementById('swatch-scroll').clientWidth - 32;
+  const cellSize = Math.max(18, Math.floor((availW - steps * GAP) / (steps + 1)));
+
+  // Ligne i : proportion couleur1 = steps-i, couleur2 = 0..i, couleur3 = i-couleur2
+  for (let i = 0; i <= steps; i++) {
+    const row = document.createElement('div');
+    row.style.cssText = `display:flex;gap:${GAP}px;margin-left:${(steps - i) * (cellSize + GAP) / 2}px;`;
+    for (let j = 0; j <= i; j++) {
+      const p = [steps - i, j, i - j];
+      row.appendChild(makeCell(cmyMix(colors, p), colors, p, cellSize));
+    }
+    grid.appendChild(row);
+  }
+  container.appendChild(grid);
+
+  const total = (steps + 1) * (steps + 2) / 2;
+  document.getElementById('swatch-count').textContent = `${total} teintes`;
+}
+
+// N ≥ 4 couleurs → tous les points du simplexe N-dimensionnel
+// Affichage style nuancier professionnel : colonnes par teinte, clair→foncé dans chaque colonne
+function genN(colors, steps, container) {
+  const n = colors.length;
+
+  // C(steps+n-1, n-1)
+  function countCombinations(s) {
+    let c = 1;
+    for (let i = 1; i < n; i++) c = c * (s + i) / i;
+    return Math.round(c);
+  }
+
+  // Plafond adaptatif : on tolère plus de cellules si les pas sont élevés
+  const MAX_CELLS = 1200;
+  let autoSteps = steps;
+  while (autoSteps > 2 && countCombinations(autoSteps) > MAX_CELLS) autoSteps--;
+  const total = countCombinations(autoSteps);
+
+
+  // ── Génère tous les points du simplexe ──
+  function simplexPoints(rem, dim) {
+    if (dim === 1) return [[rem]];
+    const out = [];
+    for (let v = 0; v <= rem; v++)
+      simplexPoints(rem - v, dim - 1).forEach(r => out.push([v, ...r]));
+    return out;
+  }
+
+  const cells = simplexPoints(autoSteps, n).map(props => {
+    const result = cmyMix(colors, props);
+    const [h, s, l] = rgbToHsl(...result);
+    const isFullMix = props.every(p => p > 0);
+    return { result, props, h, s, l, isFullMix };
+  });
+
+  // ── Tri unifié : pas de séparation chromatiques/neutres ──
+  // Pour les couleurs très peu saturées, on amplifie la teinte perçue à partir
+  // de la dominante RGB afin qu'elles se placent près de leurs voisins chromatiques.
+  cells.forEach(c => {
+    if (c.s < 0.08) {
+      const [r, g, b] = c.result;
+      const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+      if (mx - mn >= 6) {
+        // Amplifie le contraste pour extraire la teinte dominante
+        const amp = v => Math.round(128 + (v - 128) * 8);
+        c.sortH = rgbToHsl(amp(r), amp(g), amp(b))[0];
+      } else {
+        c.sortH = -1; // gris pur : sera trié par luminosité à part
+      }
+    } else {
+      c.sortH = c.h;
+    }
+  });
+
+  // Sépare les gris purs (sans teinte détectable) pour les insérer après le tri
+  const pureGrays  = cells.filter(c => c.sortH === -1).sort((a, b) => b.l - a.l);
+  const withHue    = cells.filter(c => c.sortH !== -1).sort((a, b) => a.sortH - b.sortH);
+
+  // ── Rotation : démarrer après le plus grand vide de teinte ──
+  if (withHue.length > 1) {
+    let maxGap = withHue[0].sortH + 360 - withHue[withHue.length - 1].sortH;
+    let startIdx = 0;
+    for (let i = 1; i < withHue.length; i++) {
+      const gap = withHue[i].sortH - withHue[i - 1].sortH;
+      if (gap > maxGap) { maxGap = gap; startIdx = i; }
+    }
+    if (startIdx > 0) withHue.push(...withHue.splice(0, startIdx));
+  }
+
+  // Fusionne : chromatiques + teintés + gris purs en fin
+  const sorted = [...withHue, ...pureGrays];
+
+  // ── Colonnes d'égale taille ──
+  // Tri interne : d'abord par bande de saturation (vif → moyen → neutre),
+  // puis par luminosité décroissante au sein de chaque bande.
+  // Cela évite qu'une couleur vive et un gris pâle de même luminosité
+  // se retrouvent côte à côte uniquement parce que leur L est similaire.
+  function colSort(a, b) {
+    const band = c => c.s >= 0.4 ? 0 : c.s >= 0.15 ? 1 : 2;
+    const da = band(a), db = band(b);
+    return da !== db ? da - db : b.l - a.l;
+  }
+
+  const nCols  = Math.max(3, Math.ceil(Math.sqrt(sorted.length)));
+  const colSz  = Math.ceil(sorted.length / nCols);
+  const allCols = [];
+  for (let i = 0; i < nCols; i++) {
+    const col = sorted.slice(i * colSz, (i + 1) * colSz);
+    if (col.length) allCols.push(col.sort(colSort));
+  }
+  if (allCols.length === 0) return;
+
+  // ── Dimensions des cellules : carrées, remplissent la largeur disponible ──
+  const GAP = 3;
+  const availW = document.getElementById('swatch-scroll').clientWidth - 32;
+  const cellW = Math.max(14, Math.floor((availW - allCols.length * GAP) / allCols.length));
+
+  // ── Rendu ──
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'display:flex;gap:3px;align-items:flex-start;padding:4px 0 8px;';
+
+  allCols.forEach((col, i) => {
+
+    const colEl = document.createElement('div');
+    colEl.className = 'swatch-col';
+    colEl.style.cssText = `display:flex;flex-direction:column;gap:${GAP}px;`;
+
+    col.forEach(cd => {
+      const cell = makeCell(cd.result, colors, cd.props, cellW);
+      if (cd === col[0])            cell.style.borderRadius = '4px 4px 2px 2px';
+      if (cd === col[col.length-1]) cell.style.borderRadius = '2px 2px 4px 4px';
+
+      if (cd.isFullMix) cell.dataset.fullMix = '1';
+      colEl.appendChild(cell);
+    });
+    wrapper.appendChild(colEl);
+  });
+
+  container.appendChild(wrapper);
+  document.getElementById('swatch-count').textContent = `${total} teintes`;
+}
+
+// ── Info panel ──
+// ── Bulle flottante ──────────────────────────────────────────────────────
+const tooltipEl = document.getElementById('swatch-tooltip');
+
+document.addEventListener('click', () => hideTooltip());
+
+function hideTooltip() {
+  tooltipEl.classList.remove('visible');
+  if (selectedCell) { selectedCell.classList.remove('selected'); selectedCell = null; }
+}
+
+function showTooltip(cell, result, colors, props) {
+  const total = props.reduce((a, b) => a + b, 0);
+  const nonZero = props.map((p, i) => ({ p, i })).filter(x => x.p > 0);
+
+  tooltipEl.innerHTML = `
+    <div class="tip-swatch" style="background:${toHex(result)}"></div>
+    <div class="tip-hex">${toHex(result).toUpperCase()}</div>
+    <div class="tip-rgb">rgb(${result.join(', ')})</div>
+    <div class="tip-props">
+      ${nonZero.map(({ p, i }) => {
+        const pct = total > 0 ? p / total * 100 : 0;
+        return `<div class="tip-row">
+          <div class="tip-dot" style="background:${toHex(colors[i])}"></div>
+          <div class="tip-bar-bg"><div class="tip-bar" style="width:${pct}%"></div></div>
+          <span class="tip-pct">${Math.round(pct)}%</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  // Positionnement
+  tooltipEl.classList.add('visible');
+  const tr   = cell.getBoundingClientRect();
+  const tipW = tooltipEl.offsetWidth;
+  const tipH = tooltipEl.offsetHeight;
+  const margin = 10;
+
+  // Essayer au-dessus, sinon en-dessous
+  let top, dir;
+  if (tr.top - tipH - margin >= 0) {
+    top = tr.top - tipH - margin;
+    dir = 'up';
+  } else {
+    top = tr.bottom + margin;
+    dir = 'down';
+  }
+
+  // Centrer horizontalement sur la cellule, rester dans la fenêtre
+  let left = tr.left + tr.width / 2 - tipW / 2;
+  left = Math.max(margin, Math.min(window.innerWidth - tipW - margin, left));
+
+  tooltipEl.style.top  = `${top}px`;
+  tooltipEl.style.left = `${left}px`;
+}
+
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
+renderList();
+</script>
+</body>
+</html>

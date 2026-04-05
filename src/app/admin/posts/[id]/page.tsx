@@ -26,6 +26,8 @@ interface Post {
   slug: string | null;
   alt_text: string | null;
   photos?: Photo[];
+  cover?: Photo | null;
+  tags?: string[];
 }
 
 export default function EditPostPage({

@@ -45,6 +45,10 @@ export const postSchema = z.object({
     .optional()
     .nullable(),
   order_number: z.number().int().positive().optional().nullable(),
+  tags: z
+    .array(z.string().max(100, "Un tag ne peut pas dépasser 100 caractères"))
+    .max(20, "Maximum 20 tags par post")
+    .optional(),
 });
 
 // Schéma pour la mise à jour partielle (tous les champs optionnels)

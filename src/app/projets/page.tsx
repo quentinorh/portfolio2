@@ -26,9 +26,6 @@ export default async function ProjetsPage({
     console.error("DB error (DATABASE_URL configurée ?):", e);
   }
 
-  const featuredPosts = posts.filter((p) => p.featured);
-  const hasFeaturedPosts = featuredPosts.length > 0;
-
   const tagCounts: Record<string, number> = {};
   for (const tag of allTags) {
     tagCounts[tag] = posts.filter((p) => p.tagNames.includes(tag)).length;
@@ -38,7 +35,6 @@ export default async function ProjetsPage({
     id: String(p.id),
     title: p.title,
     slug: p.slug,
-    featured: !!p.featured,
     photoKey: p.photoKey,
     tagNames: p.tagNames,
   }));
@@ -69,9 +65,6 @@ export default async function ProjetsPage({
               posts={clientPosts}
               tags={allTags}
               tagCounts={tagCounts}
-              hasFeaturedPosts={hasFeaturedPosts}
-              featuredCount={featuredPosts.length}
-              defaultView="all"
               initialTag={tag}
             />
           )}

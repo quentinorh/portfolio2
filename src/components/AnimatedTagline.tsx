@@ -38,7 +38,7 @@ export default function AnimatedTagline({ onComplete }: AnimatedTaglineProps) {
     setDisplayText(finalText.split("").map(() => ""));
     setRevealed(finalText.split("").map(() => false));
     
-    const totalDuration = 3000;
+    const totalDuration = 1500;
     const letterDelay = totalDuration / finalText.length;
 
     finalText.split("").forEach((targetChar, index) => {

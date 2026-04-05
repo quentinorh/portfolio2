@@ -33,6 +33,18 @@ export default async function AdminLayout({
                       Posts
                     </Link>
                     <Link
+                      href="/admin/tags"
+                      className="hover:text-[#219CB8] transition-colors"
+                    >
+                      Tags
+                    </Link>
+                    <Link
+                      href="/admin/og-generator"
+                      className="hover:text-[#219CB8] transition-colors"
+                    >
+                      Image OG
+                    </Link>
+                    <Link
                       href="/"
                       target="_blank"
                       className="hover:text-[#219CB8] transition-colors"
