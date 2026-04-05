@@ -174,7 +174,9 @@ export default function AboutPage() {
                     "Gestion de projet",
                     "Médiation",
                     "Prototypage",
-                    "Low-tech",
+                    "Fabrication numérique",
+                    "Facilitation",
+                    "Éco-conception",
                   ].map((skill) => (
                     <span
                       key={skill}
