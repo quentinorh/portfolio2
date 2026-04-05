@@ -60,24 +60,6 @@ export default function ProjectCard({
         <h3 className="text-lg font-medium uppercase text-stone-900 group-hover:text-accent transition-colors">
           {title || "Sans titre"}
         </h3>
-        
-        {tags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {tags.slice(0, 3).map((tag) => (
-              <span
-                key={tag}
-                className="tag inline-flex text-xs font-medium text-stone-600"
-              >
-                {tag}
-              </span>
-            ))}
-            {tags.length > 3 && (
-              <span className="tag inline-flex text-xs font-medium text-stone-500">
-                +{tags.length - 3}
-              </span>
-            )}
-          </div>
-        )}
       </div>
     </Link>
   );

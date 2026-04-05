@@ -1,4 +1,3 @@
-import Link from "next/link";
 import ProjectCard from "./ProjectCard";
 
 type Post = {
@@ -16,17 +15,22 @@ type HomeCategorySectionProps = {
   icon: React.ReactNode;
 };
 
+function getGridClass(count: number): string {
+  if (count % 4 === 0) return "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4";
+  if (count % 3 === 0) return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
+  if (count === 2) return "grid-cols-1 md:grid-cols-2";
+  return "grid-cols-1 md:grid-cols-3";
+}
+
 export default function HomeCategorySection({
   tag,
   posts,
   icon,
 }: HomeCategorySectionProps) {
-  const displayed = posts.slice(0, 3);
-
-  if (displayed.length === 0) return null;
+  if (posts.length === 0) return null;
 
   return (
-    <div className="mb-12">
+    <div>
       {/* Section header */}
       <div className="flex items-center gap-3 mb-6">
         <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center text-accent shrink-0">
@@ -42,8 +46,8 @@ export default function HomeCategorySection({
       </div>
 
       {/* Grid */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {displayed.map((post) => (
+      <div className={`grid gap-6 ${getGridClass(posts.length)}`}>
+        {posts.map((post) => (
           <ProjectCard
             key={post.id}
             id={post.id}
@@ -54,31 +58,6 @@ export default function HomeCategorySection({
           />
         ))}
       </div>
-
-      {/* "Voir tous" link */}
-      {posts.length > 3 && (
-        <div className="mt-4 flex justify-end">
-          <Link
-            href={`/projets?tag=${encodeURIComponent(tag)}`}
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 hover:text-accent transition-colors group"
-          >
-            Voir les {posts.length} projets
-            <svg
-              className="w-4 h-4 transition-transform group-hover:translate-x-0.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </Link>
-        </div>
-      )}
     </div>
   );
 }
