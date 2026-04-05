@@ -4,7 +4,6 @@ type Post = {
   id: string;
   title: string | null;
   slug: string | null;
-  featured: boolean;
   photoKey: string | null;
   tagNames: string[];
 };

@@ -47,7 +47,6 @@ export default async function HomePage() {
     id: String(p.id),
     title: p.title,
     slug: p.slug,
-    featured: !!p.featured,
     photoKey: p.photoKey,
     tagNames: p.tagNames,
   }));
