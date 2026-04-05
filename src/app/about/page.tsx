@@ -202,9 +202,7 @@ export default function AboutPage() {
               {[
                 // Langages
                 "Python",
-                "Ruby",
                 "TypeScript",
-                "SQL",
                 // Frameworks & backend
                 "React",
                 "Next.js",
