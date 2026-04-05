@@ -61,7 +61,6 @@ export default function BustViewer3D() {
       dragRef.current.active = true;
       dragRef.current.deltaX = 0;
       lastX.current = e.clientX;
-      (e.target as HTMLDivElement).setPointerCapture(e.pointerId);
     },
     [],
   );
@@ -81,7 +80,7 @@ export default function BustViewer3D() {
 
   return (
     <div
-      className="w-[250px] h-[250px] rounded-2xl overflow-hidden shadow-lg shadow-stone-200/50 cursor-grab active:cursor-grabbing touch-none"
+      className="w-[250px] h-[250px] rounded-2xl overflow-hidden shadow-lg shadow-stone-200/50 cursor-grab active:cursor-grabbing"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
